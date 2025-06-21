@@ -17,13 +17,19 @@ interface MediaViewerProps {
   allMedia: MediaItem[];
   onClose: () => void;
   onNavigate: (media: MediaItem) => void;
+  viewerSettings?: {
+    autoPlay: boolean;
+    slideInterval: number;
+    mediaFilter: 'all' | 'videos' | 'images';
+    sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
+  };
 }
 
-export default function MediaViewer({ media, allMedia, onClose, onNavigate }: MediaViewerProps) {
+export default function MediaViewer({ media, allMedia, onClose, onNavigate, viewerSettings }: MediaViewerProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
-  const [slideInterval, setSlideInterval] = useState(5); // seconds
-  const [autoPlay, setAutoPlay] = useState(true);
+  const slideInterval = viewerSettings?.slideInterval || 5;
+  const autoPlay = viewerSettings?.autoPlay ?? true;
   const [currentMediaIndex, setCurrentMediaIndex] = useState(
     allMedia.findIndex(m => m.id === media.id)
   );
@@ -259,38 +265,12 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate }: Me
           </div>
           
           <div className="controls-center">
-            {currentMedia.fileType === 'image' && (
-              <div className="slideshow-controls">
-                <label>
-                  <input 
-                    type="checkbox" 
-                    checked={autoPlay}
-                    onChange={(e) => setAutoPlay(e.target.checked)}
-                  />
-                  Auto-advance
-                </label>
-                <label>
-                  Interval: 
-                  <input 
-                    type="number" 
-                    min="1" 
-                    max="60" 
-                    value={slideInterval}
-                    onChange={(e) => setSlideInterval(parseInt(e.target.value) || 5)}
-                    style={{ width: '50px', marginLeft: '5px' }}
-                  />s
-                </label>
-              </div>
-            )}
-            {currentMedia.fileType === 'video' && (
-              <label>
-                <input 
-                  type="checkbox" 
-                  checked={autoPlay}
-                  onChange={(e) => setAutoPlay(e.target.checked)}
-                />
-                Auto-play next
-              </label>
+            {autoPlay && (
+              <span className="autoplay-info">
+                {currentMedia.fileType === 'video' 
+                  ? '⏵ Auto-play enabled' 
+                  : `⏵ Slideshow: ${slideInterval}s`}
+              </span>
             )}
           </div>
           

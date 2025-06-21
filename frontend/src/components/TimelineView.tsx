@@ -17,6 +17,12 @@ interface MediaItem {
 interface TimelineViewProps {
   media: MediaItem[];
   groupBy: GroupBy;
+  viewerSettings?: {
+    autoPlay: boolean;
+    slideInterval: number;
+    mediaFilter: 'all' | 'videos' | 'images';
+    sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
+  };
 }
 
 interface MediaGroup {
@@ -25,7 +31,7 @@ interface MediaGroup {
   date: Date;
 }
 
-export default function TimelineView({ media, groupBy }: TimelineViewProps) {
+export default function TimelineView({ media, groupBy, viewerSettings }: TimelineViewProps) {
   const groups = useMemo(() => {
     if (groupBy === 'none') {
       return [{
@@ -87,7 +93,7 @@ export default function TimelineView({ media, groupBy }: TimelineViewProps) {
           {group.label && (
             <h2 className="timeline-group-header">{group.label}</h2>
           )}
-          <MediaGrid media={group.items} />
+          <MediaGrid media={group.items} viewerSettings={viewerSettings} />
         </div>
       ))}
     </div>

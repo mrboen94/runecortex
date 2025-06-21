@@ -15,9 +15,15 @@ interface MediaItem {
 
 interface MediaGridProps {
   media: MediaItem[];
+  viewerSettings?: {
+    autoPlay: boolean;
+    slideInterval: number;
+    mediaFilter: 'all' | 'videos' | 'images';
+    sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
+  };
 }
 
-export default function MediaGrid({ media }: MediaGridProps) {
+export default function MediaGrid({ media, viewerSettings }: MediaGridProps) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
   
   const handleNavigate = (newMedia: MediaItem) => {
@@ -78,6 +84,7 @@ export default function MediaGrid({ media }: MediaGridProps) {
           allMedia={media}
           onClose={() => setSelectedMedia(null)}
           onNavigate={handleNavigate}
+          viewerSettings={viewerSettings}
         />
       )}
     </>

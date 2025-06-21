@@ -24,7 +24,17 @@ interface GroupedMedia {
   };
 }
 
-export default function Timeline() {
+interface TimelineProps {
+  viewerSettings: {
+    autoPlay: boolean;
+    slideInterval: number;
+    mediaFilter: 'all' | 'videos' | 'images';
+    sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
+  };
+  onMediaCountUpdate: (count: { total: number; videos: number; images: number }) => void;
+}
+
+export default function Timeline({ viewerSettings, onMediaCountUpdate }: TimelineProps) {
   const [viewMode, setViewMode] = useState<ViewMode>(() => 
     (localStorage.getItem('viewMode') as ViewMode) || 'timeline'
   );
@@ -54,12 +64,60 @@ export default function Timeline() {
     setSelectedDay(null);
   };
 
+  // Filter and sort media based on viewer settings
+  const filteredAndSortedMedia = useMemo(() => {
+    if (!data?.allMedia) return [];
+    
+    // Filter by media type
+    let filtered = data.allMedia;
+    if (viewerSettings.mediaFilter !== 'all') {
+      filtered = data.allMedia.filter((item: MediaItem) => {
+        if (viewerSettings.mediaFilter === 'videos') {
+          return item.fileType === 'video';
+        } else {
+          return item.fileType === 'image';
+        }
+      });
+    }
+    
+    // Sort media
+    const sorted = [...filtered].sort((a, b) => {
+      switch (viewerSettings.sortOrder) {
+        case 'date-asc':
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+        case 'date-desc':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        case 'name-asc':
+          return a.filename.localeCompare(b.filename);
+        case 'name-desc':
+          return b.filename.localeCompare(a.filename);
+        default:
+          return 0;
+      }
+    });
+    
+    return sorted;
+  }, [data, viewerSettings.mediaFilter, viewerSettings.sortOrder]);
+
+  // Update media counts
+  useEffect(() => {
+    if (data?.allMedia) {
+      const videos = data.allMedia.filter((item: MediaItem) => item.fileType === 'video').length;
+      const images = data.allMedia.filter((item: MediaItem) => item.fileType === 'image').length;
+      onMediaCountUpdate({
+        total: data.allMedia.length,
+        videos,
+        images
+      });
+    }
+  }, [data, onMediaCountUpdate]);
+
   const groupedByYear = useMemo(() => {
-    if (!data?.allMedia) return {};
+    if (!filteredAndSortedMedia.length) return {};
     
     const grouped: GroupedMedia = {};
     
-    data.allMedia.forEach((item: MediaItem) => {
+    filteredAndSortedMedia.forEach((item: MediaItem) => {
       const date = new Date(item.createdAt);
       const year = date.getFullYear().toString();
       
@@ -69,14 +127,14 @@ export default function Timeline() {
     });
     
     return grouped;
-  }, [data]);
+  }, [filteredAndSortedMedia]);
 
   const groupedByMonth = useMemo(() => {
-    if (!data?.allMedia) return {};
+    if (!filteredAndSortedMedia.length) return {};
     
     const grouped: GroupedMedia = {};
     
-    data.allMedia.forEach((item: MediaItem) => {
+    filteredAndSortedMedia.forEach((item: MediaItem) => {
       const date = new Date(item.createdAt);
       const year = date.getFullYear().toString();
       const month = date.toLocaleString('default', { month: 'long' });
@@ -88,14 +146,14 @@ export default function Timeline() {
     });
     
     return grouped;
-  }, [data]);
+  }, [filteredAndSortedMedia]);
 
   const groupedByDay = useMemo(() => {
-    if (!data?.allMedia) return {};
+    if (!filteredAndSortedMedia.length) return {};
     
     const grouped: GroupedMedia = {};
     
-    data.allMedia.forEach((item: MediaItem) => {
+    filteredAndSortedMedia.forEach((item: MediaItem) => {
       const date = new Date(item.createdAt);
       const year = date.getFullYear().toString();
       const month = date.toLocaleString('default', { month: 'long' });
@@ -109,15 +167,10 @@ export default function Timeline() {
     });
     
     return grouped;
-  }, [data]);
+  }, [filteredAndSortedMedia]);
 
   const years = Object.keys(groupedByYear).sort((a, b) => parseInt(b) - parseInt(a));
-  const sortedMedia = useMemo(() => {
-    if (!data?.allMedia) return [];
-    return [...data.allMedia].sort((a, b) => 
-      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-  }, [data]);
+  const sortedMedia = filteredAndSortedMedia;
 
   if (loading) return <div className="loading">Loading media...</div>;
   if (error) return <div className="error">Error loading media: {error.message}</div>;
@@ -165,7 +218,7 @@ export default function Timeline() {
 
   const renderContent = () => {
     if (viewMode === 'timeline') {
-      return <TimelineView media={sortedMedia} groupBy={groupBy} />;
+      return <TimelineView media={sortedMedia} groupBy={groupBy} viewerSettings={viewerSettings} />;
     }
 
     // Folder-based views (year, month, day)
@@ -202,7 +255,7 @@ export default function Timeline() {
 
       if (viewMode === 'year') {
         // Show all items for the year
-        return <MediaGrid media={groupedByYear[selectedYear].all} />;
+        return <MediaGrid media={groupedByYear[selectedYear].all} viewerSettings={viewerSettings} />;
       }
 
       return (
@@ -222,7 +275,7 @@ export default function Timeline() {
     }
 
     if (viewMode === 'month' && selectedMonth) {
-      return <MediaGrid media={groupedByMonth[selectedYear][selectedMonth]} />;
+      return <MediaGrid media={groupedByMonth[selectedYear][selectedMonth]} viewerSettings={viewerSettings} />;
     }
 
     if (viewMode === 'day' && selectedMonth && !selectedDay) {
@@ -253,7 +306,7 @@ export default function Timeline() {
 
     if (viewMode === 'day' && selectedMonth && selectedDay) {
       const key = `${selectedMonth}|${selectedDay}`;
-      return <MediaGrid media={groupedByDay[selectedYear][key]} />;
+      return <MediaGrid media={groupedByDay[selectedYear][key]} viewerSettings={viewerSettings} />;
     }
 
     return null;

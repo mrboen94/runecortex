@@ -163,35 +163,20 @@
 .controls-center {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 20px;
 }
 
-.slideshow-controls {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.controls-center label {
+.autoplay-info {
   display: flex;
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.controls-center input[type="checkbox"] {
-  cursor: pointer;
-}
-
-.controls-center input[type="number"] {
+  color: rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  color: white;
-  padding: 4px;
+  padding: 6px 12px;
   border-radius: 4px;
-  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .controls-right {
