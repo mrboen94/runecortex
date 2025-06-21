@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { useFolderContext } from '../contexts/FolderContext';
 import './ViewerSettings.css';
 
 export type MediaFilter = 'all' | 'videos' | 'images';
@@ -24,6 +25,7 @@ interface ViewerSettingsProps {
 export default function ViewerSettingsComponent({ settings, onSettingsChange, mediaCount }: ViewerSettingsProps) {
   const [showSettings, setShowSettings] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
+  const { showAllFolders, setShowAllFolders } = useFolderContext();
 
   const updateSetting = <K extends keyof ViewerSettings>(key: K, value: ViewerSettings[K]) => {
     onSettingsChange({ ...settings, [key]: value });
@@ -55,6 +57,19 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
 
       {showSettings && (
         <div className="settings-panel">
+          <div className="settings-section">
+            <h4>Folder Options</h4>
+            <label className="checkbox-label">
+              <input 
+                type="checkbox" 
+                checked={showAllFolders}
+                onChange={(e) => setShowAllFolders(e.target.checked)}
+              />
+              <span>Show all folders</span>
+            </label>
+            <p className="settings-help">When unchecked, only shows media from the current folder</p>
+          </div>
+
           <div className="settings-section">
             <h4>Autoplay</h4>
             <div className="setting-item with-duration">

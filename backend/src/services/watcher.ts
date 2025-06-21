@@ -5,6 +5,7 @@ import { MediaScanner } from './scanner';
 import { thumbnailQueue } from './thumbnailQueue';
 import { db, schema } from '../db';
 import { eq } from 'drizzle-orm';
+import { scanProgress } from './scanProgress';
 
 interface WatcherOptions {
   paths: string[];
@@ -183,6 +184,7 @@ export class MediaWatcher {
     
     // Ping thumbnail queue with new media IDs
     if (this.newMediaIds.length > 0) {
+      scanProgress.startThumbnailGeneration();
       const queueResult = await thumbnailQueue.ping(this.newMediaIds);
       console.log(`Queued ${this.newMediaIds.length} items for thumbnail generation. Queue status: ${queueResult.status}`);
       this.newMediaIds = []; // Clear the array
@@ -223,6 +225,8 @@ export class MediaWatcher {
         
         // Use the scanner's processFile method directly
         const scannerInstance = new MediaScanner();
+        // Set the source path for this watcher
+        scannerInstance['currentSourcePath'] = this.options.paths[0];
         await scannerInstance['processFile'](filepath);
         
         // Get the newly created media item
@@ -265,6 +269,7 @@ export class MediaWatcher {
     
     for (const watchPath of this.options.paths) {
       try {
+        // Scanner will store the source path internally
         await this.scanner.scanDirectory(watchPath);
       } catch (error) {
         console.error(`Initial scan failed for ${watchPath}:`, error);

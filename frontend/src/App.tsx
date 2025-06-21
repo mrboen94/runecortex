@@ -2,7 +2,10 @@ import { useState } from 'react'
 import Timeline from './components/Timeline'
 import ReindexControls from './components/ReindexControls'
 import StatusIndicator from './components/StatusIndicator'
+import FolderBrowser from './components/FolderBrowser'
+import ScanProgress from './components/ScanProgress'
 import ViewerSettingsComponent, { type ViewerSettings } from './components/ViewerSettings'
+import { FolderProvider } from './contexts/FolderContext'
 import './App.css'
 
 function App() {
@@ -25,24 +28,32 @@ function App() {
   });
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <div className="header-top">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-            <ReindexControls />
-            <StatusIndicator />
+    <FolderProvider>
+      <div className="app">
+        <header className="app-header">
+          <div className="header-top">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+              <ReindexControls />
+              <StatusIndicator />
+              <FolderBrowser />
+            </div>
+            <ViewerSettingsComponent 
+              settings={viewerSettings}
+              onSettingsChange={setViewerSettings}
+              mediaCount={mediaCount}
+            />
           </div>
-          <ViewerSettingsComponent 
-            settings={viewerSettings}
-            onSettingsChange={setViewerSettings}
-            mediaCount={mediaCount}
-          />
+        </header>
+        <main className="app-main">
+          <Timeline viewerSettings={viewerSettings} onMediaCountUpdate={setMediaCount} />
+        </main>
+        
+        {/* Global scan progress indicator */}
+        <div className="scan-progress-global">
+          <ScanProgress />
         </div>
-      </header>
-      <main className="app-main">
-        <Timeline viewerSettings={viewerSettings} onMediaCountUpdate={setMediaCount} />
-      </main>
-    </div>
+      </div>
+    </FolderProvider>
   )
 }
 

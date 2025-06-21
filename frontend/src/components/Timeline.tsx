@@ -4,6 +4,7 @@ import { GET_ALL_MEDIA } from '../graphql/queries';
 import MediaGrid from './MediaGrid';
 import TimelineView from './TimelineView';
 import Navigation from './Navigation';
+import { useFolderContext } from '../contexts/FolderContext';
 import type { ViewMode, GroupBy } from './Navigation';
 import './Timeline.css';
 
@@ -45,8 +46,13 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   
+  const { currentPath, showAllFolders } = useFolderContext();
+  
   const { data, loading, error } = useQuery(GET_ALL_MEDIA, {
-    variables: { limit: 1000 }
+    variables: { 
+      limit: 1000,
+      sourcePath: showAllFolders ? undefined : currentPath
+    }
   });
 
   useEffect(() => {

@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_ALL_MEDIA = gql`
-  query GetAllMedia($limit: Int, $offset: Int) {
-    allMedia(limit: $limit, offset: $offset) {
+  query GetAllMedia($limit: Int, $offset: Int, $sourcePath: String) {
+    allMedia(limit: $limit, offset: $offset, sourcePath: $sourcePath) {
       id
       filename
       fileType
@@ -16,8 +16,8 @@ export const GET_ALL_MEDIA = gql`
 `;
 
 export const GET_MEDIA_BY_YEAR = gql`
-  query GetMediaByYear($year: Int!) {
-    mediaByYear(year: $year) {
+  query GetMediaByYear($year: Int!, $sourcePath: String) {
+    mediaByYear(year: $year, sourcePath: $sourcePath) {
       id
       filename
       fileType
@@ -31,8 +31,8 @@ export const GET_MEDIA_BY_YEAR = gql`
 `;
 
 export const GET_MEDIA_BY_YEAR_MONTH = gql`
-  query GetMediaByYearMonth($year: Int!, $month: Int!) {
-    mediaByYearMonth(year: $year, month: $month) {
+  query GetMediaByYearMonth($year: Int!, $month: Int!, $sourcePath: String) {
+    mediaByYearMonth(year: $year, month: $month, sourcePath: $sourcePath) {
       id
       filename
       fileType

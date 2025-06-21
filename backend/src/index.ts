@@ -114,27 +114,19 @@ import { mkdir } from 'fs/promises';
 await mkdir('./thumbnails', { recursive: true }).catch(() => {});
 
 // Start media watcher if watch paths are configured
-import { MediaWatcher } from './services/watcher';
-
 const watchPaths = process.env.WATCH_PATHS?.split(',').map(p => p.trim()) || [];
-let watcher: MediaWatcher | null = null;
 
 if (watchPaths.length > 0) {
-  watcher = new MediaWatcher({
-    paths: watchPaths,
-    debounceMs: 2000, // Wait 2 seconds after last change before processing
-  });
-  
-  await watcher.start();
+  // Use the resolver to start the watcher so it's properly tracked
+  await resolvers.Mutation.startWatcher(null, { paths: watchPaths });
   console.log(`👁️  Watching directories: ${watchPaths.join(', ')}`);
 }
 
 // Graceful shutdown
-process.on('SIGINT', () => {
+process.on('SIGINT', async () => {
   console.log('\nShutting down...');
-  if (watcher) {
-    watcher.stop();
-  }
+  // Use the resolver to stop the watcher
+  await resolvers.Mutation.stopWatcher();
   server.stop();
   process.exit(0);
 });

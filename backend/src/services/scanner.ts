@@ -6,6 +6,7 @@ import crypto from 'crypto';
 import { readFile } from 'fs/promises';
 import { $ } from 'bun';
 import { phashService } from './phashService';
+import { scanProgress } from './scanProgress';
 
 const SUPPORTED_VIDEO_EXTENSIONS = ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.mpg', '.mpeg', '.3gp'];
 const SUPPORTED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
@@ -28,6 +29,7 @@ export class MediaScanner {
   };
   private enableDuplicateDetection: boolean = true;
   private duplicateThreshold: number = 10; // Hamming distance threshold
+  private currentSourcePath: string = '';
 
   async scanDirectory(rootPath: string): Promise<ScanResult> {
     // Reset scan result for new scan
@@ -39,6 +41,12 @@ export class MediaScanner {
       errors: []
     };
     
+    // Store the source path for this scan
+    this.currentSourcePath = rootPath;
+    
+    // Start progress tracking
+    scanProgress.startScan(rootPath);
+    
     const scanSession = await db.insert(schema.scanSessions).values({
       status: 'running'
     }).returning();
@@ -46,7 +54,17 @@ export class MediaScanner {
     const sessionId = scanSession[0].id;
 
     try {
-      await this.walkDirectory(rootPath);
+      // First, discover all media files
+      const mediaFiles: string[] = [];
+      await this.discoverMediaFiles(rootPath, mediaFiles);
+      
+      scanProgress.startProcessing(mediaFiles.length);
+      
+      // Process each file
+      for (let i = 0; i < mediaFiles.length; i++) {
+        await this.processFile(mediaFiles[i]);
+        scanProgress.updateProcessed(i + 1);
+      }
       
       await db.update(schema.scanSessions)
         .set({
@@ -60,6 +78,8 @@ export class MediaScanner {
         })
         .where(eq(schema.scanSessions.id, sessionId));
 
+      scanProgress.complete();
+
     } catch (error) {
       await db.update(schema.scanSessions)
         .set({
@@ -69,10 +89,30 @@ export class MediaScanner {
         })
         .where(eq(schema.scanSessions.id, sessionId));
       
+      scanProgress.reset();
       throw error;
     }
 
     return this.scanResult;
+  }
+
+  private async discoverMediaFiles(dirPath: string, fileList: string[]): Promise<void> {
+    try {
+      const entries = await readdir(dirPath, { withFileTypes: true });
+      
+      for (const entry of entries) {
+        const fullPath = join(dirPath, entry.name);
+        
+        if (entry.isDirectory() && !entry.name.startsWith('.')) {
+          await this.discoverMediaFiles(fullPath, fileList);
+        } else if (entry.isFile() && !entry.name.startsWith('.') && this.isMediaFile(entry.name)) {
+          fileList.push(fullPath);
+          scanProgress.updateDiscovering(fileList.length);
+        }
+      }
+    } catch (error) {
+      console.error(`Failed to read directory ${dirPath}:`, error);
+    }
   }
 
   private async walkDirectory(dirPath: string): Promise<void> {
@@ -128,6 +168,7 @@ export class MediaScanner {
               fileSize: stats.size,
               lastModified: stats.mtime,
               checksum,
+              sourcePath: this.currentSourcePath,
               ...metadata
             })
             .where(eq(schema.mediaItems.id, existing[0].id));
@@ -171,6 +212,7 @@ export class MediaScanner {
           fileSize: stats.size,
           lastModified: stats.mtime,
           checksum,
+          sourcePath: this.currentSourcePath,
           ...metadata
         }).returning();
         

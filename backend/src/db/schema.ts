@@ -18,6 +18,7 @@ export const mediaItems = sqliteTable('media_items', {
   lastModified: integer('last_modified', { mode: 'timestamp' }).notNull(),
   checksum: text('checksum'), // file hash for change detection
   addedAt: integer('added_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  sourcePath: text('source_path'), // The watch path this item was scanned from
   // New fields inspired by stash
   title: text('title'), // User-defined title
   description: text('description'),
@@ -35,6 +36,7 @@ export const mediaItems = sqliteTable('media_items', {
     fileTypeIdx: index('media_file_type_idx').on(table.fileType),
     favoriteIdx: index('media_favorite_idx').on(table.favorite),
     ratingIdx: index('media_rating_idx').on(table.rating),
+    sourcePathIdx: index('media_source_path_idx').on(table.sourcePath),
   };
 });
 

@@ -5,9 +5,11 @@ import { ThumbnailGenerator } from '../services/thumbnail';
 import { MediaWatcher } from '../services/watcher';
 import { thumbnailQueue } from '../services/thumbnailQueue';
 import { errorLogger } from '../services/errorLogger';
-import { unlink, readdir, rename } from 'fs/promises';
+import { scanProgress } from '../services/scanProgress';
+import { unlink, readdir, rename, access, stat } from 'fs/promises';
 import { join, basename, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { constants } from 'fs';
 
 const scanner = new MediaScanner();
 const thumbnailGenerator = new ThumbnailGenerator();
@@ -68,45 +70,68 @@ async function fixThumbnailsWithSpecialChars(): Promise<number> {
 // Global watcher instance
 let globalWatcher: MediaWatcher | null = null;
 let lastProcessedTime: Date | null = null;
+let currentWatchPath: string = process.env.WATCH_PATHS || '/Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing';
+let watchPathHistory: string[] = [currentWatchPath];
 
 export const resolvers = {
   Query: {
-    mediaByDateRange: async (_: any, { start, end }: { start: Date; end: Date }) => {
+    mediaByDateRange: async (_: any, { start, end, sourcePath }: { start: Date; end: Date; sourcePath?: string }) => {
+      const conditions = [between(schema.mediaItems.createdAt, start, end)];
+      if (sourcePath) {
+        conditions.push(eq(schema.mediaItems.sourcePath, sourcePath));
+      }
+      
       return await db.select()
         .from(schema.mediaItems)
-        .where(between(schema.mediaItems.createdAt, start, end))
+        .where(and(...conditions))
         .orderBy(desc(schema.mediaItems.createdAt));
     },
 
-    mediaByYear: async (_: any, { year }: { year: number }) => {
+    mediaByYear: async (_: any, { year, sourcePath }: { year: number; sourcePath?: string }) => {
       const startDate = new Date(year, 0, 1);
       const endDate = new Date(year + 1, 0, 1);
       
-      return await db.select()
-        .from(schema.mediaItems)
-        .where(and(
-          gte(schema.mediaItems.createdAt, startDate),
-          lt(schema.mediaItems.createdAt, endDate)
-        ))
-        .orderBy(desc(schema.mediaItems.createdAt));
-    },
-
-    mediaByYearMonth: async (_: any, { year, month }: { year: number; month: number }) => {
-      const startDate = new Date(year, month - 1, 1);
-      const endDate = new Date(year, month, 1);
+      const conditions = [
+        gte(schema.mediaItems.createdAt, startDate),
+        lt(schema.mediaItems.createdAt, endDate)
+      ];
+      if (sourcePath) {
+        conditions.push(eq(schema.mediaItems.sourcePath, sourcePath));
+      }
       
       return await db.select()
         .from(schema.mediaItems)
-        .where(and(
-          gte(schema.mediaItems.createdAt, startDate),
-          lt(schema.mediaItems.createdAt, endDate)
-        ))
+        .where(and(...conditions))
         .orderBy(desc(schema.mediaItems.createdAt));
     },
 
-    allMedia: async (_: any, { limit = 100, offset = 0 }: { limit?: number; offset?: number }) => {
+    mediaByYearMonth: async (_: any, { year, month, sourcePath }: { year: number; month: number; sourcePath?: string }) => {
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 1);
+      
+      const conditions = [
+        gte(schema.mediaItems.createdAt, startDate),
+        lt(schema.mediaItems.createdAt, endDate)
+      ];
+      if (sourcePath) {
+        conditions.push(eq(schema.mediaItems.sourcePath, sourcePath));
+      }
+      
       return await db.select()
         .from(schema.mediaItems)
+        .where(and(...conditions))
+        .orderBy(desc(schema.mediaItems.createdAt));
+    },
+
+    allMedia: async (_: any, { limit = 100, offset = 0, sourcePath }: { limit?: number; offset?: number; sourcePath?: string }) => {
+      const query = db.select()
+        .from(schema.mediaItems);
+      
+      if (sourcePath) {
+        query.where(eq(schema.mediaItems.sourcePath, sourcePath));
+      }
+      
+      return await query
         .orderBy(desc(schema.mediaItems.createdAt))
         .limit(limit)
         .offset(offset);
@@ -131,13 +156,88 @@ export const resolvers = {
     watcherStatus: async () => {
       return {
         isActive: globalWatcher !== null,
-        watchPaths: globalWatcher ? globalWatcher['options'].paths : [],
-        lastProcessed: lastProcessedTime
+        watchPaths: globalWatcher ? [currentWatchPath] : [],
+        lastProcessed: lastProcessedTime,
+        scanProgress: scanProgress.getProgress()
       };
     },
 
     thumbnailQueueStatus: async () => {
       return thumbnailQueue.getStatus();
+    },
+
+    getCurrentWatchPath: async () => {
+      return currentWatchPath;
+    },
+
+    getWatchPathHistory: async () => {
+      return watchPathHistory;
+    },
+
+    validatePath: async (_: any, { path }: { path: string }) => {
+      try {
+        // Check if path exists and is accessible
+        await access(path, constants.R_OK);
+        
+        // Check if it's a directory
+        const stats = await stat(path);
+        if (!stats.isDirectory()) {
+          return {
+            isValid: false,
+            exists: true,
+            isDirectory: false,
+            hasMediaFiles: false,
+            mediaFileCount: 0,
+            error: 'Path is not a directory'
+          };
+        }
+
+        // Check for media files
+        const files = await readdir(path, { recursive: true });
+        const mediaExtensions = ['.mp4', '.avi', '.mov', '.mkv', '.webm', '.jpg', '.jpeg', '.png', '.gif', '.webp'];
+        const mediaFiles = files.filter(file => {
+          const ext = extname(file).toLowerCase();
+          return mediaExtensions.includes(ext);
+        });
+
+        return {
+          isValid: true,
+          exists: true,
+          isDirectory: true,
+          hasMediaFiles: mediaFiles.length > 0,
+          mediaFileCount: mediaFiles.length,
+          error: null
+        };
+      } catch (error: any) {
+        if (error.code === 'ENOENT') {
+          return {
+            isValid: false,
+            exists: false,
+            isDirectory: false,
+            hasMediaFiles: false,
+            mediaFileCount: 0,
+            error: 'Path does not exist'
+          };
+        } else if (error.code === 'EACCES') {
+          return {
+            isValid: false,
+            exists: true,
+            isDirectory: false,
+            hasMediaFiles: false,
+            mediaFileCount: 0,
+            error: 'Permission denied'
+          };
+        } else {
+          return {
+            isValid: false,
+            exists: false,
+            isDirectory: false,
+            hasMediaFiles: false,
+            mediaFileCount: 0,
+            error: error.message || 'Unknown error'
+          };
+        }
+      }
     },
   },
 
@@ -166,6 +266,11 @@ export const resolvers = {
       // Stop existing watcher if any
       if (globalWatcher) {
         globalWatcher.stop();
+      }
+      
+      // Update current watch path if paths provided
+      if (paths.length > 0) {
+        currentWatchPath = paths[0];
       }
 
       // Create and start new watcher
@@ -363,6 +468,55 @@ export const resolvers = {
         console.error('Failed to log playback error:', logError);
         return false;
       }
+    },
+
+    changeWatchPath: async (_: any, { path }: { path: string }) => {
+      // Update the current watch path
+      currentWatchPath = path;
+      
+      // Add to history if not already there
+      if (!watchPathHistory.includes(path)) {
+        watchPathHistory.unshift(path); // Add to beginning
+        // Keep only last 50 paths
+        if (watchPathHistory.length > 50) {
+          watchPathHistory = watchPathHistory.slice(0, 50);
+        }
+      } else {
+        // Move to front if already in history
+        watchPathHistory = watchPathHistory.filter(p => p !== path);
+        watchPathHistory.unshift(path);
+      }
+      
+      // Stop existing watcher if any
+      if (globalWatcher) {
+        globalWatcher.stop();
+      }
+
+      // Start new watcher with the new path
+      globalWatcher = new MediaWatcher({
+        paths: [path],
+        debounceMs: parseInt(process.env.WATCHER_DEBOUNCE || '5') * 1000
+      });
+
+      // Update the emitUpdate method to track last processed time
+      const originalEmit = globalWatcher['emitUpdate'].bind(globalWatcher);
+      globalWatcher['emitUpdate'] = (update: any) => {
+        lastProcessedTime = new Date();
+        originalEmit(update);
+      };
+
+      // Start the watcher (initial scan happens automatically)
+      await globalWatcher.start();
+
+      console.log(`Changed watch path to: ${path}`);
+
+      // Return immediately with scanning status
+      return {
+        isActive: true,
+        watchPaths: [path],
+        lastProcessed: lastProcessedTime,
+        scanProgress: scanProgress.getProgress()
+      };
     },
   },
 

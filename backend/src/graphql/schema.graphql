@@ -38,20 +38,33 @@ type ScanError {
 }
 
 type Query {
-  mediaByDateRange(start: DateTime!, end: DateTime!): [MediaItem!]!
-  mediaByYear(year: Int!): [MediaItem!]!
-  mediaByYearMonth(year: Int!, month: Int!): [MediaItem!]!
-  allMedia(limit: Int, offset: Int): [MediaItem!]!
+  mediaByDateRange(start: DateTime!, end: DateTime!, sourcePath: String): [MediaItem!]!
+  mediaByYear(year: Int!, sourcePath: String): [MediaItem!]!
+  mediaByYearMonth(year: Int!, month: Int!, sourcePath: String): [MediaItem!]!
+  allMedia(limit: Int, offset: Int, sourcePath: String): [MediaItem!]!
   mediaItem(id: Int!): MediaItem
   recentScanSessions(limit: Int = 10): [ScanSession!]!
   watcherStatus: WatcherStatus!
   thumbnailQueueStatus: ThumbnailQueueStatus!
+  getCurrentWatchPath: String!
+  getWatchPathHistory: [String!]!
+  validatePath(path: String!): PathValidation!
 }
 
 type WatcherStatus {
   isActive: Boolean!
   watchPaths: [String!]!
   lastProcessed: DateTime
+  scanProgress: ScanProgress
+}
+
+type ScanProgress {
+  isScanning: Boolean!
+  currentPath: String
+  totalFiles: Int!
+  processedFiles: Int!
+  phase: String! # 'discovering' | 'processing' | 'generating_thumbnails' | 'complete'
+  message: String
 }
 
 type ThumbnailQueueStatus {
@@ -77,6 +90,15 @@ type ReindexResult {
   errors: [String!]!
 }
 
+type PathValidation {
+  isValid: Boolean!
+  exists: Boolean!
+  isDirectory: Boolean!
+  hasMediaFiles: Boolean!
+  mediaFileCount: Int!
+  error: String
+}
+
 type Mutation {
   triggerScan(path: String!): ScanResult!
   regenerateThumbnails: Int!
@@ -88,4 +110,5 @@ type Mutation {
   reindexThumbnails: ReindexResult!
   clearAllThumbnails: ReindexResult!
   logPlaybackError(mediaId: Int!, error: String!, browserInfo: String): Boolean!
+  changeWatchPath(path: String!): WatcherStatus!
 }
