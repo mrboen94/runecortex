@@ -36,6 +36,10 @@ lerna-debug.log*
 /thumbnails/
 /media/
 /virtual/
+/test-images/
+/test-media/
+# Test folder outside project
+../images-and-video-folder-for-testing/
 *.db
 *.db-shm
 *.db-wal

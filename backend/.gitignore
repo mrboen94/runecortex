@@ -45,3 +45,31 @@ export-*.json
 test.db
 test.db-shm
 test.db-wal
+
+# Test media files and folders
+test-images/
+test-media/
+media/
+thumbnails/
+# Test folder outside project
+../../images-and-video-folder-for-testing/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.webp
+*.tiff
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.mpg
+*.mpeg
+*.3gp
+!frontend/public/*.svg
+!frontend/src/assets/*.svg
