@@ -19,6 +19,10 @@ interface MediaGridProps {
 
 export default function MediaGrid({ media }: MediaGridProps) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
+  
+  const handleNavigate = (newMedia: MediaItem) => {
+    setSelectedMedia(newMedia);
+  };
 
   const formatDuration = (seconds?: number) => {
     if (!seconds) return '';
@@ -71,7 +75,9 @@ export default function MediaGrid({ media }: MediaGridProps) {
       {selectedMedia && (
         <MediaViewer
           media={selectedMedia}
+          allMedia={media}
           onClose={() => setSelectedMedia(null)}
+          onNavigate={handleNavigate}
         />
       )}
     </>
