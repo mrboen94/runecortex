@@ -1,9 +1,10 @@
 import { db, schema } from '../db';
 import { eq } from 'drizzle-orm';
 import { $ } from 'bun';
-import { join, dirname } from 'path';
+import { join, dirname, extname, basename } from 'path';
 import { mkdir, access } from 'fs/promises';
 import { constants } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 export class ThumbnailGenerator {
   private thumbnailDir: string;
@@ -36,7 +37,21 @@ export class ThumbnailGenerator {
       throw new Error(`Media item ${mediaItemId} not found`);
     }
 
-    const thumbnailPath = join(this.thumbnailDir, `${mediaItemId}.jpg`);
+    // Generate or get existing thumbnail ID
+    let thumbnailId = item.thumbnailId;
+    if (!thumbnailId) {
+      // Generate new thumbnail ID: filename (without extension) + UUID
+      const fileBaseName = basename(item.filename, extname(item.filename));
+      const uuid = uuidv4().substring(0, 8); // Use first 8 chars for brevity
+      thumbnailId = `${fileBaseName}_${uuid}`;
+      
+      // Update the database with the new thumbnail ID
+      await db.update(schema.mediaItems)
+        .set({ thumbnailId })
+        .where(eq(schema.mediaItems.id, mediaItemId));
+    }
+
+    const thumbnailPath = join(this.thumbnailDir, `${thumbnailId}.jpg`);
 
     // Check if thumbnail already exists
     try {

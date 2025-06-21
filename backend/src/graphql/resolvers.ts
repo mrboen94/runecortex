@@ -155,9 +155,12 @@ export const resolvers = {
 
   MediaItem: {
     thumbnailUrl: (parent: schema.MediaItem) => {
-      // Always return the thumbnail URL, even if not generated yet
+      // Return thumbnail URL if thumbnailId exists, otherwise fallback to ID-based naming
       // Frontend will handle missing thumbnails with placeholders
-      return `/thumbnails/${parent.id}.jpg`;
+      if (parent.thumbnailId) {
+        return `/thumbnails/${parent.thumbnailId}.jpg`;
+      }
+      return `/thumbnails/${parent.id}.jpg`; // Fallback for existing items
     },
   },
 };

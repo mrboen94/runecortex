@@ -14,6 +14,7 @@ export const mediaItems = sqliteTable('media_items', {
   height: integer('height'),
   metadataJson: text('metadata_json'), // JSON string
   thumbnailGenerated: integer('thumbnail_generated', { mode: 'boolean' }).default(false),
+  thumbnailId: text('thumbnail_id'), // UUID for thumbnail filename
   lastModified: integer('last_modified', { mode: 'timestamp' }).notNull(),
   checksum: text('checksum'), // file hash for change detection
   addedAt: integer('added_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
