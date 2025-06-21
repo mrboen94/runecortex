@@ -18,10 +18,31 @@ interface FolderContextType {
 const FolderContext = createContext<FolderContextType | undefined>(undefined);
 
 export function FolderProvider({ children }: { children: ReactNode }) {
-  const [showAllFolders, setShowAllFolders] = useState(false);
+  const [showAllFolders, setShowAllFolders] = useState(() => {
+    // Load from localStorage
+    const saved = localStorage.getItem('showAllFolders');
+    return saved ? JSON.parse(saved) : false;
+  });
+  
   const { data, refetch } = useQuery(GET_CURRENT_WATCH_PATH);
   
   const currentPath = data?.getCurrentWatchPath || '';
+  
+  // Save showAllFolders to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('showAllFolders', JSON.stringify(showAllFolders));
+  }, [showAllFolders]);
+  
+  // Save current path to localStorage when it changes
+  useEffect(() => {
+    if (currentPath) {
+      localStorage.setItem('lastWatchPath', currentPath);
+      // Also add to path history
+      import('../services/pathHistory').then(({ pathHistoryService }) => {
+        pathHistoryService.addPath(currentPath);
+      });
+    }
+  }, [currentPath]);
   
   const refreshCurrentPath = () => {
     refetch();

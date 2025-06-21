@@ -11,6 +11,10 @@ interface MediaItem {
   height: number;
   duration?: number;
   thumbnailUrl?: string;
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+  locationName?: string;
 }
 
 interface MediaGridProps {

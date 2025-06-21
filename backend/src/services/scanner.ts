@@ -295,9 +295,19 @@ export class MediaScanner {
             const result = await $`exiftool -j "${filepath}"`.json();
             
             if (result && result[0]) {
-              metadata.width = result[0].ImageWidth;
-              metadata.height = result[0].ImageHeight;
-              metadata.metadataJson = JSON.stringify(result[0]);
+              const exifData = result[0];
+              metadata.width = exifData.ImageWidth;
+              metadata.height = exifData.ImageHeight;
+              
+              // Extract GPS location data
+              const gpsData = this.extractGPSFromExif(exifData);
+              if (gpsData) {
+                metadata.latitude = gpsData.latitude;
+                metadata.longitude = gpsData.longitude;
+                metadata.altitude = gpsData.altitude;
+              }
+              
+              metadata.metadataJson = JSON.stringify(exifData);
             }
           } else {
             // Use ffprobe as fallback
@@ -400,6 +410,108 @@ export class MediaScanner {
     }
     
     return null;
+  }
+
+  private extractGPSFromExif(exifData: any): { latitude: number; longitude: number; altitude?: number } | null {
+    try {
+      // Check for GPS coordinates in various EXIF formats
+      let latitude: number | null = null;
+      let longitude: number | null = null;
+      let altitude: number | null = null;
+      
+      // Method 1: Decimal degrees (GPSLatitude/GPSLongitude as numbers)
+      if (typeof exifData.GPSLatitude === 'number' && typeof exifData.GPSLongitude === 'number') {
+        latitude = exifData.GPSLatitude;
+        longitude = exifData.GPSLongitude;
+      }
+      // Method 2: DMS format (degrees, minutes, seconds)
+      else if (exifData.GPSLatitude && exifData.GPSLongitude && 
+               exifData.GPSLatitudeRef && exifData.GPSLongitudeRef) {
+        // Convert DMS to decimal degrees
+        latitude = this.convertDMSToDecimal(exifData.GPSLatitude, exifData.GPSLatitudeRef);
+        longitude = this.convertDMSToDecimal(exifData.GPSLongitude, exifData.GPSLongitudeRef);
+      }
+      
+      // Extract altitude if available
+      if (exifData.GPSAltitude !== undefined) {
+        altitude = parseFloat(exifData.GPSAltitude);
+        // Handle altitude reference (above/below sea level)
+        if (exifData.GPSAltitudeRef === '1' || exifData.GPSAltitudeRef === 1) {
+          altitude = -altitude; // Below sea level
+        }
+      }
+      
+      // Return null if we don't have valid coordinates
+      if (latitude === null || longitude === null) {
+        return null;
+      }
+      
+      // Validate coordinates are in valid ranges
+      if (latitude < -90 || latitude > 90 || longitude < -180 || longitude > 180) {
+        console.warn(`Invalid GPS coordinates: lat=${latitude}, lon=${longitude}`);
+        return null;
+      }
+      
+      const result: { latitude: number; longitude: number; altitude?: number } = {
+        latitude,
+        longitude
+      };
+      
+      if (altitude !== null) {
+        result.altitude = altitude;
+      }
+      
+      return result;
+    } catch (error) {
+      console.error('Error extracting GPS data:', error);
+      return null;
+    }
+  }
+  
+  private convertDMSToDecimal(dmsString: string, ref: string): number {
+    try {
+      // Parse DMS string like "34 deg 1' 13.80\" N" or "34 deg 1' 13.80\""
+      let dms = dmsString;
+      
+      // Extract degrees, minutes, seconds using regex
+      const dmsMatch = dms.match(/(\d+)\s*deg\s*(\d+)'\s*([\d.]+)"/);
+      if (!dmsMatch) {
+        // Try alternate format
+        const parts = dms.split(/[°'"]/);
+        if (parts.length >= 3) {
+          const degrees = parseFloat(parts[0]);
+          const minutes = parseFloat(parts[1]);
+          const seconds = parseFloat(parts[2]);
+          
+          let decimal = degrees + minutes / 60 + seconds / 3600;
+          
+          // Apply reference (N/S for latitude, E/W for longitude)
+          if (ref === 'S' || ref === 'W') {
+            decimal = -decimal;
+          }
+          
+          return decimal;
+        }
+      } else {
+        const degrees = parseFloat(dmsMatch[1]);
+        const minutes = parseFloat(dmsMatch[2]);
+        const seconds = parseFloat(dmsMatch[3]);
+        
+        let decimal = degrees + minutes / 60 + seconds / 3600;
+        
+        // Apply reference
+        if (ref === 'S' || ref === 'W') {
+          decimal = -decimal;
+        }
+        
+        return decimal;
+      }
+      
+      return 0;
+    } catch (error) {
+      console.error('Error converting DMS to decimal:', error);
+      return 0;
+    }
   }
 
   private async checkForDuplicate(filepath: string, fileType: string, checksum: string, fileSize: number): Promise<any | null> {

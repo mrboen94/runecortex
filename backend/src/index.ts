@@ -120,6 +120,11 @@ if (watchPaths.length > 0) {
   // Use the resolver to start the watcher so it's properly tracked
   await resolvers.Mutation.startWatcher(null, { paths: watchPaths });
   console.log(`👁️  Watching directories: ${watchPaths.join(', ')}`);
+} else {
+  // If no watch paths configured, use a default
+  const defaultPath = '/Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing';
+  await resolvers.Mutation.startWatcher(null, { paths: [defaultPath] });
+  console.log(`👁️  Watching default directory: ${defaultPath}`);
 }
 
 // Graceful shutdown

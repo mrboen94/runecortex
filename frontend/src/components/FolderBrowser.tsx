@@ -2,18 +2,13 @@ import { useState, useEffect } from 'react';
 import { useMutation, useQuery, useLazyQuery } from '@apollo/client';
 import { gql } from '@apollo/client';
 import { useFolderContext } from '../contexts/FolderContext';
+import { pathHistoryService } from '../services/pathHistory';
 import ScanProgress from './ScanProgress';
 import './FolderBrowser.css';
 
 const GET_CURRENT_PATH = gql`
   query GetCurrentWatchPath {
     getCurrentWatchPath
-  }
-`;
-
-const GET_PATH_HISTORY = gql`
-  query GetWatchPathHistory {
-    getWatchPathHistory
   }
 `;
 
@@ -50,14 +45,19 @@ export default function FolderBrowser({ onPathChange }: FolderBrowserProps) {
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [showScanProgress, setShowScanProgress] = useState(false);
+  const [localHistory, setLocalHistory] = useState<string[]>([]);
   
   const { refreshCurrentPath } = useFolderContext();
   const { data: currentPathData } = useQuery(GET_CURRENT_PATH);
-  const { data: historyData, refetch: refetchHistory } = useQuery(GET_PATH_HISTORY);
   const [validatePath] = useLazyQuery(VALIDATE_PATH);
   const [changeWatchPath] = useMutation(CHANGE_WATCH_PATH, {
-    refetchQueries: ['GetAllMedia', 'GetSystemStatus', 'GetWatchPathHistory', 'GetCurrentWatchPath'],
+    refetchQueries: ['GetAllMedia', 'GetSystemStatus', 'GetCurrentWatchPath'],
   });
+
+  // Load history from localStorage on mount
+  useEffect(() => {
+    setLocalHistory(pathHistoryService.getHistory());
+  }, []);
 
   useEffect(() => {
     if (currentPathData?.getCurrentWatchPath) {
@@ -68,7 +68,8 @@ export default function FolderBrowser({ onPathChange }: FolderBrowserProps) {
   const handleBrowse = () => {
     setShowBrowser(true);
     setValidationError(null);
-    refetchHistory();
+    // Refresh local history
+    setLocalHistory(pathHistoryService.getHistory());
   };
 
   const handleOSDialog = async () => {
@@ -137,6 +138,10 @@ export default function FolderBrowser({ onPathChange }: FolderBrowserProps) {
       await changeWatchPath({
         variables: { path: selectedPath }
       });
+      
+      // Add to local history
+      const updatedHistory = pathHistoryService.addPath(selectedPath);
+      setLocalHistory(updatedHistory);
       
       // Refresh the current path in the context
       refreshCurrentPath();
@@ -235,21 +240,23 @@ export default function FolderBrowser({ onPathChange }: FolderBrowserProps) {
               </button>
             </div>
 
-            {historyData?.getWatchPathHistory && historyData.getWatchPathHistory.length > 1 && (
+            {localHistory.length > 0 && (
               <div className="path-history-section">
                 <h4>Recent Folders</h4>
                 <div className="path-history-list">
-                  {historyData.getWatchPathHistory.slice(1).map((path: string, index: number) => (
-                    <button
-                      key={index}
-                      className="history-item"
-                      onClick={() => handleHistorySelect(path)}
-                      title={path}
-                    >
-                      📁 {path.split('/').pop() || path.split('\\').pop() || path}
-                      <span className="history-path">{path}</span>
-                    </button>
-                  ))}
+                  {localHistory
+                    .filter(path => path !== currentPathData?.getCurrentWatchPath)
+                    .map((path: string, index: number) => (
+                      <button
+                        key={index}
+                        className="history-item"
+                        onClick={() => handleHistorySelect(path)}
+                        title={path}
+                      >
+                        📁 {path.split('/').pop() || path.split('\\').pop() || path}
+                        <span className="history-path">{path}</span>
+                      </button>
+                    ))}
                 </div>
               </div>
             )}

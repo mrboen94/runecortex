@@ -4,6 +4,7 @@ import ReindexControls from './components/ReindexControls'
 import StatusIndicator from './components/StatusIndicator'
 import FolderBrowser from './components/FolderBrowser'
 import ScanProgress from './components/ScanProgress'
+import PathRestorer from './components/PathRestorer'
 import ViewerSettingsComponent, { type ViewerSettings } from './components/ViewerSettings'
 import { FolderProvider } from './contexts/FolderContext'
 import './App.css'
@@ -30,6 +31,7 @@ function App() {
   return (
     <FolderProvider>
       <div className="app">
+        <PathRestorer />
         <header className="app-header">
           <div className="header-top">
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>

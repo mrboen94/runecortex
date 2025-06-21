@@ -12,6 +12,10 @@ interface MediaItem {
   height: number;
   duration?: number;
   thumbnailUrl?: string;
+  latitude?: number;
+  longitude?: number;
+  altitude?: number;
+  locationName?: string;
 }
 
 const LOG_PLAYBACK_ERROR = gql`
@@ -437,6 +441,19 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
               }}
             >
               {currentMediaIndex + 1} / {allMedia.length}
+            </div>
+          )}
+          {currentMedia.latitude && currentMedia.longitude && (
+            <div 
+              style={{ 
+                marginTop: '8px',
+                opacity: showDate ? 1 : 0,
+                transition: 'opacity 0.3s ease',
+                fontSize: '12px'
+              }}
+            >
+              📍 {currentMedia.latitude.toFixed(6)}, {currentMedia.longitude.toFixed(6)}
+              {currentMedia.altitude && ` • ${currentMedia.altitude.toFixed(0)}m`}
             </div>
           )}
         </div>

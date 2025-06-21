@@ -73,6 +73,15 @@ let lastProcessedTime: Date | null = null;
 let currentWatchPath: string = process.env.WATCH_PATHS || '/Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing';
 let watchPathHistory: string[] = [currentWatchPath];
 
+// Initialize path history from environment or default
+function initializePathHistory() {
+  // You could load this from a file or database if needed
+  // For now, just ensure the current path is in history
+  if (!watchPathHistory.includes(currentWatchPath)) {
+    watchPathHistory.unshift(currentWatchPath);
+  }
+}
+
 export const resolvers = {
   Query: {
     mediaByDateRange: async (_: any, { start, end, sourcePath }: { start: Date; end: Date; sourcePath?: string }) => {

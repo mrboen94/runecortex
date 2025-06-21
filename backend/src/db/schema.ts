@@ -19,6 +19,11 @@ export const mediaItems = sqliteTable('media_items', {
   checksum: text('checksum'), // file hash for change detection
   addedAt: integer('added_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
   sourcePath: text('source_path'), // The watch path this item was scanned from
+  // Location metadata
+  latitude: real('latitude'), // GPS latitude
+  longitude: real('longitude'), // GPS longitude
+  altitude: real('altitude'), // GPS altitude in meters
+  locationName: text('location_name'), // Reverse geocoded location name
   // New fields inspired by stash
   title: text('title'), // User-defined title
   description: text('description'),
@@ -37,6 +42,7 @@ export const mediaItems = sqliteTable('media_items', {
     favoriteIdx: index('media_favorite_idx').on(table.favorite),
     ratingIdx: index('media_rating_idx').on(table.rating),
     sourcePathIdx: index('media_source_path_idx').on(table.sourcePath),
+    locationIdx: index('media_location_idx').on(table.latitude, table.longitude),
   };
 });
 

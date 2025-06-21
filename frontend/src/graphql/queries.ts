@@ -11,6 +11,10 @@ export const GET_ALL_MEDIA = gql`
       height
       duration
       thumbnailUrl
+      latitude
+      longitude
+      altitude
+      locationName
     }
   }
 `;
@@ -26,6 +30,10 @@ export const GET_MEDIA_BY_YEAR = gql`
       height
       duration
       thumbnailUrl
+      latitude
+      longitude
+      altitude
+      locationName
     }
   }
 `;
@@ -41,6 +49,10 @@ export const GET_MEDIA_BY_YEAR_MONTH = gql`
       height
       duration
       thumbnailUrl
+      latitude
+      longitude
+      altitude
+      locationName
     }
   }
 `;

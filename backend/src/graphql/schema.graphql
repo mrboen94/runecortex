@@ -12,6 +12,10 @@ type MediaItem {
   height: Int
   thumbnailUrl: String
   lastModified: DateTime!
+  latitude: Float
+  longitude: Float
+  altitude: Float
+  locationName: String
 }
 
 type ScanSession {
