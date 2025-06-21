@@ -1,0 +1,168 @@
+.reindex-controls {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.reindex-buttons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.reindex-btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.reindex-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.reindex-btn.primary {
+  background: #007bff;
+  color: white;
+}
+
+.reindex-btn.primary:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.reindex-btn.secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.reindex-btn.secondary:hover:not(:disabled) {
+  background: #5a6268;
+}
+
+.reindex-btn.danger {
+  background: #dc3545;
+  color: white;
+}
+
+.reindex-btn.danger:hover:not(:disabled) {
+  background: #c82333;
+}
+
+.clear-confirm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3cd;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ffeaa7;
+}
+
+.clear-confirm span {
+  font-size: 14px;
+  color: #856404;
+  font-weight: 500;
+}
+
+.reindex-result {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 6px;
+  position: relative;
+}
+
+.reindex-result.success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.reindex-result.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.reindex-result h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.reindex-result p {
+  margin: 4px 0;
+  font-size: 14px;
+}
+
+.error-details {
+  margin-top: 12px;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.error-details ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.error-details li {
+  margin: 4px 0;
+  font-size: 13px;
+  font-family: monospace;
+}
+
+.close-result {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: inherit;
+  opacity: 0.7;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-result:hover {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .reindex-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .reindex-btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .clear-confirm {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+  
+  .clear-confirm span {
+    text-align: center;
+  }
+}

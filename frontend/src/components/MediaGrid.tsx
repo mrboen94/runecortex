@@ -42,12 +42,20 @@ export default function MediaGrid({ media }: MediaGridProps) {
                   src={`http://localhost:4001${item.thumbnailUrl}`} 
                   alt={item.filename}
                   loading="lazy"
+                  onError={(e) => {
+                    // Hide the image and show placeholder when thumbnail fails to load
+                    (e.target as HTMLImageElement).style.display = 'none';
+                    const placeholder = (e.target as HTMLImageElement).nextElementSibling as HTMLElement;
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
                 />
-              ) : (
-                <div className="placeholder">
-                  {item.fileType === 'video' ? '🎬' : '🖼️'}
-                </div>
-              )}
+              ) : null}
+              <div 
+                className="placeholder" 
+                style={{ display: item.thumbnailUrl ? 'none' : 'flex' }}
+              >
+                {item.fileType === 'video' ? '🎬' : '🖼️'}
+              </div>
               {item.fileType === 'video' && item.duration && (
                 <span className="duration">{formatDuration(item.duration)}</span>
               )}

@@ -58,3 +58,25 @@ export const TRIGGER_SCAN = gql`
     }
   }
 `;
+
+export const REINDEX_THUMBNAILS = gql`
+  mutation ReindexThumbnails {
+    reindexThumbnails {
+      success
+      message
+      thumbnailsProcessed
+      errors
+    }
+  }
+`;
+
+export const CLEAR_ALL_THUMBNAILS = gql`
+  mutation ClearAllThumbnails {
+    clearAllThumbnails {
+      success
+      message
+      thumbnailsProcessed
+      errors
+    }
+  }
+`;
