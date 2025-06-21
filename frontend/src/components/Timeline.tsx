@@ -314,16 +314,12 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
 
   return (
     <div className="timeline">
-      <header className="timeline-header">
-        <h1>RuneCortex Media Timeline</h1>
-        {renderBreadcrumb()}
-      </header>
-
       <Navigation 
         viewMode={viewMode}
         groupBy={groupBy}
         onViewModeChange={handleViewModeChange}
         onGroupByChange={setGroupBy}
+        breadcrumb={renderBreadcrumb()}
       />
 
       <main className="timeline-content">

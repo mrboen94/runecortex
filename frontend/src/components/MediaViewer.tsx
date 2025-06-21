@@ -1,4 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
+import { useMutation } from '@apollo/client';
+import { gql } from '@apollo/client';
 import './MediaViewer.css';
 
 interface MediaItem {
@@ -12,6 +14,12 @@ interface MediaItem {
   thumbnailUrl?: string;
 }
 
+const LOG_PLAYBACK_ERROR = gql`
+  mutation LogPlaybackError($mediaId: Int!, $error: String!, $browserInfo: String) {
+    logPlaybackError(mediaId: $mediaId, error: $error, browserInfo: $browserInfo)
+  }
+`;
+
 interface MediaViewerProps {
   media: MediaItem;
   allMedia: MediaItem[];
@@ -22,14 +30,25 @@ interface MediaViewerProps {
     slideInterval: number;
     mediaFilter: 'all' | 'videos' | 'images';
     sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
+    showCounter?: boolean;
+    showDate?: boolean;
+    counterDuration?: number;
+    dateDuration?: number;
   };
 }
 
 export default function MediaViewer({ media, allMedia, onClose, onNavigate, viewerSettings }: MediaViewerProps) {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [showCounter, setShowCounter] = useState(true);
+  const [showDate, setShowDate] = useState(true);
+  const [playbackError, setPlaybackError] = useState(false);
   const slideInterval = viewerSettings?.slideInterval || 5;
   const autoPlay = viewerSettings?.autoPlay ?? true;
+  const displayCounter = viewerSettings?.showCounter ?? true;
+  const displayDate = viewerSettings?.showDate ?? true;
+  const counterDuration = viewerSettings?.counterDuration ?? 1;
+  const dateDuration = viewerSettings?.dateDuration ?? 0;
   const [currentMediaIndex, setCurrentMediaIndex] = useState(
     allMedia.findIndex(m => m.id === media.id)
   );
@@ -38,6 +57,10 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const slideTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const counterTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const dateTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  
+  const [logError] = useMutation(LOG_PLAYBACK_ERROR);
 
   const currentMedia = allMedia[currentMediaIndex];
   const mediaUrl = `http://localhost:4001/media/${currentMedia.id}`;
@@ -50,7 +73,67 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     
     setCurrentMediaIndex(newIndex);
     onNavigate(allMedia[newIndex]);
-  }, [currentMediaIndex, allMedia, onNavigate]);
+    setPlaybackError(false); // Reset error state when navigating
+    
+    // Show counter briefly when navigating
+    if (displayCounter && counterDuration > 0) {
+      setShowCounter(true);
+      if (counterTimeoutRef.current) {
+        clearTimeout(counterTimeoutRef.current);
+      }
+      counterTimeoutRef.current = setTimeout(() => {
+        setShowCounter(false);
+      }, counterDuration * 1000);
+    } else if (displayCounter && counterDuration === 0) {
+      setShowCounter(true); // Always show
+    }
+    
+    // Show date briefly when navigating
+    if (displayDate && dateDuration > 0) {
+      setShowDate(true);
+      if (dateTimeoutRef.current) {
+        clearTimeout(dateTimeoutRef.current);
+      }
+      dateTimeoutRef.current = setTimeout(() => {
+        setShowDate(false);
+      }, dateDuration * 1000);
+    } else if (displayDate && dateDuration === 0) {
+      setShowDate(true); // Always show
+    }
+  }, [currentMediaIndex, allMedia, onNavigate, displayCounter, displayDate, counterDuration, dateDuration]);
+
+  // Handle media playback errors
+  const handleMediaError = useCallback(async (error: Event | string) => {
+    setPlaybackError(true);
+    
+    const errorMessage = typeof error === 'string' ? error : 'Media playback failed';
+    const browserInfo = {
+      userAgent: navigator.userAgent,
+      timestamp: new Date().toISOString(),
+      mediaType: currentMedia.fileType,
+      filename: currentMedia.filename,
+      dimensions: `${currentMedia.width}x${currentMedia.height}`,
+      duration: currentMedia.duration
+    };
+    
+    try {
+      await logError({
+        variables: {
+          mediaId: currentMedia.id,
+          error: errorMessage,
+          browserInfo: JSON.stringify(browserInfo)
+        }
+      });
+      console.error('Playback error logged:', errorMessage);
+    } catch (logErr) {
+      console.error('Failed to log playback error:', logErr);
+    }
+    
+    // Auto-advance after error if autoplay is enabled
+    if (autoPlay) {
+      setTimeout(() => navigate('next'), 2000);
+    }
+  }, [currentMedia, logError, autoPlay, navigate]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -181,6 +264,46 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
   }, []);
 
+  // Initial counter display
+  useEffect(() => {
+    if (displayCounter && counterDuration > 0) {
+      setShowCounter(true);
+      counterTimeoutRef.current = setTimeout(() => {
+        setShowCounter(false);
+      }, counterDuration * 1000);
+    } else if (displayCounter && counterDuration === 0) {
+      setShowCounter(true); // Always show
+    } else {
+      setShowCounter(false);
+    }
+    
+    return () => {
+      if (counterTimeoutRef.current) {
+        clearTimeout(counterTimeoutRef.current);
+      }
+    };
+  }, [displayCounter, counterDuration]);
+
+  // Initial date display
+  useEffect(() => {
+    if (displayDate && dateDuration > 0) {
+      setShowDate(true);
+      dateTimeoutRef.current = setTimeout(() => {
+        setShowDate(false);
+      }, dateDuration * 1000);
+    } else if (displayDate && dateDuration === 0) {
+      setShowDate(true); // Always show
+    } else {
+      setShowDate(false);
+    }
+    
+    return () => {
+      if (dateTimeoutRef.current) {
+        clearTimeout(dateTimeoutRef.current);
+      }
+    };
+  }, [displayDate, dateDuration]);
+
   return (
     <div 
       ref={viewerRef}
@@ -228,13 +351,35 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
         
         {/* Media content */}
         <div className="media-content">
-          {currentMedia.fileType === 'video' ? (
+          {playbackError ? (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: 'white',
+              textAlign: 'center',
+              padding: '20px'
+            }}>
+              <div style={{ fontSize: '48px', marginBottom: '20px' }}>⚠️</div>
+              <h3 style={{ margin: '0 0 10px 0' }}>Unable to play media</h3>
+              <p style={{ margin: '0 0 20px 0', opacity: 0.8 }}>
+                {currentMedia.filename}
+              </p>
+              {autoPlay && (
+                <p style={{ margin: 0, fontSize: '14px', opacity: 0.6 }}>
+                  Auto-advancing in 2 seconds...
+                </p>
+              )}
+            </div>
+          ) : currentMedia.fileType === 'video' ? (
             <video 
               ref={videoRef}
               controls 
               autoPlay
               src={mediaUrl}
               onEnded={handleVideoEnded}
+              onError={handleMediaError}
               style={{ 
                 maxWidth: '100%', 
                 maxHeight: isFullscreen ? '100vh' : '80vh',
@@ -246,6 +391,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
             <img 
               src={mediaUrl} 
               alt={currentMedia.filename}
+              onError={handleMediaError}
               style={{ 
                 maxWidth: '100%', 
                 maxHeight: isFullscreen ? '100vh' : '80vh',
@@ -257,29 +403,42 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
           )}
         </div>
         
-        {/* Controls panel */}
-        <div className={`media-controls ${showControls || !isFullscreen ? 'show' : ''}`}>
-          <div className="controls-left">
-            <h3>{currentMedia.filename}</h3>
-            <p>{currentMediaIndex + 1} / {allMedia.length}</p>
-          </div>
-          
-          <div className="controls-center">
-            {autoPlay && (
-              <span className="autoplay-info">
-                {currentMedia.fileType === 'video' 
-                  ? '⏵ Auto-play enabled' 
-                  : `⏵ Slideshow: ${slideInterval}s`}
-              </span>
-            )}
-          </div>
-          
-          <div className="controls-right">
-            <p>{new Date(currentMedia.createdAt).toLocaleDateString()}</p>
-            {currentMedia.duration && (
-              <p>{Math.floor(currentMedia.duration / 60)}:{Math.floor(currentMedia.duration % 60).toString().padStart(2, '0')}</p>
-            )}
-          </div>
+        {/* Minimal info overlay */}
+        <div 
+          className="media-info-overlay"
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            color: 'white',
+            textShadow: '0 1px 3px rgba(0,0,0,0.8)',
+            pointerEvents: 'none',
+            fontSize: '14px',
+            lineHeight: '1.4',
+            zIndex: 5
+          }}
+        >
+          {displayDate && (
+            <div 
+              style={{ 
+                marginBottom: '4px',
+                opacity: showDate ? 1 : 0,
+                transition: 'opacity 0.3s ease'
+              }}
+            >
+              {new Date(currentMedia.createdAt).toLocaleDateString()}
+            </div>
+          )}
+          {displayCounter && (
+            <div 
+              style={{ 
+                opacity: showCounter ? 1 : 0,
+                transition: 'opacity 0.3s ease'
+              }}
+            >
+              {currentMediaIndex + 1} / {allMedia.length}
+            </div>
+          )}
         </div>
       </div>
     </div>

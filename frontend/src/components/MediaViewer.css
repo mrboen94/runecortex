@@ -142,10 +142,16 @@
   gap: 20px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  pointer-events: none; /* Allow clicks to pass through to video controls */
 }
 
 .media-controls.show {
   opacity: 1;
+}
+
+/* Make sure the actual control elements are clickable */
+.media-controls > * {
+  pointer-events: auto;
 }
 
 .controls-left h3 {
@@ -189,15 +195,7 @@
   opacity: 0.8;
 }
 
-/* Hide video controls in fullscreen to use custom controls */
-.fullscreen-viewer video::-webkit-media-controls {
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.fullscreen-viewer video:hover::-webkit-media-controls {
-  opacity: 1;
-}
+/* Video controls are always visible - no custom overlay needed */
 
 /* Animations */
 @keyframes fadeIn {

@@ -11,6 +11,8 @@
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s;
+  position: relative;
+  z-index: 1;
 }
 
 .media-item:hover {

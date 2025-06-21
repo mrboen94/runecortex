@@ -1,9 +1,7 @@
 .reindex-controls {
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .reindex-buttons {
@@ -15,13 +13,15 @@
 
 .reindex-btn {
   padding: 8px 16px;
-  border: none;
+  border: 1px solid #ddd;
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
   white-space: nowrap;
+  background: white;
+  color: #333;
 }
 
 .reindex-btn:disabled {
@@ -29,31 +29,20 @@
   cursor: not-allowed;
 }
 
-.reindex-btn.primary {
-  background: #007bff;
-  color: white;
-}
-
-.reindex-btn.primary:hover:not(:disabled) {
-  background: #0056b3;
-}
-
-.reindex-btn.secondary {
-  background: #6c757d;
-  color: white;
-}
-
-.reindex-btn.secondary:hover:not(:disabled) {
-  background: #5a6268;
+.reindex-btn:hover:not(:disabled) {
+  background: #f0f0f0;
+  border-color: #ccc;
 }
 
 .reindex-btn.danger {
-  background: #dc3545;
-  color: white;
+  background: #fff;
+  color: #dc3545;
+  border-color: #dc3545;
 }
 
 .reindex-btn.danger:hover:not(:disabled) {
-  background: #c82333;
+  background: #dc3545;
+  color: white;
 }
 
 .clear-confirm {
@@ -73,10 +62,26 @@
 }
 
 .reindex-result {
-  margin-top: 16px;
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  max-width: 400px;
   padding: 16px;
-  border-radius: 6px;
-  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .reindex-result.success {

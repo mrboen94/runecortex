@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import './ViewerSettings.css';
 
 export type MediaFilter = 'all' | 'videos' | 'images';
@@ -9,6 +9,10 @@ interface ViewerSettings {
   slideInterval: number;
   mediaFilter: MediaFilter;
   sortOrder: SortOrder;
+  showCounter: boolean;
+  showDate: boolean;
+  counterDuration: number; // 0 = always show, -1 = always hide, > 0 = duration in seconds
+  dateDuration: number; // 0 = always show, -1 = always hide, > 0 = duration in seconds
 }
 
 interface ViewerSettingsProps {
@@ -19,13 +23,28 @@ interface ViewerSettingsProps {
 
 export default function ViewerSettingsComponent({ settings, onSettingsChange, mediaCount }: ViewerSettingsProps) {
   const [showSettings, setShowSettings] = useState(false);
+  const settingsRef = useRef<HTMLDivElement>(null);
 
   const updateSetting = <K extends keyof ViewerSettings>(key: K, value: ViewerSettings[K]) => {
     onSettingsChange({ ...settings, [key]: value });
   };
 
+  // Close settings when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
+        setShowSettings(false);
+      }
+    };
+
+    if (showSettings) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showSettings]);
+
   return (
-    <div className="viewer-settings">
+    <div className="viewer-settings" ref={settingsRef}>
       <button 
         className="settings-toggle"
         onClick={() => setShowSettings(!showSettings)}
@@ -38,27 +57,28 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
         <div className="settings-panel">
           <div className="settings-section">
             <h4>Autoplay</h4>
-            <label className="setting-item">
-              <input 
-                type="checkbox" 
-                checked={settings.autoPlay}
-                onChange={(e) => updateSetting('autoPlay', e.target.checked)}
-              />
-              <span>Auto-advance media</span>
-            </label>
-            
-            <label className="setting-item">
-              <span>Image interval:</span>
-              <input 
-                type="number" 
-                min="1" 
-                max="60" 
-                value={settings.slideInterval}
-                onChange={(e) => updateSetting('slideInterval', parseInt(e.target.value) || 5)}
-                disabled={!settings.autoPlay}
-              />
-              <span>seconds</span>
-            </label>
+            <div className="setting-item with-duration">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={settings.autoPlay}
+                  onChange={(e) => updateSetting('autoPlay', e.target.checked)}
+                />
+                <span>Auto-advance media</span>
+              </label>
+              {settings.autoPlay && (
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="60" 
+                  value={settings.slideInterval}
+                  onChange={(e) => updateSetting('slideInterval', parseInt(e.target.value) || 5)}
+                  className="duration-input"
+                  title="Image interval in seconds"
+                />
+              )}
+            </div>
+            <p className="settings-help">Seconds between images in slideshow</p>
           </div>
 
           <div className="settings-section">
@@ -97,6 +117,52 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
               <option value="name-asc">Name (A-Z)</option>
               <option value="name-desc">Name (Z-A)</option>
             </select>
+          </div>
+
+          <div className="settings-section">
+            <h4>Display Options</h4>
+            <div className="setting-item with-duration">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={settings.showDate}
+                  onChange={(e) => updateSetting('showDate', e.target.checked)}
+                />
+                <span>Show date</span>
+              </label>
+              {settings.showDate && (
+                <input 
+                  type="number"
+                  min="0"
+                  value={settings.dateDuration || 0}
+                  onChange={(e) => updateSetting('dateDuration', Math.max(0, parseInt(e.target.value) || 0))}
+                  className="duration-input"
+                  title="Duration in seconds (0 = always visible)"
+                />
+              )}
+            </div>
+            
+            <div className="setting-item with-duration">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={settings.showCounter}
+                  onChange={(e) => updateSetting('showCounter', e.target.checked)}
+                />
+                <span>Show position counter</span>
+              </label>
+              {settings.showCounter && (
+                <input 
+                  type="number"
+                  min="0"
+                  value={settings.counterDuration || 1}
+                  onChange={(e) => updateSetting('counterDuration', Math.max(0, parseInt(e.target.value) || 0))}
+                  className="duration-input"
+                  title="Duration in seconds (0 = always visible)"
+                />
+              )}
+            </div>
+            <p className="settings-help">Duration in seconds (0 = always visible)</p>
           </div>
         </div>
       )}

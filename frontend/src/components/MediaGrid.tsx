@@ -62,7 +62,10 @@ export default function MediaGrid({ media, viewerSettings }: MediaGridProps) {
               ) : null}
               <div 
                 className="placeholder" 
-                style={{ display: item.thumbnailUrl ? 'none' : 'flex' }}
+                style={{ 
+                  display: item.thumbnailUrl ? 'none' : 'flex',
+                  pointerEvents: 'none'
+                }}
               >
                 {item.fileType === 'video' ? '🎬' : '🖼️'}
               </div>

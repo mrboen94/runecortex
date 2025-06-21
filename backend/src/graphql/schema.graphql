@@ -87,4 +87,5 @@ type Mutation {
   clearThumbnailQueue: Boolean!
   reindexThumbnails: ReindexResult!
   clearAllThumbnails: ReindexResult!
+  logPlaybackError(mediaId: Int!, error: String!, browserInfo: String): Boolean!
 }

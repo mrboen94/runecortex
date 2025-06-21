@@ -4,6 +4,7 @@ import { MediaScanner } from '../services/scanner';
 import { ThumbnailGenerator } from '../services/thumbnail';
 import { MediaWatcher } from '../services/watcher';
 import { thumbnailQueue } from '../services/thumbnailQueue';
+import { errorLogger } from '../services/errorLogger';
 import { unlink, readdir, rename } from 'fs/promises';
 import { join, basename, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
@@ -343,6 +344,24 @@ export const resolvers = {
           thumbnailsProcessed: 0,
           errors: [String(error)]
         };
+      }
+    },
+
+    logPlaybackError: async (_: any, { mediaId, error, browserInfo }: { mediaId: number; error: string; browserInfo?: string }) => {
+      try {
+        const media = await db.select().from(schema.mediaItems).where(eq(schema.mediaItems.id, mediaId)).get();
+        if (!media) {
+          console.error(`Media item ${mediaId} not found for error logging`);
+          return false;
+        }
+
+        const parsedBrowserInfo = browserInfo ? JSON.parse(browserInfo) : undefined;
+        await errorLogger.logPlaybackError(mediaId, media.filepath, error, parsedBrowserInfo);
+        
+        return true;
+      } catch (logError) {
+        console.error('Failed to log playback error:', logError);
+        return false;
       }
     },
   },

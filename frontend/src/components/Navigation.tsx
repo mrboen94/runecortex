@@ -10,9 +10,10 @@ interface NavigationProps {
   groupBy: GroupBy;
   onViewModeChange: (mode: ViewMode) => void;
   onGroupByChange: (groupBy: GroupBy) => void;
+  breadcrumb?: React.ReactNode;
 }
 
-export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange }: NavigationProps) {
+export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange, breadcrumb }: NavigationProps) {
   return (
     <nav className="navigation">
       <div className="nav-section">
@@ -74,6 +75,12 @@ export default function Navigation({ viewMode, groupBy, onViewModeChange, onGrou
               Day
             </button>
           </div>
+        </div>
+      )}
+      
+      {breadcrumb && (
+        <div className="nav-section nav-breadcrumb">
+          {breadcrumb}
         </div>
       )}
     </nav>

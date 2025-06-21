@@ -25,6 +25,10 @@ export const mediaItems = sqliteTable('media_items', {
   favorite: integer('favorite', { mode: 'boolean' }).default(false),
   organized: integer('organized', { mode: 'boolean' }).default(false),
   phash: text('phash'), // Perceptual hash for duplicate detection
+  // Error tracking fields
+  lastError: text('last_error'), // Last error encountered
+  errorCount: integer('error_count').default(0),
+  processingStatus: text('processing_status').default('pending'), // 'pending' | 'processing' | 'completed' | 'error'
 }, (table) => {
   return {
     createdAtIdx: index('media_created_at_idx').on(table.createdAt),
@@ -146,6 +150,30 @@ export const customFields = sqliteTable('custom_fields', {
   };
 });
 
+// Error logs table for detailed error tracking
+export const errorLogs = sqliteTable('error_logs', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  service: text('service').notNull(), // 'scanner', 'thumbnail', 'watcher', 'playback'
+  operation: text('operation').notNull(), // 'scan_file', 'generate_thumbnail', 'play_media'
+  entityType: text('entity_type'), // 'media', 'collection', 'tag'
+  entityId: integer('entity_id'),
+  filePath: text('file_path'),
+  errorMessage: text('error_message').notNull(),
+  errorStack: text('error_stack'),
+  severity: text('severity').default('error'), // 'warning', 'error', 'critical'
+  contextJson: text('context_json'), // Additional context data
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  resolvedAt: integer('resolved_at', { mode: 'timestamp' }),
+  resolvedBy: text('resolved_by'),
+}, (table) => {
+  return {
+    serviceIdx: index('error_log_service_idx').on(table.service),
+    entityIdx: index('error_log_entity_idx').on(table.entityType, table.entityId),
+    severityIdx: index('error_log_severity_idx').on(table.severity),
+    createdAtIdx: index('error_log_created_at_idx').on(table.createdAt),
+  };
+});
+
 // Define relations
 export const mediaItemsRelations = relations(mediaItems, ({ many }) => ({
   tags: many(mediaTags),
@@ -188,3 +216,5 @@ export type SavedFilter = typeof savedFilters.$inferSelect;
 export type NewSavedFilter = typeof savedFilters.$inferInsert;
 export type CustomField = typeof customFields.$inferSelect;
 export type NewCustomField = typeof customFields.$inferInsert;
+export type ErrorLog = typeof errorLogs.$inferSelect;
+export type NewErrorLog = typeof errorLogs.$inferInsert;
