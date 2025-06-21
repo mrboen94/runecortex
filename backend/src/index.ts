@@ -41,7 +41,9 @@ const server = Bun.serve({
     
     // Serve thumbnails
     if (url.pathname.startsWith('/thumbnails/')) {
-      const thumbnailPath = join('./thumbnails', url.pathname.replace('/thumbnails/', ''));
+      // Decode URL to handle special characters in filenames
+      const thumbnailFilename = decodeURIComponent(url.pathname.replace('/thumbnails/', ''));
+      const thumbnailPath = join('./thumbnails', thumbnailFilename);
       const file = Bun.file(thumbnailPath);
       
       if (await file.exists()) {

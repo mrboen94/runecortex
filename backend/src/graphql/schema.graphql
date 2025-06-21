@@ -70,6 +70,13 @@ type ThumbnailQueueStats {
   skipped: Int!
 }
 
+type ReindexResult {
+  success: Boolean!
+  message: String!
+  thumbnailsProcessed: Int!
+  errors: [String!]!
+}
+
 type Mutation {
   triggerScan(path: String!): ScanResult!
   regenerateThumbnails: Int!
@@ -78,4 +85,6 @@ type Mutation {
   stopWatcher: Boolean!
   pingThumbnailQueue(mediaIds: [Int!]): ThumbnailQueueStatus!
   clearThumbnailQueue: Boolean!
+  reindexThumbnails: ReindexResult!
+  clearAllThumbnails: ReindexResult!
 }

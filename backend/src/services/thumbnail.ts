@@ -40,10 +40,17 @@ export class ThumbnailGenerator {
     // Generate or get existing thumbnail ID
     let thumbnailId = item.thumbnailId;
     if (!thumbnailId) {
-      // Generate new thumbnail ID: filename (without extension) + UUID
+      // Generate new thumbnail ID: sanitized filename + UUID
       const fileBaseName = basename(item.filename, extname(item.filename));
       const uuid = uuidv4().substring(0, 8); // Use first 8 chars for brevity
-      thumbnailId = `${fileBaseName}_${uuid}`;
+      
+      // Sanitize filename for URL safety: remove/replace problematic characters
+      const sanitizedName = fileBaseName
+        .replace(/[^\w\-_.]/g, '_') // Replace non-alphanumeric chars with underscore
+        .replace(/_+/g, '_') // Replace multiple underscores with single
+        .replace(/^_|_$/g, ''); // Remove leading/trailing underscores
+      
+      thumbnailId = `${sanitizedName}_${uuid}`;
       
       // Update the database with the new thumbnail ID
       await db.update(schema.mediaItems)
