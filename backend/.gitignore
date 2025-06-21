@@ -32,3 +32,16 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Test artifacts
+test-results.txt
+TEST_FIXES_SUMMARY.md
+TEST_ISSUES.md
+
+# Export files
+export-*.json
+
+# SQLite test database files
+test.db
+test.db-shm
+test.db-wal
