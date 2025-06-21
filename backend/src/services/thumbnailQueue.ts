@@ -11,10 +11,11 @@ interface QueueItem {
 export type QueueStatus = 'idle' | 'waiting' | 'busy';
 
 interface QueueConfig {
-  debounceMinutes: number;      // Wait time after last ping before starting
-  cooldownMinutes: number;      // Minimum time between runs
+  debounceSeconds: number;      // Wait time after last ping before starting
+  cooldownSeconds: number;      // Minimum time between runs
   maxConcurrent: number;        // Max parallel thumbnail generations
   batchSize: number;            // How many to process per batch
+  batchWaitSeconds: number;     // Wait time between batches in seconds
 }
 
 export class ThumbnailQueueService {
@@ -35,10 +36,11 @@ export class ThumbnailQueueService {
 
   constructor() {
     this.config = {
-      debounceMinutes: parseInt(process.env.THUMBNAIL_DEBOUNCE_MINUTES || '1'),
-      cooldownMinutes: parseInt(process.env.THUMBNAIL_COOLDOWN_MINUTES || '5'),
+      debounceSeconds: parseInt(process.env.THUMBNAIL_DEBOUNCE_SECONDS || '60'),
+      cooldownSeconds: parseInt(process.env.THUMBNAIL_COOLDOWN_SECONDS || '300'),
       maxConcurrent: parseInt(process.env.THUMBNAIL_MAX_CONCURRENT || '4'),
-      batchSize: parseInt(process.env.THUMBNAIL_BATCH_SIZE || '20')
+      batchSize: parseInt(process.env.THUMBNAIL_BATCH_SIZE || '20'),
+      batchWaitSeconds: parseInt(process.env.THUMBNAIL_BATCH_WAIT_SECONDS || '10')
     };
 
     console.log('ThumbnailQueue initialized with config:', this.config);
@@ -100,7 +102,7 @@ export class ThumbnailQueueService {
     let nextRun: Date | null = null;
     
     if (this.status === 'waiting' && this.lastPingTime) {
-      nextRun = new Date(this.lastPingTime.getTime() + this.config.debounceMinutes * 60 * 1000);
+      nextRun = new Date(this.lastPingTime.getTime() + this.config.debounceSeconds * 1000);
     }
 
     return {
@@ -148,7 +150,7 @@ export class ThumbnailQueueService {
     // Check cooldown
     if (this.lastRunTime) {
       const timeSinceLastRun = Date.now() - this.lastRunTime.getTime();
-      const cooldownMs = this.config.cooldownMinutes * 60 * 1000;
+      const cooldownMs = this.config.cooldownSeconds * 1000;
       
       if (timeSinceLastRun < cooldownMs) {
         console.log(`ThumbnailQueue: In cooldown. ${Math.ceil((cooldownMs - timeSinceLastRun) / 1000)}s remaining`);
@@ -170,8 +172,8 @@ export class ThumbnailQueueService {
       clearTimeout(this.debounceTimer);
     }
 
-    const debounceMs = this.config.debounceMinutes * 60 * 1000;
-    console.log(`ThumbnailQueue: Waiting ${this.config.debounceMinutes} minute(s) before processing...`);
+    const debounceMs = this.config.debounceSeconds * 1000;
+    console.log(`ThumbnailQueue: Waiting ${this.config.debounceSeconds} second(s) before processing...`);
     
     this.debounceTimer = setTimeout(() => {
       this.processQueue();
@@ -235,8 +237,12 @@ export class ThumbnailQueueService {
       
       // Check if there are more items to process
       if (this.queue.size > 0) {
-        console.log(`ThumbnailQueue: ${this.queue.size} items remaining in queue`);
-        this.updateStatusAndSchedule();
+        console.log(`ThumbnailQueue: ${this.queue.size} items remaining in queue, waiting ${this.config.batchWaitSeconds}s before next batch`);
+        
+        // Wait between batches to avoid overwhelming the system
+        setTimeout(() => {
+          this.updateStatusAndSchedule();
+        }, this.config.batchWaitSeconds * 1000);
       } else {
         this.status = 'idle';
         console.log('ThumbnailQueue: Queue empty, returning to idle');

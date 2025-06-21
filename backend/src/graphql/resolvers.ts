@@ -86,7 +86,14 @@ export const resolvers = {
 
   Mutation: {
     triggerScan: async (_: any, { path }: { path: string }) => {
-      return await scanner.scanDirectory(path);
+      const result = await scanner.scanDirectory(path);
+      
+      // Trigger thumbnail generation for new files
+      if (result.newFiles > 0) {
+        await thumbnailQueue.ping();
+      }
+      
+      return result;
     },
 
     regenerateThumbnails: async () => {
@@ -148,10 +155,9 @@ export const resolvers = {
 
   MediaItem: {
     thumbnailUrl: (parent: schema.MediaItem) => {
-      if (parent.thumbnailGenerated) {
-        return `/thumbnails/${parent.id}.jpg`;
-      }
-      return null;
+      // Always return the thumbnail URL, even if not generated yet
+      // Frontend will handle missing thumbnails with placeholders
+      return `/thumbnails/${parent.id}.jpg`;
     },
   },
 };
