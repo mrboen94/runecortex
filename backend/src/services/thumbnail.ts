@@ -46,6 +46,7 @@ export class ThumbnailGenerator {
       // Thumbnail doesn't exist, generate it
     }
 
+
     // Check if source file exists
     try {
       await access(item.filepath, constants.F_OK);

@@ -17,12 +17,17 @@ export async function ensureDatabase() {
   // If tests fail with missing columns, run: rm -f test.db && DATABASE_PATH=./test.db bun run src/db/migrate.ts
 }
 
+// Reset test counter
+export function resetTestCounters() {
+  testMediaCounter = 0;
+}
+
 // Clean up test database
 export async function cleanDatabase() {
   await ensureDatabase();
   
   // Reset test counters
-  testMediaCounter = 0;
+  resetTestCounters();
   
   // Direct SQL approach to ensure complete cleanup
   try {
@@ -135,10 +140,22 @@ export async function createTestVideo(filename: string, options?: {
 let testMediaCounter = 0;
 
 // Insert test media item
-export async function insertTestMedia(overrides: Partial<schema.NewMediaItem> = {}): Promise<schema.MediaItem> {
+export async function insertTestMedia(overrides: Partial<schema.NewMediaItem> = {}, options: { createFile?: boolean } = {}): Promise<schema.MediaItem> {
   // Generate unique defaults if not provided
   const filename = overrides.filename || `test-${++testMediaCounter}.jpg`;
-  const filepath = overrides.filepath || `/test/media/${filename}`;
+  const filepath = overrides.filepath || path.join(TEST_MEDIA_DIR, filename);
+  
+  // Create the actual file if requested
+  if (options.createFile) {
+    await setupTestDirs(); // Ensure directory exists
+    if (filename.endsWith('.jpg') || filename.endsWith('.png')) {
+      await createTestImage(filename);
+    } else if (filename.endsWith('.mp4') || filename.endsWith('.mov')) {
+      await createTestVideo(filename);
+    } else {
+      await createTestMediaFile(filename, 'test content');
+    }
+  }
   
   const [item] = await db.insert(schema.mediaItems).values({
     filepath,
@@ -157,13 +174,13 @@ export async function insertTestMedia(overrides: Partial<schema.NewMediaItem> = 
 // Insert test tag
 export async function insertTestTag(overrides: Partial<schema.NewTag> = {}): Promise<schema.Tag> {
   const name = overrides.name || 'test-tag';
-  const slug = overrides.slug || name.toLowerCase().replace(/\s+/g, '-');
+  const slug = overrides.slug || (overrides.name || name).toLowerCase().replace(/\s+/g, '-');
   
   const [tag] = await db.insert(schema.tags).values({
-    name,
-    slug,
     path: '', // Will be set by service
-    ...overrides
+    ...overrides,
+    name,
+    slug
   }).returning();
   
   return tag;

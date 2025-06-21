@@ -81,7 +81,8 @@ export class ThumbnailQueueService {
 
     return {
       status: this.status,
-      queued: this.queue.size
+      queued: this.queue.size,
+      queueSize: this.queue.size
     };
   }
 
@@ -123,6 +124,14 @@ export class ThumbnailQueueService {
     this.queue.clear();
     this.status = 'idle';
     console.log('ThumbnailQueue: Queue cleared');
+  }
+
+  /**
+   * Clear the queue (alias for compatibility)
+   */
+  clearQueue(): boolean {
+    this.clear();
+    return true;
   }
 
   private updateStatusAndSchedule(): void {

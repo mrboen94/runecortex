@@ -81,10 +81,13 @@ describe('MediaScanner', () => {
         .where(eq(schema.mediaItems.filepath, filepath));
       
       // Wait a bit to ensure different timestamp
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Touch the file to update its modification time
       await $`touch ${filepath}`.quiet();
+      
+      // Wait a bit more to ensure the filesystem has updated the mtime
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       // Rescan
       const result = await scanner.scanDirectory(TEST_MEDIA_DIR);
