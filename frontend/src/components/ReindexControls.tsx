@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useApolloClient } from '@apollo/client';
 import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS } from '../graphql/queries';
 import './ReindexControls.css';
 
@@ -16,6 +16,7 @@ export default function ReindexControls() {
   const [result, setResult] = useState<ReindexResult | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
+  const apolloClient = useApolloClient();
   const [reindexThumbnails] = useMutation(REINDEX_THUMBNAILS);
   const [clearAllThumbnails] = useMutation(CLEAR_ALL_THUMBNAILS);
 
@@ -26,6 +27,11 @@ export default function ReindexControls() {
     try {
       const { data } = await reindexThumbnails();
       setResult(data.reindexThumbnails);
+      
+      // Clear Apollo cache to refresh thumbnail URLs
+      await apolloClient.refetchQueries({
+        include: 'active',
+      });
     } catch (error) {
       setResult({
         success: false,
@@ -46,6 +52,11 @@ export default function ReindexControls() {
     try {
       const { data } = await clearAllThumbnails();
       setResult(data.clearAllThumbnails);
+      
+      // Clear Apollo cache to refresh thumbnail URLs
+      await apolloClient.refetchQueries({
+        include: 'active',
+      });
     } catch (error) {
       setResult({
         success: false,
@@ -98,6 +109,14 @@ export default function ReindexControls() {
         )}
       </div>
 
+      <button 
+        onClick={() => window.location.reload()}
+        className="reindex-btn secondary"
+        title="Refresh page to reload thumbnails"
+      >
+        🔄 Refresh Page
+      </button>
+
       {result && (
         <div className={`reindex-result ${result.success ? 'success' : 'error'}`}>
           <h4>{result.success ? '✅ Success' : '⚠️ Warning'}</h4>
@@ -105,6 +124,10 @@ export default function ReindexControls() {
           
           {result.thumbnailsProcessed > 0 && (
             <p>Processed: {result.thumbnailsProcessed} thumbnails</p>
+          )}
+          
+          {result.success && result.thumbnailsProcessed > 0 && (
+            <p><strong>💡 Tip:</strong> If thumbnails don't update immediately, try refreshing the page to clear browser cache.</p>
           )}
           
           {result.errors.length > 0 && (
