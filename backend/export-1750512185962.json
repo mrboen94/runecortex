@@ -1,0 +1,50 @@
+{
+  "exportDate": "2025-06-21T13:23:05.962Z",
+  "itemCount": 2,
+  "items": [
+    {
+      "id": 295,
+      "filepath": "/test/media/test-1.jpg",
+      "filename": "test-1.jpg",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "fileType": "image",
+      "fileSize": 1024,
+      "duration": null,
+      "width": null,
+      "height": null,
+      "metadataJson": null,
+      "thumbnailGenerated": false,
+      "lastModified": "2025-06-21T13:23:05.000Z",
+      "checksum": null,
+      "addedAt": "2025-06-21T13:23:05.000Z",
+      "title": "Export Test 1",
+      "description": "Test description",
+      "rating": null,
+      "favorite": false,
+      "organized": false,
+      "phash": null
+    },
+    {
+      "id": 296,
+      "filepath": "/test/media/test-2.jpg",
+      "filename": "test-2.jpg",
+      "createdAt": "2024-01-01T00:00:00.000Z",
+      "fileType": "image",
+      "fileSize": 1024,
+      "duration": null,
+      "width": null,
+      "height": null,
+      "metadataJson": null,
+      "thumbnailGenerated": false,
+      "lastModified": "2025-06-21T13:23:05.000Z",
+      "checksum": null,
+      "addedAt": "2025-06-21T13:23:05.000Z",
+      "title": "Export Test 2",
+      "description": null,
+      "rating": 5,
+      "favorite": false,
+      "organized": false,
+      "phash": null
+    }
+  ]
+}

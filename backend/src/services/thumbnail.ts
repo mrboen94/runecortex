@@ -17,6 +17,15 @@ export class ThumbnailGenerator {
     await mkdir(this.thumbnailDir, { recursive: true });
   }
 
+  async generateThumbnail(mediaItemId: number): Promise<{ success: boolean; path?: string; error?: string }> {
+    try {
+      const path = await this.generateForMediaItem(mediaItemId);
+      return { success: true, path: path || undefined };
+    } catch (error) {
+      return { success: false, error: String(error) };
+    }
+  }
+
   async generateForMediaItem(mediaItemId: number): Promise<string | null> {
     const [item] = await db.select()
       .from(schema.mediaItems)
@@ -37,6 +46,13 @@ export class ThumbnailGenerator {
       // Thumbnail doesn't exist, generate it
     }
 
+    // Check if source file exists
+    try {
+      await access(item.filepath, constants.F_OK);
+    } catch {
+      throw new Error(`Source file not found: ${item.filepath}`);
+    }
+
     await this.ensureThumbnailDir();
 
     try {
@@ -54,7 +70,7 @@ export class ThumbnailGenerator {
       return thumbnailPath;
     } catch (error) {
       console.error(`Failed to generate thumbnail for ${item.filepath}:`, error);
-      return null;
+      throw error;
     }
   }
 
@@ -62,7 +78,7 @@ export class ThumbnailGenerator {
     // Extract frame at 10% of video duration
     const seekTime = Math.max(1, duration * 0.1);
 
-    await $`ffmpeg -i "${inputPath}" -ss ${seekTime} -vframes 1 -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -q:v 2 "${outputPath}" -y`.quiet();
+    await $`ffmpeg -i "${inputPath}" -ss ${seekTime} -vframes 1 -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -q:v 2 -strict unofficial "${outputPath}" -y`.quiet();
   }
 
   private async generateImageThumbnail(inputPath: string, outputPath: string): Promise<void> {

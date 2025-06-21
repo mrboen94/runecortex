@@ -1,10 +1,11 @@
 import { readdir, stat } from 'fs/promises';
 import { join, extname, basename } from 'path';
 import { db, schema } from '../db';
-import { eq } from 'drizzle-orm';
+import { eq, and, ne } from 'drizzle-orm';
 import crypto from 'crypto';
 import { readFile } from 'fs/promises';
 import { $ } from 'bun';
+import { phashService } from './phashService';
 
 const SUPPORTED_VIDEO_EXTENSIONS = ['.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', '.webm', '.m4v', '.mpg', '.mpeg', '.3gp'];
 const SUPPORTED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff', '.svg'];
@@ -13,6 +14,7 @@ export interface ScanResult {
   processed: number;
   newFiles: number;
   updated: number;
+  duplicatesSkipped: number;
   errors: { path: string; error: string }[];
 }
 
@@ -21,10 +23,22 @@ export class MediaScanner {
     processed: 0,
     newFiles: 0,
     updated: 0,
+    duplicatesSkipped: 0,
     errors: []
   };
+  private enableDuplicateDetection: boolean = true;
+  private duplicateThreshold: number = 10; // Hamming distance threshold
 
   async scanDirectory(rootPath: string): Promise<ScanResult> {
+    // Reset scan result for new scan
+    this.scanResult = {
+      processed: 0,
+      newFiles: 0,
+      updated: 0,
+      duplicatesSkipped: 0,
+      errors: []
+    };
+    
     const scanSession = await db.insert(schema.scanSessions).values({
       status: 'running'
     }).returning();
@@ -70,7 +84,7 @@ export class MediaScanner {
         
         if (entry.isDirectory() && !entry.name.startsWith('.')) {
           await this.walkDirectory(fullPath);
-        } else if (entry.isFile() && this.isMediaFile(entry.name)) {
+        } else if (entry.isFile() && !entry.name.startsWith('.') && this.isMediaFile(entry.name)) {
           await this.processFile(fullPath);
         }
       }
@@ -121,11 +135,35 @@ export class MediaScanner {
           this.scanResult.updated++;
         }
       } else {
+        // Check for duplicates before inserting
+        if (this.enableDuplicateDetection) {
+          const duplicate = await this.checkForDuplicate(filepath, fileType, checksum, stats.size);
+          if (duplicate) {
+            console.log(`Duplicate detected: ${filepath} is similar to ${duplicate.filepath}`);
+            this.scanResult.duplicatesSkipped++;
+            
+            // Store duplicate relationship in a custom field
+            await db.insert(schema.customFields).values({
+              entityType: 'media',
+              entityId: duplicate.id,
+              fieldName: 'duplicate_paths',
+              fieldValue: JSON.stringify([...(JSON.parse(duplicate.duplicatePaths || '[]')), filepath]),
+              fieldType: 'array'
+            }).onConflictDoUpdate({
+              target: [schema.customFields.entityType, schema.customFields.entityId, schema.customFields.fieldName],
+              set: {
+                fieldValue: JSON.stringify([...(JSON.parse(duplicate.duplicatePaths || '[]')), filepath])
+              }
+            });
+            return;
+          }
+        }
+        
         // Insert new file
         const metadata = await this.extractMetadata(filepath, fileType);
         const createdAt = await this.extractCreationDate(filepath, fileType, stats);
         
-        await db.insert(schema.mediaItems).values({
+        const [newItem] = await db.insert(schema.mediaItems).values({
           filepath,
           filename: basename(filepath),
           createdAt,
@@ -134,7 +172,21 @@ export class MediaScanner {
           lastModified: stats.mtime,
           checksum,
           ...metadata
-        });
+        }).returning();
+        
+        // Generate perceptual hash for future duplicate detection
+        if (this.enableDuplicateDetection && newItem) {
+          try {
+            const phash = await phashService.generatePhash(filepath, fileType);
+            if (phash) {
+              await db.update(schema.mediaItems)
+                .set({ phash })
+                .where(eq(schema.mediaItems.id, newItem.id));
+            }
+          } catch (error) {
+            console.error(`Failed to generate phash for ${filepath}:`, error);
+          }
+        }
         
         this.scanResult.newFiles++;
       }
@@ -306,5 +358,69 @@ export class MediaScanner {
     }
     
     return null;
+  }
+
+  private async checkForDuplicate(filepath: string, fileType: string, checksum: string, fileSize: number): Promise<any | null> {
+    try {
+      // First check for exact checksum match
+      const exactMatch = await db.select()
+        .from(schema.mediaItems)
+        .where(eq(schema.mediaItems.checksum, checksum))
+        .limit(1);
+      
+      if (exactMatch.length > 0) {
+        return exactMatch[0];
+      }
+      
+      // Check for similar file sizes (within 5%)
+      const sizeTolerance = fileSize * 0.05;
+      const similarSizeItems = await db.select()
+        .from(schema.mediaItems)
+        .where(and(
+          eq(schema.mediaItems.fileType, fileType),
+          // @ts-ignore - Drizzle ORM comparison operators
+          schema.mediaItems.fileSize >= fileSize - sizeTolerance,
+          // @ts-ignore - Drizzle ORM comparison operators
+          schema.mediaItems.fileSize <= fileSize + sizeTolerance
+        ));
+      
+      if (similarSizeItems.length === 0) {
+        return null;
+      }
+      
+      // Generate phash for the new file
+      const newPhash = await phashService.generatePhash(filepath, fileType);
+      if (!newPhash) {
+        return null;
+      }
+      
+      // Check perceptual similarity
+      for (const item of similarSizeItems) {
+        if (item.phash) {
+          const distance = phashService.calculateHammingDistance(newPhash, item.phash);
+          if (distance <= this.duplicateThreshold) {
+            // Get custom field for duplicate paths
+            const customField = await db.select()
+              .from(schema.customFields)
+              .where(and(
+                eq(schema.customFields.entityType, 'media'),
+                eq(schema.customFields.entityId, item.id),
+                eq(schema.customFields.fieldName, 'duplicate_paths')
+              ))
+              .limit(1);
+            
+            return {
+              ...item,
+              duplicatePaths: customField[0]?.fieldValue || '[]'
+            };
+          }
+        }
+      }
+      
+      return null;
+    } catch (error) {
+      console.error(`Error checking for duplicate: ${error}`);
+      return null;
+    }
   }
 }

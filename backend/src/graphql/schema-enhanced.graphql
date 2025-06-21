@@ -1,0 +1,506 @@
+scalar DateTime
+
+# Enums for filtering
+enum CriterionModifier {
+  EQUALS
+  NOT_EQUALS
+  GREATER_THAN
+  LESS_THAN
+  BETWEEN
+  NOT_BETWEEN
+  IS_NULL
+  NOT_NULL
+  INCLUDES
+  EXCLUDES
+  MATCHES_REGEX
+  NOT_MATCHES_REGEX
+  INCLUDES_ALL
+  INCLUDES_ANY
+}
+
+enum ResolutionEnum {
+  VERY_LOW
+  LOW
+  SD
+  HD
+  FULL_HD
+  QUAD_HD
+  VR_HD
+  FOUR_K
+  FIVE_K
+  SIX_K
+  SEVEN_K
+  EIGHT_K
+}
+
+enum OrientationEnum {
+  PORTRAIT
+  LANDSCAPE
+  SQUARE
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+enum FilterMode {
+  MEDIA
+  COLLECTIONS
+  TAGS
+}
+
+# Input types for filtering
+input StringCriterionInput {
+  value: String!
+  modifier: CriterionModifier!
+}
+
+input IntCriterionInput {
+  value: Int!
+  value2: Int
+  modifier: CriterionModifier!
+}
+
+input DateCriterionInput {
+  value: DateTime!
+  value2: DateTime
+  modifier: CriterionModifier!
+}
+
+input ResolutionCriterionInput {
+  value: ResolutionEnum!
+  modifier: CriterionModifier!
+}
+
+input OrientationCriterionInput {
+  value: OrientationEnum!
+}
+
+input HierarchicalCriterionInput {
+  value: String!
+  modifier: CriterionModifier!
+  depth: Int
+}
+
+input CustomFieldFilterInput {
+  fieldName: String!
+  fieldValue: StringCriterionInput!
+  fieldType: String
+}
+
+# Main filter inputs
+input MediaFilterInput {
+  AND: [MediaFilterInput!]
+  OR: [MediaFilterInput!]
+  NOT: MediaFilterInput
+  
+  # Basic fields
+  id: IntCriterionInput
+  path: StringCriterionInput
+  filename: StringCriterionInput
+  title: StringCriterionInput
+  description: StringCriterionInput
+  
+  # Ratings and favorites
+  rating: IntCriterionInput
+  favorite: Boolean
+  organized: Boolean
+  
+  # File properties
+  fileSize: IntCriterionInput
+  duration: IntCriterionInput
+  width: IntCriterionInput
+  height: IntCriterionInput
+  resolution: ResolutionCriterionInput
+  orientation: OrientationCriterionInput
+  fileType: StringCriterionInput
+  
+  # Dates
+  createdAt: DateCriterionInput
+  updatedAt: DateCriterionInput
+  
+  # Relationships
+  tags: HierarchicalCriterionInput
+  tagCount: IntCriterionInput
+  collections: HierarchicalCriterionInput
+  collectionCount: IntCriterionInput
+  
+  # Custom fields
+  customFields: [CustomFieldFilterInput!]
+  
+  # Duplicate detection
+  hasDuplicates: Boolean
+  phash: StringCriterionInput
+}
+
+input TagFilterInput {
+  AND: [TagFilterInput!]
+  OR: [TagFilterInput!]
+  NOT: TagFilterInput
+  
+  id: IntCriterionInput
+  name: StringCriterionInput
+  description: StringCriterionInput
+  aliases: StringCriterionInput
+  parentId: IntCriterionInput
+  childCount: IntCriterionInput
+  mediaCount: IntCriterionInput
+  favorite: Boolean
+  ignoreAutoTag: Boolean
+}
+
+input CollectionFilterInput {
+  AND: [CollectionFilterInput!]
+  OR: [CollectionFilterInput!]
+  NOT: CollectionFilterInput
+  
+  id: IntCriterionInput
+  title: StringCriterionInput
+  description: StringCriterionInput
+  date: DateCriterionInput
+  rating: IntCriterionInput
+  favorite: Boolean
+  organized: Boolean
+  parentId: IntCriterionInput
+  childCount: IntCriterionInput
+  mediaCount: IntCriterionInput
+}
+
+# Sorting and pagination
+input SortInput {
+  field: String!
+  direction: SortDirection!
+}
+
+input FindFilterInput {
+  q: String
+  page: Int
+  perPage: Int
+  sort: SortInput
+  direction: SortDirection
+}
+
+# Query inputs
+input MediaQueryInput {
+  filter: MediaFilterInput
+  findFilter: FindFilterInput
+}
+
+input TagQueryInput {
+  filter: TagFilterInput
+  findFilter: FindFilterInput
+}
+
+input CollectionQueryInput {
+  filter: CollectionFilterInput
+  findFilter: FindFilterInput
+}
+
+# Enhanced types
+type MediaItem {
+  id: Int!
+  filepath: String!
+  filename: String!
+  createdAt: DateTime!
+  fileType: String!
+  fileSize: Int!
+  duration: Float
+  width: Int
+  height: Int
+  thumbnailUrl: String
+  lastModified: DateTime!
+  
+  # New fields
+  title: String
+  description: String
+  rating: Int
+  favorite: Boolean!
+  organized: Boolean!
+  phash: String
+  
+  # Computed fields
+  resolution: ResolutionEnum
+  orientation: OrientationEnum
+  
+  # Relationships
+  tags: [Tag!]!
+  collections: [Collection!]!
+  customFields: [CustomField!]!
+}
+
+type Tag {
+  id: Int!
+  name: String!
+  description: String
+  aliases: [String!]!
+  parent: Tag
+  children: [Tag!]!
+  favorite: Boolean!
+  ignoreAutoTag: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  # Computed fields
+  mediaCount: Int!
+  childCount: Int!
+}
+
+type Collection {
+  id: Int!
+  title: String!
+  description: String
+  date: DateTime
+  rating: Int
+  favorite: Boolean!
+  organized: Boolean!
+  parent: Collection
+  children: [Collection!]!
+  coverMedia: MediaItem
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  # Computed fields
+  mediaCount: Int!
+  childCount: Int!
+  media: [MediaItem!]!
+}
+
+type CustomField {
+  id: Int!
+  entityType: String!
+  entityId: Int!
+  fieldName: String!
+  fieldValue: String
+  fieldType: String!
+}
+
+type SavedFilter {
+  id: Int!
+  name: String!
+  mode: FilterMode!
+  filter: String!
+  uiOptions: String
+  favorite: Boolean!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+# Result types
+type MediaSearchResult {
+  count: Int!
+  totalDuration: Float!
+  totalFilesize: Float!
+  items: [MediaItem!]!
+}
+
+type TagSearchResult {
+  count: Int!
+  items: [Tag!]!
+}
+
+type CollectionSearchResult {
+  count: Int!
+  items: [Collection!]!
+}
+
+type ScanSession {
+  id: Int!
+  timestamp: DateTime!
+  filesProcessed: Int!
+  newFiles: Int!
+  updatedFiles: Int!
+  errors: Int!
+  status: String!
+  completedAt: DateTime
+}
+
+type ScanResult {
+  processed: Int!
+  newFiles: Int!
+  updated: Int!
+  errors: [ScanError!]!
+}
+
+type ScanError {
+  path: String!
+  error: String!
+}
+
+type WatcherStatus {
+  isActive: Boolean!
+  watchPaths: [String!]!
+  lastProcessed: DateTime
+}
+
+type ThumbnailQueueStatus {
+  status: String!
+  queueSize: Int!
+  stats: ThumbnailQueueStats!
+  lastPing: DateTime
+  lastRun: DateTime
+  nextRun: DateTime
+}
+
+type ThumbnailQueueStats {
+  totalQueued: Int!
+  processed: Int!
+  failed: Int!
+  skipped: Int!
+}
+
+# Enhanced Query type
+type Query {
+  # Media queries
+  findMedia(input: MediaQueryInput): MediaSearchResult!
+  mediaByDateRange(start: DateTime!, end: DateTime!): [MediaItem!]!
+  mediaByYear(year: Int!): [MediaItem!]!
+  mediaByYearMonth(year: Int!, month: Int!): [MediaItem!]!
+  allMedia(limit: Int, offset: Int): [MediaItem!]!
+  mediaItem(id: Int!): MediaItem
+  
+  # Tag queries
+  findTags(input: TagQueryInput): TagSearchResult!
+  allTags: [Tag!]!
+  tag(id: Int!): Tag
+  tagByName(name: String!): Tag
+  
+  # Collection queries
+  findCollections(input: CollectionQueryInput): CollectionSearchResult!
+  allCollections: [Collection!]!
+  collection(id: Int!): Collection
+  
+  # Saved filter queries
+  savedFilters(mode: FilterMode): [SavedFilter!]!
+  savedFilter(id: Int!): SavedFilter
+  
+  # System queries
+  recentScanSessions(limit: Int = 10): [ScanSession!]!
+  watcherStatus: WatcherStatus!
+  thumbnailQueueStatus: ThumbnailQueueStatus!
+}
+
+# Tag mutations
+input TagCreateInput {
+  name: String!
+  description: String
+  aliases: [String!]
+  parentId: Int
+  favorite: Boolean
+  ignoreAutoTag: Boolean
+}
+
+input TagUpdateInput {
+  id: Int!
+  name: String
+  description: String
+  aliases: [String!]
+  parentId: Int
+  favorite: Boolean
+  ignoreAutoTag: Boolean
+}
+
+# Collection mutations
+input CollectionCreateInput {
+  title: String!
+  description: String
+  date: DateTime
+  rating: Int
+  favorite: Boolean
+  organized: Boolean
+  parentId: Int
+  coverMediaId: Int
+}
+
+input CollectionUpdateInput {
+  id: Int!
+  title: String
+  description: String
+  date: DateTime
+  rating: Int
+  favorite: Boolean
+  organized: Boolean
+  parentId: Int
+  coverMediaId: Int
+}
+
+# Media mutations
+input MediaUpdateInput {
+  id: Int!
+  title: String
+  description: String
+  rating: Int
+  favorite: Boolean
+  organized: Boolean
+}
+
+input MediaTagInput {
+  mediaIds: [Int!]!
+  tagIds: [Int!]!
+  mode: BulkUpdateMode!
+}
+
+input MediaCollectionInput {
+  mediaIds: [Int!]!
+  collectionIds: [Int!]!
+  mode: BulkUpdateMode!
+}
+
+enum BulkUpdateMode {
+  SET
+  ADD
+  REMOVE
+}
+
+# SavedFilter mutations
+input SavedFilterCreateInput {
+  name: String!
+  mode: FilterMode!
+  filter: String!
+  uiOptions: String
+  favorite: Boolean
+}
+
+input SavedFilterUpdateInput {
+  id: Int!
+  name: String
+  filter: String
+  uiOptions: String
+  favorite: Boolean
+}
+
+# Enhanced Mutation type
+type Mutation {
+  # Media mutations
+  updateMedia(input: MediaUpdateInput!): MediaItem!
+  updateMediaTags(input: MediaTagInput!): [MediaItem!]!
+  updateMediaCollections(input: MediaCollectionInput!): [MediaItem!]!
+  deleteMedia(ids: [Int!]!): Boolean!
+  
+  # Tag mutations
+  createTag(input: TagCreateInput!): Tag!
+  updateTag(input: TagUpdateInput!): Tag!
+  deleteTag(id: Int!): Boolean!
+  mergeTags(sourceIds: [Int!]!, targetId: Int!): Tag!
+  
+  # Collection mutations
+  createCollection(input: CollectionCreateInput!): Collection!
+  updateCollection(input: CollectionUpdateInput!): Collection!
+  deleteCollection(id: Int!): Boolean!
+  addMediaToCollection(collectionId: Int!, mediaIds: [Int!]!): Collection!
+  removeMediaFromCollection(collectionId: Int!, mediaIds: [Int!]!): Collection!
+  
+  # SavedFilter mutations
+  createSavedFilter(input: SavedFilterCreateInput!): SavedFilter!
+  updateSavedFilter(input: SavedFilterUpdateInput!): SavedFilter!
+  deleteSavedFilter(id: Int!): Boolean!
+  
+  # System mutations
+  triggerScan(path: String!): ScanResult!
+  regenerateThumbnails: Int!
+  generateThumbnail(mediaItemId: Int!): Boolean!
+  startWatcher(paths: [String!]!): WatcherStatus!
+  stopWatcher: Boolean!
+  pingThumbnailQueue(mediaIds: [Int!]): ThumbnailQueueStatus!
+  clearThumbnailQueue: Boolean!
+}
