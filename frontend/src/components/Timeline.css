@@ -1,0 +1,98 @@
+.timeline {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.timeline-header {
+  background-color: #fff;
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.timeline-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.breadcrumb {
+  margin-top: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.breadcrumb button {
+  background: none;
+  border: none;
+  color: #0066cc;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.breadcrumb button:hover {
+  color: #0052a3;
+}
+
+.breadcrumb span {
+  color: #666;
+}
+
+.timeline-content {
+  padding: 2rem;
+}
+
+.year-grid, .month-grid, .day-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.year-card, .month-card, .day-card {
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.year-card:hover, .month-card:hover, .day-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-color: #0066cc;
+}
+
+.year-card h2 {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+  color: #333;
+}
+
+.month-card h3, .day-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.year-card p, .month-card p, .day-card p {
+  margin: 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.2rem;
+}
+
+.error {
+  color: #d32f2f;
+}

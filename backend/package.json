@@ -1,0 +1,29 @@
+{
+  "name": "backend",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "bun run src/db/migrate.ts",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "drizzle-kit": "^0.31.1"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@graphql-tools/schema": "^10.0.23",
+    "@graphql-yoga/node": "^3.9.1",
+    "drizzle-orm": "^0.44.2",
+    "exiftool": "^0.0.3",
+    "graphql": "^16.11.0",
+    "graphql-scalars": "^1.24.2"
+  }
+}

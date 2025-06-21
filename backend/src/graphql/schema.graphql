@@ -1,0 +1,81 @@
+scalar DateTime
+
+type MediaItem {
+  id: Int!
+  filepath: String!
+  filename: String!
+  createdAt: DateTime!
+  fileType: String!
+  fileSize: Int!
+  duration: Float
+  width: Int
+  height: Int
+  thumbnailUrl: String
+  lastModified: DateTime!
+}
+
+type ScanSession {
+  id: Int!
+  timestamp: DateTime!
+  filesProcessed: Int!
+  newFiles: Int!
+  updatedFiles: Int!
+  errors: Int!
+  status: String!
+  completedAt: DateTime
+}
+
+type ScanResult {
+  processed: Int!
+  newFiles: Int!
+  updated: Int!
+  errors: [ScanError!]!
+}
+
+type ScanError {
+  path: String!
+  error: String!
+}
+
+type Query {
+  mediaByDateRange(start: DateTime!, end: DateTime!): [MediaItem!]!
+  mediaByYear(year: Int!): [MediaItem!]!
+  mediaByYearMonth(year: Int!, month: Int!): [MediaItem!]!
+  allMedia(limit: Int, offset: Int): [MediaItem!]!
+  mediaItem(id: Int!): MediaItem
+  recentScanSessions(limit: Int = 10): [ScanSession!]!
+  watcherStatus: WatcherStatus!
+  thumbnailQueueStatus: ThumbnailQueueStatus!
+}
+
+type WatcherStatus {
+  isActive: Boolean!
+  watchPaths: [String!]!
+  lastProcessed: DateTime
+}
+
+type ThumbnailQueueStatus {
+  status: String! # 'idle' | 'waiting' | 'busy'
+  queueSize: Int!
+  stats: ThumbnailQueueStats!
+  lastPing: DateTime
+  lastRun: DateTime
+  nextRun: DateTime
+}
+
+type ThumbnailQueueStats {
+  totalQueued: Int!
+  processed: Int!
+  failed: Int!
+  skipped: Int!
+}
+
+type Mutation {
+  triggerScan(path: String!): ScanResult!
+  regenerateThumbnails: Int!
+  generateThumbnail(mediaItemId: Int!): Boolean!
+  startWatcher(paths: [String!]!): WatcherStatus!
+  stopWatcher: Boolean!
+  pingThumbnailQueue(mediaIds: [Int!]): ThumbnailQueueStatus!
+  clearThumbnailQueue: Boolean!
+}
