@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
-import { useFolderContext } from '../contexts/FolderContext';
+import { useMutation, useApolloClient } from '@apollo/client';
+import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS } from '../graphql/queries';
 import './ViewerSettings.css';
 
 export type MediaFilter = 'all' | 'videos' | 'images';
@@ -24,13 +25,77 @@ interface ViewerSettingsProps {
   mediaCount: { total: number; videos: number; images: number };
 }
 
+interface ReindexResult {
+  success: boolean;
+  message: string;
+  thumbnailsProcessed: number;
+  errors: string[];
+}
+
 export default function ViewerSettingsComponent({ settings, onSettingsChange, mediaCount }: ViewerSettingsProps) {
   const [showSettings, setShowSettings] = useState(false);
   const settingsRef = useRef<HTMLDivElement>(null);
-  const { showAllFolders, setShowAllFolders } = useFolderContext();
+  const [isReindexing, setIsReindexing] = useState(false);
+  const [isClearing, setIsClearing] = useState(false);
+  const [result, setResult] = useState<ReindexResult | null>(null);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showDisplayOptions, setShowDisplayOptions] = useState(false);
+  
+  const apolloClient = useApolloClient();
+  const [reindexThumbnails] = useMutation(REINDEX_THUMBNAILS);
+  const [clearAllThumbnails] = useMutation(CLEAR_ALL_THUMBNAILS);
 
   const updateSetting = <K extends keyof ViewerSettings>(key: K, value: ViewerSettings[K]) => {
     onSettingsChange({ ...settings, [key]: value });
+  };
+
+  const handleReindex = async () => {
+    setIsReindexing(true);
+    setResult(null);
+    
+    try {
+      const { data } = await reindexThumbnails();
+      setResult(data.reindexThumbnails);
+      
+      // Clear Apollo cache to refresh thumbnail URLs
+      await apolloClient.refetchQueries({
+        include: 'active',
+      });
+    } catch (error) {
+      setResult({
+        success: false,
+        message: `Network error: ${error}`,
+        thumbnailsProcessed: 0,
+        errors: [String(error)]
+      });
+    } finally {
+      setIsReindexing(false);
+    }
+  };
+
+  const handleClearAll = async () => {
+    setIsClearing(true);
+    setResult(null);
+    setShowClearConfirm(false);
+    
+    try {
+      const { data } = await clearAllThumbnails();
+      setResult(data.clearAllThumbnails);
+      
+      // Clear Apollo cache to refresh thumbnail URLs
+      await apolloClient.refetchQueries({
+        include: 'active',
+      });
+    } catch (error) {
+      setResult({
+        success: false,
+        message: `Network error: ${error}`,
+        thumbnailsProcessed: 0,
+        errors: [String(error)]
+      });
+    } finally {
+      setIsClearing(false);
+    }
   };
 
   // Close settings when clicking outside
@@ -59,45 +124,6 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
 
       {showSettings && (
         <div className="settings-panel">
-          <div className="settings-section">
-            <h4>Folder Options</h4>
-            <label className="checkbox-label">
-              <input 
-                type="checkbox" 
-                checked={showAllFolders}
-                onChange={(e) => setShowAllFolders(e.target.checked)}
-              />
-              <span>Show all folders</span>
-            </label>
-            <p className="settings-help">When unchecked, only shows media from the current folder</p>
-          </div>
-
-          <div className="settings-section">
-            <h4>Autoplay</h4>
-            <div className="setting-item with-duration">
-              <label className="checkbox-label">
-                <input 
-                  type="checkbox" 
-                  checked={settings.autoPlay}
-                  onChange={(e) => updateSetting('autoPlay', e.target.checked)}
-                />
-                <span>Auto-advance media</span>
-              </label>
-              {settings.autoPlay && (
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="60" 
-                  value={settings.slideInterval}
-                  onChange={(e) => updateSetting('slideInterval', parseInt(e.target.value) || 5)}
-                  className="duration-input"
-                  title="Image interval in seconds"
-                />
-              )}
-            </div>
-            <p className="settings-help">Seconds between images in slideshow</p>
-          </div>
-
           <div className="settings-section">
             <h4>Filter Media</h4>
             <div className="filter-buttons">
@@ -137,7 +163,41 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
           </div>
 
           <div className="settings-section">
-            <h4>Display Options</h4>
+            <h4>Autoplay</h4>
+            <div className="setting-item with-duration">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={settings.autoPlay}
+                  onChange={(e) => updateSetting('autoPlay', e.target.checked)}
+                />
+                <span>Auto-advance media</span>
+              </label>
+              {settings.autoPlay && (
+                <input 
+                  type="number" 
+                  min="1" 
+                  max="60" 
+                  value={settings.slideInterval}
+                  onChange={(e) => updateSetting('slideInterval', parseInt(e.target.value) || 5)}
+                  className="duration-input"
+                  title="Image interval in seconds"
+                />
+              )}
+            </div>
+            <p className="settings-help">Seconds between images in slideshow</p>
+          </div>
+
+          <div className="settings-section collapsible">
+            <h4 
+              className="settings-header collapsible-header" 
+              onClick={() => setShowDisplayOptions(!showDisplayOptions)}
+            >
+              <span className="collapse-icon">{showDisplayOptions ? '▼' : '▶'}</span>
+              Display Options
+            </h4>
+            {showDisplayOptions && (
+            <div className="collapsible-content">
             <div className="setting-item with-duration">
               <label className="checkbox-label">
                 <input 
@@ -201,6 +261,78 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
               )}
             </div>
             <p className="settings-help">Duration in seconds (0 = always visible)</p>
+            </div>
+            )}
+          </div>
+
+          <div className="settings-section">
+            <h4>Thumbnail Management</h4>
+            <div className="thumbnail-controls">
+              <button 
+                onClick={handleReindex}
+                disabled={isReindexing || isClearing}
+                className="settings-btn primary"
+              >
+                {isReindexing ? 'Reindexing...' : '🔄 Fix Thumbnails'}
+              </button>
+              
+              {!showClearConfirm ? (
+                <button 
+                  onClick={() => setShowClearConfirm(true)}
+                  disabled={isReindexing || isClearing}
+                  className="settings-btn secondary"
+                >
+                  🗑️ Clear All
+                </button>
+              ) : (
+                <div className="clear-confirm">
+                  <span>Delete all thumbnails?</span>
+                  <button 
+                    onClick={handleClearAll}
+                    disabled={isClearing}
+                    className="settings-btn danger"
+                  >
+                    {isClearing ? 'Clearing...' : 'Yes, Delete All'}
+                  </button>
+                  <button 
+                    onClick={() => setShowClearConfirm(false)}
+                    disabled={isClearing}
+                    className="settings-btn secondary"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
+            
+            {result && (
+              <div className={`reindex-result ${result.success ? 'success' : 'error'}`}>
+                <h5>{result.success ? '✅ Success' : '⚠️ Warning'}</h5>
+                <p>{result.message}</p>
+                
+                {result.thumbnailsProcessed > 0 && (
+                  <p>Processed: {result.thumbnailsProcessed} thumbnails</p>
+                )}
+                
+                {result.errors.length > 0 && (
+                  <details className="error-details">
+                    <summary>Errors ({result.errors.length})</summary>
+                    <ul>
+                      {result.errors.map((error, index) => (
+                        <li key={index}>{error}</li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+                
+                <button 
+                  onClick={() => setResult(null)}
+                  className="close-result"
+                >
+                  ×
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { gql } from '@apollo/client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './StatusIndicator.css';
 
 const STATUS_QUERY = gql`
@@ -27,6 +27,7 @@ export default function StatusIndicator() {
   const { data, loading, error, refetch } = useQuery(STATUS_QUERY, {
     pollInterval: 5000, // Poll every 5 seconds
   });
+  const [showErrorDetails, setShowErrorDetails] = useState(false);
 
   // Refetch when component mounts
   useEffect(() => {
@@ -80,10 +81,40 @@ export default function StatusIndicator() {
       </div>
 
       {thumbnailStatus?.stats.failed > 0 && (
-        <div className="status-item status-error">
-          <span className="status-label">Failed</span>
-          <span className="status-value">{thumbnailStatus.stats.failed}</span>
-        </div>
+        <>
+          <div 
+            className="status-item status-error clickable"
+            onClick={() => setShowErrorDetails(!showErrorDetails)}
+            title="Click to view error details"
+          >
+            <span className="status-label">Failed</span>
+            <span className="status-value">{thumbnailStatus.stats.failed}</span>
+            <span className="status-arrow">{showErrorDetails ? '▲' : '▼'}</span>
+          </div>
+          
+          {showErrorDetails && (
+            <div className="error-details-overlay" onClick={() => setShowErrorDetails(false)}>
+              <div className="error-details-content" onClick={(e) => e.stopPropagation()}>
+                <h3>⚠️ Thumbnail Generation Errors</h3>
+                <p>{thumbnailStatus.stats.failed} files failed to generate thumbnails</p>
+                <p className="error-hint">Common causes:</p>
+                <ul>
+                  <li>Corrupted or unsupported file formats</li>
+                  <li>Missing or moved files</li>
+                  <li>Insufficient permissions</li>
+                  <li>FFmpeg processing errors</li>
+                </ul>
+                <p className="error-action">Try "Fix Thumbnails" in Settings to reprocess failed items</p>
+                <button 
+                  className="close-button"
+                  onClick={() => setShowErrorDetails(false)}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

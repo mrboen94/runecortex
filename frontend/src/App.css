@@ -2,6 +2,30 @@
   box-sizing: border-box;
 }
 
+/* Global button and form element standardization */
+button {
+  min-height: 32px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+input[type="text"],
+input[type="number"],
+select {
+  min-height: 28px;
+  line-height: 1;
+}
+
+/* Ensure consistent button sizing for primary actions */
+.primary-button,
+.secondary-button {
+  height: 36px;
+  min-width: 80px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 #root {
   min-height: 100vh;
 }
@@ -81,6 +105,11 @@
   font-size: 14px;
   transition: all 0.2s;
   font-weight: 500;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 80px;
 }
 
 .view-button:hover {
@@ -91,4 +120,18 @@
 .view-button.active {
   background: #4a90e2;
   color: white;
+}
+
+.folder-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #555;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.folder-toggle input[type="checkbox"] {
+  cursor: pointer;
 }

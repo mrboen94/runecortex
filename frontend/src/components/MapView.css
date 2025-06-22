@@ -9,20 +9,19 @@
 
 .map-header {
   background: #222;
-  padding: 20px;
+  padding: 12px 20px;
   border-bottom: 1px solid #333;
 }
 
-.map-header h2 {
-  margin: 0 0 8px 0;
-  color: white;
-  font-size: 24px;
+.map-header.compact {
+  padding: 10px 20px;
 }
 
-.map-stats {
+.map-header h3 {
   margin: 0;
-  color: #888;
-  font-size: 14px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
 }
 
 .map-container {
@@ -142,6 +141,28 @@
   text-overflow: ellipsis;
 }
 
+.slideshow-button {
+  width: 100%;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 12px 0 8px 0;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.slideshow-button:hover {
+  background: #357abd;
+}
+
 .more-items {
   margin: 10px 0 0 0;
   color: #888;
@@ -179,4 +200,176 @@
 
 .leaflet-control-attribution a {
   color: #4a90e2;
+}
+
+/* Cluster Preview Modal */
+.cluster-preview-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.cluster-preview-modal {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  animation: slideIn 0.3s ease-out;
+}
+
+.cluster-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cluster-preview-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.close-preview {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-preview:hover {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.cluster-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.cluster-preview-item {
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  background: #f8f9fa;
+}
+
+.cluster-preview-item:hover {
+  border-color: #4a90e2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.2);
+}
+
+.cluster-preview-item img {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  display: block;
+}
+
+.cluster-preview-item .media-placeholder {
+  width: 100%;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: #e9ecef;
+  color: #6c757d;
+}
+
+.preview-filename {
+  display: block;
+  padding: 8px;
+  font-size: 11px;
+  color: #666;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background: white;
+}
+
+.cluster-preview-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.slideshow-button.primary {
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  width: auto;
+  margin: 0;
+}
+
+.slideshow-button.primary:hover {
+  background: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 768px) {
+  .cluster-preview-modal {
+    width: 95%;
+    padding: 20px;
+    max-height: 85vh;
+  }
+  
+  .cluster-preview-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+  }
+  
+  .cluster-preview-item img,
+  .cluster-preview-item .media-placeholder {
+    height: 60px;
+  }
 }

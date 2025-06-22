@@ -10,11 +10,21 @@ interface MarkerClusterGroupProps {
   spiderfyOnMaxZoom?: boolean;
   disableClusteringAtZoom?: number;
   animate?: boolean;
+  onClusterClick?: (cluster: L.MarkerCluster) => void;
 }
 
 const MarkerClusterGroup = createPathComponent<L.MarkerClusterGroup, MarkerClusterGroupProps>(
-  ({ children, ...options }, ctx) => {
+  ({ children, onClusterClick, ...options }, ctx) => {
     const clusterGroup = (L as any).markerClusterGroup(options);
+    
+    if (onClusterClick) {
+      clusterGroup.on('clusterclick', (event: any) => {
+        event.originalEvent.preventDefault();
+        event.originalEvent.stopPropagation();
+        onClusterClick(event.layer);
+      });
+    }
+    
     return { instance: clusterGroup, context: { ...ctx, layerContainer: clusterGroup } };
   }
 );

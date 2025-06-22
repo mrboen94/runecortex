@@ -15,6 +15,8 @@
   align-items: center;
   gap: 6px;
   transition: all 0.2s ease;
+  height: 36px;
+  min-width: 100px;
 }
 
 .settings-toggle:hover {
@@ -73,6 +75,7 @@
   border-radius: 4px;
   font-size: 14px;
   transition: all 0.2s ease;
+  height: 28px;
 }
 
 .setting-item input[type="number"]:hover {
@@ -110,6 +113,10 @@
   flex: 1;
   text-align: center;
   min-width: 0;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .filter-btn:first-child {
@@ -146,6 +153,7 @@
   background-position: right 8px center;
   background-size: 16px;
   padding-right: 32px;
+  height: 36px;
 }
 
 .sort-select:hover {
@@ -175,6 +183,7 @@
   background-size: 14px;
   padding-right: 24px;
   margin-left: 8px;
+  height: 28px;
 }
 
 .setting-item select:hover {
@@ -232,6 +241,185 @@
 }
 
 /* Remove any invisible overlay that might block clicks */
+
+/* Thumbnail management styles */
+.thumbnail-controls {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  margin-bottom: 8px;
+}
+
+.settings-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+}
+
+.settings-btn:hover {
+  background: #e8e8e8;
+  border-color: #ccc;
+}
+
+.settings-btn.primary {
+  background: #4a90e2;
+  color: white;
+  border-color: #357abd;
+}
+
+.settings-btn.primary:hover {
+  background: #357abd;
+}
+
+.settings-btn.secondary {
+  background: #f5f5f5;
+}
+
+.settings-btn.danger {
+  background: #dc3545;
+  color: white;
+  border-color: #c82333;
+}
+
+.settings-btn.danger:hover {
+  background: #c82333;
+}
+
+.settings-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-confirm {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.clear-confirm span {
+  font-size: 14px;
+  color: #666;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.clear-confirm .settings-btn {
+  min-width: auto;
+  padding: 6px 12px;
+  height: 32px;
+  font-size: 13px;
+  flex: 0 0 auto;
+  max-width: none;
+}
+
+.reindex-result {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  position: relative;
+}
+
+.reindex-result.success {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.reindex-result.error {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+.reindex-result h5 {
+  margin: 0 0 8px 0;
+  font-size: 14px;
+}
+
+.reindex-result p {
+  margin: 4px 0;
+}
+
+.error-details {
+  margin-top: 8px;
+  padding: 8px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.error-details summary {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.error-details ul {
+  margin: 8px 0 0 0;
+  padding-left: 20px;
+}
+
+.error-details li {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.close-result {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+}
+
+.close-result:hover {
+  opacity: 1;
+}
+
+/* Collapsible section styles */
+.settings-header.collapsible-header {
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.settings-header.collapsible-header:hover {
+  color: #007bff;
+}
+
+.collapse-icon {
+  font-size: 10px;
+  transition: transform 0.2s ease;
+}
+
+.collapsible-content {
+  margin-top: 12px;
+  animation: slideDown 0.2s ease-out;
+}
 
 @media (max-width: 768px) {
   .settings-panel {

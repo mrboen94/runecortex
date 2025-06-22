@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { gql } from '@apollo/client';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from './MarkerClusterGroup';
+import MediaViewer from './MediaViewer';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
@@ -29,6 +30,9 @@ const GET_MEDIA_WITH_LOCATION = gql`
       longitude
       altitude
       locationName
+      width
+      height
+      duration
     }
   }
 `;
@@ -43,6 +47,9 @@ interface MediaItem {
   longitude?: number;
   altitude?: number;
   locationName?: string;
+  width: number;
+  height: number;
+  duration?: number;
 }
 
 interface MapViewProps {
@@ -51,6 +58,9 @@ interface MapViewProps {
 
 export default function MapView({ onMediaClick }: MapViewProps) {
   const [showMap, setShowMap] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
+  const [viewerMedia, setViewerMedia] = useState<MediaItem[]>([]);
+  const [clusterPreview, setClusterPreview] = useState<MediaItem[] | null>(null);
   const { data, loading } = useQuery(GET_MEDIA_WITH_LOCATION);
   
   // Filter media with location data
@@ -95,6 +105,12 @@ export default function MapView({ onMediaClick }: MapViewProps) {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleClusterClick = (cluster: any) => {
+    const markers = cluster.getAllChildMarkers();
+    const clusterMedia = markers.map((marker: any) => marker.options.mediaItem).filter(Boolean);
+    setClusterPreview(clusterMedia);
+  };
+
   if (loading) {
     return (
       <div className="map-loading">
@@ -113,13 +129,35 @@ export default function MapView({ onMediaClick }: MapViewProps) {
     );
   }
 
+  const handleMediaClick = (media: MediaItem, groupItems?: MediaItem[]) => {
+    if (onMediaClick) {
+      onMediaClick(media);
+    } else {
+      // Use internal viewer
+      setSelectedMedia(media);
+      setViewerMedia(groupItems || [media]);
+    }
+  };
+
+  const handleStartSlideshow = (items: MediaItem[]) => {
+    if (items.length > 0) {
+      setSelectedMedia(items[0]);
+      setViewerMedia(items);
+    }
+  };
+
+  const handleClusterSlideshow = () => {
+    if (clusterPreview && clusterPreview.length > 0) {
+      setSelectedMedia(clusterPreview[0]);
+      setViewerMedia(clusterPreview);
+      setClusterPreview(null);
+    }
+  };
+
   return (
     <div className="map-view-container">
-      <div className="map-header">
-        <h2>📍 Media Locations</h2>
-        <p className="map-stats">
-          {mediaWithLocation.length} items with GPS data at {locationGroups.size} locations
-        </p>
+      <div className="map-header compact">
+        <h3>📍 {mediaWithLocation.length} items • {locationGroups.size} locations</h3>
       </div>
       
       {showMap ? (
@@ -138,15 +176,25 @@ export default function MapView({ onMediaClick }: MapViewProps) {
             chunkedLoading
             showCoverageOnHover={false}
             maxClusterRadius={80}
-            spiderfyOnMaxZoom={true}
+            spiderfyOnMaxZoom={false}
             disableClusteringAtZoom={16}
             animate={true}
+            onClusterClick={handleClusterClick}
           >
             {Array.from(locationGroups.entries()).map(([locationKey, items]) => {
               const [lat, lng] = locationKey.split(',').map(Number);
               
               return (
-                <Marker key={locationKey} position={[lat, lng]}>
+                <Marker 
+                  key={locationKey} 
+                  position={[lat, lng]}
+                  ref={(ref) => {
+                    if (ref) {
+                      (ref as any).options.mediaItem = items[0];
+                      (ref as any).options.allItems = items;
+                    }
+                  }}
+                >
                   <Popup className="map-popup">
                     <div className="popup-content">
                       <h4>{items.length} item{items.length > 1 ? 's' : ''} at this location</h4>
@@ -158,7 +206,7 @@ export default function MapView({ onMediaClick }: MapViewProps) {
                           <div 
                             key={item.id}
                             className="popup-media-item"
-                            onClick={() => onMediaClick?.(item)}
+                            onClick={() => handleMediaClick(item, items)}
                             title={item.filename}
                           >
                             {item.thumbnailUrl ? (
@@ -178,6 +226,15 @@ export default function MapView({ onMediaClick }: MapViewProps) {
                           </div>
                         ))}
                       </div>
+                      {items.length > 1 && (
+                        <button 
+                          className="slideshow-button"
+                          onClick={() => handleStartSlideshow(items)}
+                          title="Start slideshow with all items at this location"
+                        >
+                          ▶ Start Slideshow ({items.length} items)
+                        </button>
+                      )}
                       {items.length > 6 && (
                         <p className="more-items">+{items.length - 6} more</p>
                       )}
@@ -192,6 +249,83 @@ export default function MapView({ onMediaClick }: MapViewProps) {
         <div className="map-loading">
           <p>Initializing map...</p>
         </div>
+      )}
+      
+      {/* Cluster Preview Modal */}
+      {clusterPreview && (
+        <div className="cluster-preview-overlay" onClick={() => setClusterPreview(null)}>
+          <div className="cluster-preview-modal" onClick={e => e.stopPropagation()}>
+            <div className="cluster-preview-header">
+              <h3>📍 {clusterPreview.length} items at this location</h3>
+              <button 
+                className="close-preview"
+                onClick={() => setClusterPreview(null)}
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="cluster-preview-grid">
+              {clusterPreview.slice(0, 12).map((item) => (
+                <div 
+                  key={item.id}
+                  className="cluster-preview-item"
+                  onClick={() => handleMediaClick(item, clusterPreview)}
+                >
+                  {item.thumbnailUrl ? (
+                    <img 
+                      src={`http://localhost:4001${item.thumbnailUrl}`} 
+                      alt={item.filename}
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="media-placeholder">
+                      {item.fileType === 'video' ? '🎬' : '🖼️'}
+                    </div>
+                  )}
+                  <span className="preview-filename">{item.filename}</span>
+                </div>
+              ))}
+            </div>
+            
+            {clusterPreview.length > 12 && (
+              <p className="more-items">+{clusterPreview.length - 12} more items</p>
+            )}
+            
+            <div className="cluster-preview-actions">
+              <button 
+                className="slideshow-button primary"
+                onClick={handleClusterSlideshow}
+              >
+                🎬 Start Slideshow ({clusterPreview.length} items)
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {selectedMedia && (
+        <MediaViewer
+          media={selectedMedia}
+          allMedia={viewerMedia}
+          onClose={() => {
+            setSelectedMedia(null);
+            setViewerMedia([]);
+          }}
+          onNavigate={(media) => setSelectedMedia(media)}
+          viewerSettings={{
+            autoPlay: true,
+            slideInterval: 5,
+            mediaFilter: 'all',
+            sortOrder: 'date-desc',
+            showCounter: true,
+            showDate: true,
+            showLocation: true,
+            counterDuration: 1,
+            dateDuration: 0,
+            locationDuration: 0
+          }}
+        />
       )}
     </div>
   );

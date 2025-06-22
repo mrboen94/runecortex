@@ -50,8 +50,10 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const [showDate, setShowDate] = useState(true);
   const [showLocation, setShowLocation] = useState(true);
   const [playbackError, setPlaybackError] = useState(false);
+  const [showAutoplayButton, setShowAutoplayButton] = useState(true);
+  const [autoplayEnabled, setAutoplayEnabled] = useState(viewerSettings?.autoPlay ?? true);
+  const [showVideoSettings, setShowVideoSettings] = useState(false);
   const slideInterval = viewerSettings?.slideInterval || 5;
-  const autoPlay = viewerSettings?.autoPlay ?? true;
   const displayCounter = viewerSettings?.showCounter ?? true;
   const displayDate = viewerSettings?.showDate ?? true;
   const displayLocation = viewerSettings?.showLocation ?? true;
@@ -153,10 +155,10 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     }
     
     // Auto-advance after error if autoplay is enabled
-    if (autoPlay) {
+    if (autoplayEnabled) {
       setTimeout(() => navigate('next'), 2000);
     }
-  }, [currentMedia, logError, autoPlay, navigate]);
+  }, [currentMedia, logError, autoplayEnabled, navigate]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -226,7 +228,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
 
   // Auto-advance for images
   useEffect(() => {
-    if (currentMedia.fileType === 'image' && autoPlay && isFullscreen) {
+    if (currentMedia.fileType === 'image' && autoplayEnabled && isFullscreen) {
       slideTimeoutRef.current = setTimeout(() => {
         navigate('next');
       }, slideInterval * 1000);
@@ -237,14 +239,21 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
         }
       };
     }
-  }, [currentMedia, autoPlay, slideInterval, isFullscreen, navigate]);
+  }, [currentMedia, autoplayEnabled, slideInterval, isFullscreen, navigate]);
 
   // Handle video ended event
   const handleVideoEnded = useCallback(() => {
-    if (autoPlay) {
+    if (autoplayEnabled) {
       navigate('next');
     }
-  }, [autoPlay, navigate]);
+  }, [autoplayEnabled, navigate]);
+
+  // Start autoplay for images
+  const startImageAutoplay = () => {
+    setShowAutoplayButton(false);
+    setAutoplayEnabled(true);
+    enterFullscreen();
+  };
 
   // Fullscreen functions
   const enterFullscreen = async () => {
@@ -409,40 +418,85 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
               <p style={{ margin: '0 0 20px 0', opacity: 0.8 }}>
                 {currentMedia.filename}
               </p>
-              {autoPlay && (
+              {autoplayEnabled && (
                 <p style={{ margin: 0, fontSize: '14px', opacity: 0.6 }}>
                   Auto-advancing in 2 seconds...
                 </p>
               )}
             </div>
           ) : currentMedia.fileType === 'video' ? (
-            <video 
-              ref={videoRef}
-              controls 
-              autoPlay
-              src={mediaUrl}
-              onEnded={handleVideoEnded}
-              onError={handleMediaError}
-              style={{ 
-                maxWidth: '100%', 
-                maxHeight: isFullscreen ? '100vh' : '80vh',
-                width: isFullscreen ? '100%' : 'auto',
-                height: isFullscreen ? '100%' : 'auto'
-              }}
-            />
+            <>
+              <video 
+                ref={videoRef}
+                controls 
+                autoPlay
+                src={mediaUrl}
+                onEnded={handleVideoEnded}
+                onError={handleMediaError}
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: isFullscreen ? '100vh' : '80vh',
+                  width: isFullscreen ? '100%' : 'auto',
+                  height: isFullscreen ? '100%' : 'auto'
+                }}
+              />
+              
+              {/* Video settings button */}
+              <button
+                className={`video-settings-button ${showControls || !isFullscreen ? 'show' : ''}`}
+                onClick={() => setShowVideoSettings(!showVideoSettings)}
+                title="Video playback settings"
+              >
+                ⚙️
+              </button>
+              
+              {showVideoSettings && (
+                <div className="video-settings-popup">
+                  <h4>Video Playback Settings</h4>
+                  <label className="settings-checkbox">
+                    <input
+                      type="checkbox"
+                      checked={autoplayEnabled}
+                      onChange={(e) => setAutoplayEnabled(e.target.checked)}
+                    />
+                    <span>Auto-advance to next video</span>
+                  </label>
+                  <button 
+                    className="close-settings"
+                    onClick={() => setShowVideoSettings(false)}
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </>
           ) : (
-            <img 
-              src={mediaUrl} 
-              alt={currentMedia.filename}
-              onError={handleMediaError}
-              style={{ 
-                maxWidth: '100%', 
-                maxHeight: isFullscreen ? '100vh' : '80vh',
-                width: isFullscreen ? '100%' : 'auto',
-                height: isFullscreen ? '100%' : 'auto',
-                objectFit: 'contain' 
-              }}
-            />
+            <>
+              <img 
+                src={mediaUrl} 
+                alt={currentMedia.filename}
+                onError={handleMediaError}
+                style={{ 
+                  maxWidth: '100%', 
+                  maxHeight: isFullscreen ? '100vh' : '80vh',
+                  width: isFullscreen ? '100%' : 'auto',
+                  height: isFullscreen ? '100%' : 'auto',
+                  objectFit: 'contain' 
+                }}
+              />
+              
+              {/* Autoplay start button for images */}
+              {showAutoplayButton && !isFullscreen && currentMedia.fileType === 'image' && allMedia.filter(m => m.fileType === 'image').length > 1 && (
+                <button
+                  className="autoplay-start-button"
+                  onClick={startImageAutoplay}
+                  title="Start slideshow"
+                >
+                  <span className="play-icon">▶</span>
+                  <span className="button-text">Start Slideshow</span>
+                </button>
+              )}
+            </>
           )}
         </div>
         
@@ -491,7 +545,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
                 fontSize: '12px'
               }}
             >
-              📍 {currentMedia.latitude.toFixed(6)}, {currentMedia.longitude.toFixed(6)}
+              📍 {currentMedia.locationName || `${currentMedia.latitude.toFixed(6)}, ${currentMedia.longitude.toFixed(6)}`}
               {currentMedia.altitude && ` • ${currentMedia.altitude.toFixed(0)}m`}
             </div>
           )}

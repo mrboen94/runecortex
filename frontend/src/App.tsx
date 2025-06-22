@@ -2,7 +2,6 @@ import { useState } from 'react'
 import Timeline from './components/Timeline'
 import MapView from './components/MapView'
 import SimpleMap from './components/SimpleMap'
-import ReindexControls from './components/ReindexControls'
 import StatusIndicator from './components/StatusIndicator'
 import FolderBrowser from './components/FolderBrowser'
 import ScanProgress from './components/ScanProgress'
@@ -40,9 +39,6 @@ function App() {
         <header className="app-header">
           <div className="header-top">
             <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
-              <ReindexControls />
-              <StatusIndicator />
-              <FolderBrowser />
               <div className="view-switcher">
                 <button 
                   className={`view-button ${currentView === 'timeline' ? 'active' : ''}`}
@@ -57,6 +53,16 @@ function App() {
                   🗺️ Map
                 </button>
               </div>
+              <StatusIndicator />
+              <FolderBrowser />
+              <label className="folder-toggle">
+                <input 
+                  type="checkbox" 
+                  checked={viewerSettings.showAllFolders}
+                  onChange={(e) => setViewerSettings({...viewerSettings, showAllFolders: e.target.checked})}
+                />
+                <span>All folders</span>
+              </label>
             </div>
             <ViewerSettingsComponent 
               settings={viewerSettings}

@@ -22,6 +22,11 @@
   white-space: nowrap;
   background: white;
   color: #333;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
 }
 
 .reindex-btn:disabled {
