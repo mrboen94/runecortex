@@ -1,0 +1,8 @@
+$ vite
+Port 5173 is in use, trying another one...
+
+  VITE v6.3.5  ready in 83 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: use --host to expose
+error: script "dev" exited with code 143

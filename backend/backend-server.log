@@ -1,0 +1,18 @@
+$ bun run --watch src/index.ts
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+error: script "dev" was terminated by signal SIGTERM (Polite quit request)
