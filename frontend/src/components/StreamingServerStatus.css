@@ -252,3 +252,64 @@
   font-weight: 600;
 }
 
+.playlist-urls {
+  margin-top: 12px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.playlist-urls h5 {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #333;
+}
+
+.url-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.url-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  min-width: 45px;
+}
+
+.url-value {
+  font-size: 12px;
+  font-family: 'Monaco', 'Courier New', monospace;
+  color: #4a90e2;
+  background: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.url-value.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.url-value.clickable:hover {
+  background: #e3f2fd;
+  border-color: #4a90e2;
+  color: #357abd;
+}
+
+.info-text.small {
+  font-size: 11px;
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-style: italic;
+}
+

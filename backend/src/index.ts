@@ -50,7 +50,10 @@ const server = Bun.serve({
         url.pathname.startsWith('/stream/') ||
         url.pathname === '/device.xml' ||
         url.pathname === '/contentdirectory.xml' ||
-        url.pathname === '/control') {
+        url.pathname === '/control' ||
+        url.pathname === '/playlist.m3u' ||
+        url.pathname === '/playlist.m3u8' ||
+        url.pathname === '/playlist.json') {
       
       const streamingServerInstance = (resolvers as any).streamingServer;
       
@@ -276,6 +279,18 @@ const server = Bun.serve({
         });
       }
       
+      
+      // GET /playlist.m3u - M3U playlist
+      if (url.pathname === '/playlist.m3u' && request.method === 'GET') {
+        console.log(`🎵 M3U playlist requested from ${request.headers.get('user-agent') || 'unknown'}`);
+        return streamingServerInstance.handleRequest(request);
+      }
+      
+      // GET /playlist.m3u8 - M3U8 (HLS) playlist
+      if (url.pathname === '/playlist.m3u8' && request.method === 'GET') {
+        console.log(`🎵 M3U8 playlist requested from ${request.headers.get('user-agent') || 'unknown'}`);
+        return streamingServerInstance.handleRequest(request);
+      }
       
       // POST /control - SOAP endpoint for UPnP actions
       if (url.pathname === '/control' && request.method === 'POST') {

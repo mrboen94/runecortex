@@ -278,6 +278,32 @@ export default function StreamingServerStatus() {
                 <p className="info-text">
                   🔄 Use "Refresh VLC" if VLC doesn't show updated content
                 </p>
+                <div className="playlist-urls">
+                  <h5>Direct Playlist URLs:</h5>
+                  <div className="url-item">
+                    <span className="url-label">M3U:</span>
+                    <span 
+                      className="url-value clickable" 
+                      onClick={() => copyToClipboard(`http://${status.localIp}:${status.port}/playlist.m3u`)}
+                      title="Click to copy M3U playlist URL"
+                    >
+                      http://{status.localIp}:{status.port}/playlist.m3u
+                    </span>
+                  </div>
+                  <div className="url-item">
+                    <span className="url-label">M3U8:</span>
+                    <span 
+                      className="url-value clickable" 
+                      onClick={() => copyToClipboard(`http://${status.localIp}:${status.port}/playlist.m3u8`)}
+                      title="Click to copy M3U8 playlist URL"
+                    >
+                      http://{status.localIp}:{status.port}/playlist.m3u8
+                    </span>
+                  </div>
+                  <p className="info-text small">
+                    📝 In VLC: Media → Open Network Stream → Paste URL
+                  </p>
+                </div>
               </div>
             )}
           </div>

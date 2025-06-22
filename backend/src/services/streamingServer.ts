@@ -5,6 +5,7 @@ import { existsSync } from 'fs';
 import { join, dirname, basename, extname } from 'path';
 import { db, schema } from '../db';
 import { eq, sql } from 'drizzle-orm';
+import { getLocalIpAddress } from '../utils/network';
 
 export interface StreamingServerConfig {
   port: number;
@@ -59,6 +60,93 @@ export class StreamingServer {
           { name: 'Streaming', path: '/streaming', type: 'folder' }
         ]
       });
+    });
+
+    // M3U playlist endpoint
+    this.app.get('/playlist.m3u', async (c) => {
+      const host = c.req.header('host') || `${this.getNetworkIP()}:${this.config.port}`;
+      const items = this.orderedItemIds
+        .map(id => this.currentStreamingItems.get(id))
+        .filter(item => item !== undefined) as StreamingMediaItem[];
+      
+      let m3u = '#EXTM3U\n';
+      m3u += `#PLAYLIST:${this.config.name}\n`;
+      
+      items.forEach((item, index) => {
+        const title = `${(index + 1).toString().padStart(3, '0')} - ${item.filename}`;
+        const duration = Math.round(item.duration || -1);
+        
+        // Extended M3U format with additional metadata
+        m3u += `#EXTINF:${duration},${title}\n`;
+        
+        // Optional: Add extra metadata for compatible players
+        if (item.thumbnailId) {
+          m3u += `#EXTVLCOPT:artworkURL=http://${host}/thumbnails/${item.thumbnailId}.jpg\n`;
+        }
+        
+        m3u += `http://${host}/stream/${item.id}\n`;
+      });
+      
+      c.header('Content-Type', 'audio/x-mpegurl');
+      c.header('Content-Disposition', 'inline; filename="playlist.m3u"');
+      return c.text(m3u);
+    });
+
+    // M3U8 (HLS) playlist endpoint for better compatibility
+    this.app.get('/playlist.m3u8', async (c) => {
+      const host = c.req.header('host') || `${this.getNetworkIP()}:${this.config.port}`;
+      const items = this.orderedItemIds
+        .map(id => this.currentStreamingItems.get(id))
+        .filter(item => item !== undefined) as StreamingMediaItem[];
+      
+      let m3u8 = '#EXTM3U\n';
+      m3u8 += '#EXT-X-VERSION:3\n';
+      m3u8 += '#EXT-X-MEDIA-SEQUENCE:0\n';
+      m3u8 += '#EXT-X-PLAYLIST-TYPE:VOD\n';
+      
+      items.forEach((item, index) => {
+        const title = `${(index + 1).toString().padStart(3, '0')} - ${item.filename}`;
+        const duration = item.duration || 0;
+        
+        m3u8 += `#EXTINF:${duration.toFixed(3)},${title}\n`;
+        m3u8 += `http://${host}/stream/${item.id}\n`;
+      });
+      
+      m3u8 += '#EXT-X-ENDLIST\n';
+      
+      c.header('Content-Type', 'application/vnd.apple.mpegurl');
+      c.header('Content-Disposition', 'inline; filename="playlist.m3u8"');
+      return c.text(m3u8);
+    });
+
+    // JSON playlist endpoint for debugging and future features
+    this.app.get('/playlist.json', async (c) => {
+      const host = c.req.header('host') || `${this.getNetworkIP()}:${this.config.port}`;
+      const items = this.orderedItemIds
+        .map(id => this.currentStreamingItems.get(id))
+        .filter(item => item !== undefined) as StreamingMediaItem[];
+      
+      const playlist = {
+        name: this.config.name,
+        totalItems: items.length,
+        systemUpdateId: this.systemUpdateId,
+        currentlyPlayingId: this.currentlyPlayingId,
+        items: items.map((item, index) => ({
+          index: index + 1,
+          id: item.id,
+          filename: item.filename,
+          url: `http://${host}/stream/${item.id}`,
+          thumbnailUrl: item.thumbnailId ? `http://${host}/thumbnails/${item.thumbnailId}.jpg` : null,
+          duration: item.duration,
+          width: item.width,
+          height: item.height,
+          fileSize: item.fileSize,
+          createdAt: item.createdAt,
+          isCurrentlyPlaying: item.id === this.currentlyPlayingId
+        }))
+      };
+      
+      return c.json(playlist);
     });
 
     // Current streaming folder - shows dynamically selected media
@@ -702,6 +790,10 @@ export class StreamingServer {
     // Use a consistent UUID for the DLNA server
     // This prevents VLC from seeing multiple server instances
     return 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
+  }
+
+  private getNetworkIP(): string {
+    return getLocalIpAddress();
   }
 
   async start(): Promise<void> {
