@@ -1,0 +1,246 @@
+.streaming-status {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 8px;
+  margin: 8px 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.streaming-status.expanded {
+  border-color: #4a90e2;
+}
+
+.streaming-indicator {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  min-height: 32px;
+  line-height: 1;
+}
+
+.streaming-indicator:hover {
+  background: rgba(74, 144, 226, 0.1);
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.status-dot.running {
+  background: #4caf50;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
+  animation: pulse 2s infinite;
+}
+
+.status-dot.stopped {
+  background: #666;
+}
+
+.status-dot.loading {
+  background: #ff9800;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+.status-text {
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  white-space: nowrap;
+}
+
+.expand-toggle {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px;
+  min-height: 24px;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.expand-toggle:hover {
+  color: #4a90e2;
+}
+
+.streaming-details {
+  border-top: 1px solid #444;
+  padding: 16px;
+  background: #1e1e1e;
+}
+
+.server-info h4 {
+  margin: 0 0 12px 0;
+  color: #4a90e2;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  min-height: 24px;
+}
+
+.info-row .label {
+  color: #888;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.info-row .value {
+  color: white;
+  font-size: 13px;
+  font-family: 'Monaco', 'Courier New', monospace;
+}
+
+.info-row .value.running {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.info-row .value.stopped {
+  color: #666;
+}
+
+.info-row .value.playing {
+  color: #ff9800;
+  font-weight: 600;
+}
+
+.info-row .value.url {
+  color: #4a90e2;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.info-row .value.url:hover {
+  color: #357abd;
+  text-decoration: underline;
+}
+
+.server-controls {
+  margin: 16px 0 12px 0;
+}
+
+.control-button {
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.control-button.start {
+  background: #4caf50;
+  color: white;
+}
+
+.control-button.start:hover:not(:disabled) {
+  background: #45a049;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+.control-button.stop {
+  background: #f44336;
+  color: white;
+}
+
+.control-button.stop:hover:not(:disabled) {
+  background: #da190b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+.control-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.streaming-folder-info {
+  margin: 16px 0;
+  padding: 12px;
+  background: #252525;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+
+.usage-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #444;
+}
+
+.info-text {
+  color: #ccc;
+  font-size: 12px;
+  margin: 4px 0;
+  line-height: 1.4;
+}
+
+.info-text strong {
+  color: #4a90e2;
+  font-weight: 600;
+}
+
+/* Compact view for header */
+.streaming-status.compact {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
+
+.streaming-status.compact .streaming-indicator {
+  padding: 8px 12px;
+  min-height: 28px;
+}
+
+.streaming-status.compact .status-text {
+  font-size: 13px;
+}
+
+.streaming-status.compact .status-dot {
+  width: 10px;
+  height: 10px;
+  margin-right: 6px;
+}
+
+.streaming-status.compact .expand-toggle {
+  font-size: 10px;
+  min-height: 20px;
+}

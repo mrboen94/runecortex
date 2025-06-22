@@ -53,6 +53,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const [showAutoplayButton, setShowAutoplayButton] = useState(true);
   const [autoplayEnabled, setAutoplayEnabled] = useState(viewerSettings?.autoPlay ?? true);
   const [showVideoSettings, setShowVideoSettings] = useState(false);
+  const [userClosed, setUserClosed] = useState(false);
   const slideInterval = viewerSettings?.slideInterval || 5;
   const displayCounter = viewerSettings?.showCounter ?? true;
   const displayDate = viewerSettings?.showDate ?? true;
@@ -71,11 +72,29 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const counterTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const dateTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const locationTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const errorAdvanceTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   
   const [logError] = useMutation(LOG_PLAYBACK_ERROR);
 
   const currentMedia = allMedia[currentMediaIndex];
   const mediaUrl = `http://localhost:4001/media/${currentMedia.id}`;
+
+  // Handle user-initiated close
+  const handleClose = useCallback(() => {
+    setUserClosed(true);
+    
+    // Clear all timeouts to prevent auto-advance after close
+    if (errorAdvanceTimeoutRef.current) {
+      clearTimeout(errorAdvanceTimeoutRef.current);
+      errorAdvanceTimeoutRef.current = undefined;
+    }
+    if (slideTimeoutRef.current) {
+      clearTimeout(slideTimeoutRef.current);
+      slideTimeoutRef.current = undefined;
+    }
+    
+    onClose();
+  }, [onClose]);
 
   // Navigate to previous/next media
   const navigate = useCallback((direction: 'prev' | 'next') => {
@@ -86,6 +105,12 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     setCurrentMediaIndex(newIndex);
     onNavigate(allMedia[newIndex]);
     setPlaybackError(false); // Reset error state when navigating
+    
+    // Clear error advance timeout when manually navigating
+    if (errorAdvanceTimeoutRef.current) {
+      clearTimeout(errorAdvanceTimeoutRef.current);
+      errorAdvanceTimeoutRef.current = undefined;
+    }
     
     // Show counter briefly when navigating
     if (displayCounter && counterDuration > 0) {
@@ -154,11 +179,11 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
       console.error('Failed to log playback error:', logErr);
     }
     
-    // Auto-advance after error if autoplay is enabled
-    if (autoplayEnabled) {
-      setTimeout(() => navigate('next'), 2000);
+    // Auto-advance after error if autoplay is enabled and user hasn't manually closed
+    if (autoplayEnabled && !userClosed) {
+      errorAdvanceTimeoutRef.current = setTimeout(() => navigate('next'), 2000);
     }
-  }, [currentMedia, logError, autoplayEnabled, navigate]);
+  }, [currentMedia, logError, autoplayEnabled, navigate, userClosed]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -168,7 +193,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
           if (isFullscreen) {
             exitFullscreen();
           } else {
-            onClose();
+            handleClose();
           }
           break;
         case 'ArrowLeft':
@@ -196,7 +221,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
 
     document.addEventListener('keydown', handleKeydown);
     return () => document.removeEventListener('keydown', handleKeydown);
-  }, [isFullscreen, navigate, onClose]);
+  }, [isFullscreen, navigate, handleClose]);
 
   // Auto-hide controls in fullscreen
   useEffect(() => {
@@ -228,7 +253,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
 
   // Auto-advance for images
   useEffect(() => {
-    if (currentMedia.fileType === 'image' && autoplayEnabled && isFullscreen) {
+    if (currentMedia.fileType === 'image' && autoplayEnabled && isFullscreen && !userClosed) {
       slideTimeoutRef.current = setTimeout(() => {
         navigate('next');
       }, slideInterval * 1000);
@@ -239,14 +264,14 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
         }
       };
     }
-  }, [currentMedia, autoplayEnabled, slideInterval, isFullscreen, navigate]);
+  }, [currentMedia, autoplayEnabled, slideInterval, isFullscreen, navigate, userClosed]);
 
   // Handle video ended event
   const handleVideoEnded = useCallback(() => {
-    if (autoplayEnabled) {
+    if (autoplayEnabled && !userClosed) {
       navigate('next');
     }
-  }, [autoplayEnabled, navigate]);
+  }, [autoplayEnabled, navigate, userClosed]);
 
   // Start autoplay for images
   const startImageAutoplay = () => {
@@ -360,7 +385,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     <div 
       ref={viewerRef}
       className={`media-viewer-overlay ${isFullscreen ? 'fullscreen' : ''}`} 
-      onClick={isFullscreen ? undefined : onClose}
+      onClick={isFullscreen ? undefined : handleClose}
     >
       <div 
         className={`media-viewer ${isFullscreen ? 'fullscreen-viewer' : ''}`} 
@@ -386,7 +411,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
         {/* Close button */}
         <button 
           className={`close-button ${showControls || !isFullscreen ? 'show' : ''}`} 
-          onClick={onClose}
+          onClick={handleClose}
           title="Close (Esc)"
         >
           ×

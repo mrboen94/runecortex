@@ -56,6 +56,11 @@
   margin-left: auto; /* Push to the right */
 }
 
+/* Streaming section */
+.nav-streaming {
+  margin-left: auto;
+}
+
 .nav-breadcrumb .breadcrumb {
   margin: 0;
 }

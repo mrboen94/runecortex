@@ -1,3 +1,4 @@
+import SendToStreamingButton from './SendToStreamingButton';
 import './Navigation.css';
 
 type ViewMode = 'timeline' | 'year' | 'month' | 'day';
@@ -5,15 +6,29 @@ type GroupBy = 'year' | 'month' | 'day' | 'none';
 
 export type { ViewMode, GroupBy };
 
+interface MediaItem {
+  id: number;
+  filename: string;
+  filepath: string;
+  fileType: string;
+  createdAt: string;
+  fileSize: number;
+  duration?: number;
+  width: number;
+  height: number;
+}
+
 interface NavigationProps {
   viewMode: ViewMode;
   groupBy: GroupBy;
   onViewModeChange: (mode: ViewMode) => void;
   onGroupByChange: (groupBy: GroupBy) => void;
   breadcrumb?: React.ReactNode;
+  currentMedia?: MediaItem[];
+  currentlyPlayingId?: number;
 }
 
-export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange, breadcrumb }: NavigationProps) {
+export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange, breadcrumb, currentMedia, currentlyPlayingId }: NavigationProps) {
   return (
     <nav className="navigation">
       <div className="nav-section">
@@ -81,6 +96,17 @@ export default function Navigation({ viewMode, groupBy, onViewModeChange, onGrou
       {breadcrumb && (
         <div className="nav-section nav-breadcrumb">
           {breadcrumb}
+        </div>
+      )}
+      
+      {currentMedia && currentMedia.length > 0 && (
+        <div className="nav-section nav-streaming">
+          <SendToStreamingButton 
+            mediaItems={currentMedia}
+            currentlyPlayingId={currentlyPlayingId}
+            variant="secondary"
+            size="small"
+          />
         </div>
       )}
     </nav>

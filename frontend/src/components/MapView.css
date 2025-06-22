@@ -17,6 +17,13 @@
   padding: 10px 20px;
 }
 
+.map-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .map-header h3 {
   margin: 0;
   color: white;

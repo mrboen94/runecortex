@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useApolloClient } from '@apollo/client';
 import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS } from '../graphql/queries';
+import StreamingServerStatus from './StreamingServerStatus';
 import './ViewerSettings.css';
 
 export type MediaFilter = 'all' | 'videos' | 'images';
@@ -263,6 +264,11 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
             <p className="settings-help">Duration in seconds (0 = always visible)</p>
             </div>
             )}
+          </div>
+
+          <div className="settings-section">
+            <h4>Media Streaming</h4>
+            <StreamingServerStatus />
           </div>
 
           <div className="settings-section">

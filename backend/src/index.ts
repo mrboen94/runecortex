@@ -1,10 +1,12 @@
 import { createYoga } from 'graphql-yoga';
 import { createServer } from 'node:http';
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 import { resolvers } from './graphql/resolvers';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { DateTimeTypeDefinition, DateTimeResolver } from 'graphql-scalars';
+import { StreamingServer } from './services/streamingServer';
+import { SSDPServer } from './services/ssdp';
 
 // Read GraphQL schema
 const typeDefs = readFileSync(join(__dirname, 'graphql/schema.graphql'), 'utf-8');
@@ -18,6 +20,9 @@ const schema = makeExecutableSchema({
   },
 });
 
+// Get server port
+const serverPort = parseInt(process.env.PORT || '4001');
+
 // Create GraphQL Yoga instance
 const yoga = createYoga({
   schema,
@@ -30,9 +35,283 @@ const yoga = createYoga({
 
 // Create and configure server
 const server = Bun.serve({
-  port: process.env.PORT || 4001,
+  port: serverPort,
+  hostname: '0.0.0.0', // Listen on all interfaces (IPv4)
   async fetch(request) {
     const url = new URL(request.url);
+    
+    // Handle all streaming server endpoints directly without Hono framework
+    if (url.pathname.startsWith('/streaming') || 
+        url.pathname.startsWith('/stream/') ||
+        url.pathname === '/device.xml' ||
+        url.pathname === '/contentdirectory.xml' ||
+        url.pathname === '/control') {
+      
+      const streamingServerInstance = (resolvers as any).streamingServer;
+      
+      // GET /streaming/status
+      if (url.pathname === '/streaming/status' && request.method === 'GET') {
+        const status = streamingServerInstance.getStreamingFolderStatus();
+        return new Response(JSON.stringify(status), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // GET /streaming/debug - Debug endpoint
+      if (url.pathname === '/streaming/debug' && request.method === 'GET') {
+        const items = Array.from(streamingServerInstance.currentStreamingItems.entries());
+        return new Response(JSON.stringify({
+          itemsMap: items,
+          currentlyPlaying: streamingServerInstance.currentlyPlayingId,
+          itemCount: streamingServerInstance.currentStreamingItems.size
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // GET /streaming
+      if (url.pathname === '/streaming' && request.method === 'GET') {
+        const streamingItems = Array.from(streamingServerInstance.currentStreamingItems.values());
+        const response = {
+          name: 'Current Selection',
+          type: 'folder',
+          children: streamingItems.map(item => ({
+            name: item.filename,
+            path: `/stream/${item.id}`,
+            type: 'media',
+            fileType: item.fileType,
+            size: item.fileSize,
+            duration: item.duration,
+            created: item.createdAt,
+            mimeType: streamingServerInstance.getContentType(item.filepath),
+            isCurrentlyPlaying: item.id === streamingServerInstance.currentlyPlayingId
+          }))
+        };
+        return new Response(JSON.stringify(response), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // POST /streaming/update
+      if (url.pathname === '/streaming/update' && request.method === 'POST') {
+        try {
+          const body = await request.json();
+          streamingServerInstance.updateStreamingFolderFromExternal(body.mediaItems, body.currentlyPlayingId);
+          
+          return new Response(JSON.stringify({
+            success: true,
+            message: `Updated streaming folder with ${body.mediaItems.length} items`,
+            totalItems: streamingServerInstance.currentStreamingItems.size,
+            currentlyPlaying: streamingServerInstance.currentlyPlayingId
+          }), {
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
+        } catch (error) {
+          console.error('Failed to update streaming folder:', error);
+          return new Response(JSON.stringify({
+            success: false,
+            error: 'Failed to update streaming folder'
+          }), {
+            status: 400,
+            headers: {
+              'Content-Type': 'application/json',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
+        }
+      }
+      
+      // POST /streaming/playing/:id
+      if (url.pathname.startsWith('/streaming/playing/') && request.method === 'POST') {
+        const id = parseInt(url.pathname.split('/')[3]);
+        streamingServerInstance.currentlyPlayingId = id;
+        
+        return new Response(JSON.stringify({
+          success: true,
+          currentlyPlaying: id
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // DELETE /streaming/playing
+      if (url.pathname === '/streaming/playing' && request.method === 'DELETE') {
+        streamingServerInstance.currentlyPlayingId = null;
+        
+        return new Response(JSON.stringify({
+          success: true,
+          currentlyPlaying: null
+        }), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // GET /stream/:id - Media streaming with range support
+      if (url.pathname.startsWith('/stream/') && request.method === 'GET') {
+        const mediaId = parseInt(url.pathname.split('/')[2]);
+        
+        if (!isNaN(mediaId)) {
+          // Check if media is in current streaming items first
+          const streamingItem = streamingServerInstance.currentStreamingItems.get(mediaId);
+          let filepath = null;
+          
+          if (streamingItem && existsSync(streamingItem.filepath)) {
+            filepath = streamingItem.filepath;
+            // Mark as currently playing
+            streamingServerInstance.currentlyPlayingId = mediaId;
+          } else {
+            // Fallback to database lookup
+            const { db, schema } = await import('./db');
+            const { eq } = await import('drizzle-orm');
+            
+            const [item] = await db.select()
+              .from(schema.mediaItems)
+              .where(eq(schema.mediaItems.id, mediaId))
+              .limit(1);
+            
+            if (item && existsSync(item.filepath)) {
+              filepath = item.filepath;
+            }
+          }
+          
+          if (filepath) {
+            try {
+              const file = Bun.file(filepath);
+              const size = file.size;
+              const range = request.headers.get('range');
+              
+              if (range) {
+                // Handle range requests for video streaming
+                const parts = range.replace(/bytes=/, '').split('-');
+                const start = parseInt(parts[0], 10);
+                const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
+                const chunksize = (end - start) + 1;
+                
+                const fileSlice = file.slice(start, end + 1);
+                const arrayBuffer = await fileSlice.arrayBuffer();
+                
+                return new Response(arrayBuffer, {
+                  status: 206,
+                  headers: {
+                    'Content-Range': `bytes ${start}-${end}/${size}`,
+                    'Accept-Ranges': 'bytes',
+                    'Content-Length': chunksize.toString(),
+                    'Content-Type': streamingServerInstance.getContentType(filepath),
+                    'Access-Control-Allow-Origin': '*',
+                  },
+                });
+              } else {
+                // Handle full file requests
+                const arrayBuffer = await file.arrayBuffer();
+                
+                return new Response(arrayBuffer, {
+                  status: 200,
+                  headers: {
+                    'Content-Length': size.toString(),
+                    'Content-Type': streamingServerInstance.getContentType(filepath),
+                    'Accept-Ranges': 'bytes',
+                    'Access-Control-Allow-Origin': '*',
+                  },
+                });
+              }
+            } catch (error) {
+              console.error('Streaming error:', error);
+              return new Response('Internal Server Error', { status: 500 });
+            }
+          }
+        }
+        
+        return new Response('Not Found', { status: 404 });
+      }
+      
+      // GET /device.xml - DLNA device description
+      if (url.pathname === '/device.xml' && request.method === 'GET') {
+        const requestHost = request.headers.get('host');
+        const deviceXml = streamingServerInstance.generateDeviceDescription(requestHost || undefined);
+        return new Response(deviceXml, {
+          headers: {
+            'Content-Type': 'text/xml',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // GET /contentdirectory.xml - Content directory service description
+      if (url.pathname === '/contentdirectory.xml' && request.method === 'GET') {
+        const serviceXml = streamingServerInstance.generateContentDirectoryService();
+        return new Response(serviceXml, {
+          headers: {
+            'Content-Type': 'text/xml',
+            'Access-Control-Allow-Origin': '*',
+          },
+        });
+      }
+      
+      // POST /control - SOAP endpoint for UPnP actions
+      if (url.pathname === '/control' && request.method === 'POST') {
+        const soapAction = request.headers.get('soapaction');
+        const body = await request.text();
+        const requestHost = request.headers.get('host');
+        
+        if (soapAction?.includes('Browse')) {
+          // Parse the SOAP request to get ObjectID
+          const objectIdMatch = body.match(/<ObjectID>([^<]+)<\/ObjectID>/);
+          const objectId = objectIdMatch ? objectIdMatch[1] : '0';
+          
+          // Create a minimal context object with the necessary method
+          const context = {
+            header: (name: string, value: string) => {},
+            text: (content: string) => new Response(content, {
+              headers: {
+                'Content-Type': 'text/xml; charset=utf-8',
+                'Access-Control-Allow-Origin': '*',
+              },
+            })
+          };
+          
+          // Let the streaming server handle the browse action
+          const response = await streamingServerInstance.handleBrowseAction(context, body, requestHost || undefined);
+          return response;
+        }
+        
+        return new Response('Unsupported SOAP action', { status: 400 });
+      }
+      
+    }
+    
+    // GET / - Root directory listing for DLNA browsing
+    if (url.pathname === '/' && request.method === 'GET') {
+      return new Response(JSON.stringify({
+        name: 'RuneCortex Media Server',
+        type: 'root',
+        children: [
+          { name: 'Streaming', path: '/streaming', type: 'folder' }
+        ]
+      }), {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      });
+    }
     
     // Serve GraphQL endpoint
     if (url.pathname.startsWith('/graphql')) {
@@ -47,10 +326,13 @@ const server = Bun.serve({
       const file = Bun.file(thumbnailPath);
       
       if (await file.exists()) {
-        return new Response(file, {
+        // Read the file as an ArrayBuffer to avoid _Response issues
+        const arrayBuffer = await file.arrayBuffer();
+        return new Response(arrayBuffer, {
           headers: {
             'Content-Type': 'image/jpeg',
             'Cache-Control': 'public, max-age=31536000',
+            'Content-Length': file.size.toString(),
           },
         });
       }
@@ -83,7 +365,11 @@ const server = Bun.serve({
               const end = parts[1] ? parseInt(parts[1], 10) : size - 1;
               const chunksize = (end - start) + 1;
               
-              return new Response(file.slice(start, end + 1), {
+              // Read the file slice as ArrayBuffer to avoid _Response issues
+              const fileSlice = file.slice(start, end + 1);
+              const arrayBuffer = await fileSlice.arrayBuffer();
+              
+              return new Response(arrayBuffer, {
                 status: 206,
                 headers: {
                   'Content-Range': `bytes ${start}-${end}/${size}`,
@@ -94,10 +380,13 @@ const server = Bun.serve({
               });
             }
             
-            return new Response(file, {
+            // Read the full file as ArrayBuffer to avoid _Response issues
+            const arrayBuffer = await file.arrayBuffer();
+            return new Response(arrayBuffer, {
               headers: {
                 'Content-Type': file.type || 'application/octet-stream',
                 'Content-Length': file.size.toString(),
+                'Accept-Ranges': 'bytes',
               },
             });
           }
@@ -112,6 +401,21 @@ const server = Bun.serve({
 // Ensure thumbnails directory exists
 import { mkdir } from 'fs/promises';
 await mkdir('./thumbnails', { recursive: true }).catch(() => {});
+
+// Initialize streaming server (only for data management, not as separate server)
+const streamingServer = new StreamingServer({
+  port: serverPort, // Use the same port as the main server
+  host: process.env.STREAMING_HOST || '0.0.0.0',
+  name: 'RuneCortex Media Server',
+  virtualFolderPath: './virtual'
+});
+
+// Make streaming server available to resolvers
+(resolvers as any).streamingServer = streamingServer;
+
+// Start SSDP discovery server
+const ssdpServer = new SSDPServer(serverPort);
+ssdpServer.start();
 
 // Start media watcher if watch paths are configured
 const watchPaths = process.env.WATCH_PATHS?.split(',').map(p => p.trim()) || [];
@@ -132,6 +436,8 @@ process.on('SIGINT', async () => {
   console.log('\nShutting down...');
   // Use the resolver to stop the watcher
   await resolvers.Mutation.stopWatcher();
+  // Stop SSDP server
+  ssdpServer.stop();
   server.stop();
   process.exit(0);
 });

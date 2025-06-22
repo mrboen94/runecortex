@@ -185,6 +185,43 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
   if (loading) return <div className="loading">Loading media...</div>;
   if (error) return <div className="error">Error loading media: {error.message}</div>;
 
+  // Get currently visible media based on view mode and selections
+  const getCurrentlyVisibleMedia = () => {
+    switch (viewMode) {
+      case 'timeline':
+        return filteredAndSortedMedia;
+        
+      case 'year':
+        // When in year view, show all media for selected year, or all if no year selected
+        if (selectedYear) {
+          return Object.values(groupedByMonth[selectedYear] || {}).flat();
+        }
+        return filteredAndSortedMedia;
+        
+      case 'month':
+        if (selectedYear && selectedMonth) {
+          return groupedByMonth[selectedYear]?.[selectedMonth] || [];
+        } else if (selectedYear) {
+          // Show all media for the year if month not selected yet
+          return Object.values(groupedByMonth[selectedYear] || {}).flat();
+        }
+        return [];
+        
+      case 'day':
+        if (selectedYear && selectedMonth && selectedDay) {
+          const key = `${selectedMonth}|${selectedDay}`;
+          return groupedByDay[selectedYear]?.[key] || [];
+        } else if (selectedYear && selectedMonth) {
+          // Show all media for the month if day not selected yet
+          return groupedByMonth[selectedYear]?.[selectedMonth] || [];
+        }
+        return [];
+        
+      default:
+        return [];
+    }
+  };
+
   const renderBreadcrumb = () => {
     if (viewMode === 'timeline' || !selectedYear) return null;
     
@@ -265,7 +302,7 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
 
       if (viewMode === 'year') {
         // Show all items for the year
-        return <MediaGrid media={groupedByYear[selectedYear].all} viewerSettings={viewerSettings} />;
+        return <MediaGrid media={groupedByYear[selectedYear]?.all || []} viewerSettings={viewerSettings} />;
       }
 
       return (
@@ -277,7 +314,7 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
               onClick={() => setSelectedMonth(month)}
             >
               <h3>{month}</h3>
-              <p>{groupedByMonth[selectedYear][month].length} items</p>
+              <p>{groupedByMonth[selectedYear]?.[month]?.length || 0} items</p>
             </button>
           ))}
         </div>
@@ -285,7 +322,7 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
     }
 
     if (viewMode === 'month' && selectedMonth) {
-      return <MediaGrid media={groupedByMonth[selectedYear][selectedMonth]} viewerSettings={viewerSettings} />;
+      return <MediaGrid media={groupedByMonth[selectedYear]?.[selectedMonth] || []} viewerSettings={viewerSettings} />;
     }
 
     if (viewMode === 'day' && selectedMonth && !selectedDay) {
@@ -307,7 +344,7 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
               onClick={() => setSelectedDay(day)}
             >
               <h3>{selectedMonth} {day}</h3>
-              <p>{groupedByDay[selectedYear][key].length} items</p>
+              <p>{groupedByDay[selectedYear]?.[key]?.length || 0} items</p>
             </button>
           ))}
         </div>
@@ -316,7 +353,7 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
 
     if (viewMode === 'day' && selectedMonth && selectedDay) {
       const key = `${selectedMonth}|${selectedDay}`;
-      return <MediaGrid media={groupedByDay[selectedYear][key]} viewerSettings={viewerSettings} />;
+      return <MediaGrid media={groupedByDay[selectedYear]?.[key] || []} viewerSettings={viewerSettings} />;
     }
 
     return null;
@@ -330,6 +367,17 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
         onViewModeChange={handleViewModeChange}
         onGroupByChange={setGroupBy}
         breadcrumb={renderBreadcrumb()}
+        currentMedia={getCurrentlyVisibleMedia().map(item => ({
+          id: item.id,
+          filename: item.filename,
+          filepath: '', // Will be populated from database in mutation
+          fileType: item.fileType,
+          createdAt: item.createdAt,
+          fileSize: 0, // Will be populated from database in mutation
+          duration: item.duration,
+          width: item.width,
+          height: item.height
+        }))}
       />
 
       <main className="timeline-content">

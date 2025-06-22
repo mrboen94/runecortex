@@ -1,0 +1,121 @@
+.send-to-streaming {
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  min-height: 32px;
+  line-height: 1;
+}
+
+/* Variants */
+.send-to-streaming.primary {
+  background: #4a90e2;
+  color: white;
+}
+
+.send-to-streaming.primary:hover:not(:disabled) {
+  background: #357abd;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
+}
+
+.send-to-streaming.secondary {
+  background: #666;
+  color: white;
+}
+
+.send-to-streaming.secondary:hover:not(:disabled) {
+  background: #777;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 102, 102, 0.3);
+}
+
+/* Sizes */
+.send-to-streaming.small {
+  padding: 6px 12px;
+  font-size: 12px;
+  min-height: 28px;
+}
+
+.send-to-streaming.medium {
+  padding: 8px 16px;
+  font-size: 14px;
+  min-height: 32px;
+}
+
+.send-to-streaming.large {
+  padding: 12px 20px;
+  font-size: 16px;
+  min-height: 40px;
+}
+
+/* States */
+.send-to-streaming.disabled,
+.send-to-streaming:disabled {
+  background: #333;
+  color: #666;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.send-to-streaming.loading {
+  background: #357abd;
+  cursor: wait;
+}
+
+.send-to-streaming.loading:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Success state styling */
+.send-to-streaming:not(.loading):not(.disabled) {
+  position: relative;
+}
+
+/* Animation for success state */
+@keyframes successPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(76, 175, 80, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+  }
+}
+
+/* Show success styling when button text contains checkmark */
+.send-to-streaming:not(.loading):not(.disabled):contains("✅") {
+  background: #4caf50;
+  animation: successPulse 0.6s ease-out;
+}
+
+/* Focus styles */
+.send-to-streaming:focus {
+  outline: 2px solid rgba(74, 144, 226, 0.5);
+  outline-offset: 2px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .send-to-streaming.large {
+    padding: 10px 16px;
+    font-size: 14px;
+    min-height: 36px;
+  }
+  
+  .send-to-streaming.medium {
+    padding: 6px 12px;
+    font-size: 12px;
+    min-height: 28px;
+  }
+}

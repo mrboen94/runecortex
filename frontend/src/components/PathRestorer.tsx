@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { useMutation } from '@apollo/client';
+import { useEffect, useRef } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { gql } from '@apollo/client';
 
 const CHANGE_WATCH_PATH = gql`
@@ -11,17 +11,31 @@ const CHANGE_WATCH_PATH = gql`
   }
 `;
 
+const GET_CURRENT_PATH = gql`
+  query GetCurrentWatchPath {
+    getCurrentWatchPath
+  }
+`;
+
 export default function PathRestorer() {
+  const hasRestoredRef = useRef(false);
+  const { data: currentPathData } = useQuery(GET_CURRENT_PATH);
   const [changeWatchPath] = useMutation(CHANGE_WATCH_PATH, {
     refetchQueries: ['GetCurrentWatchPath', 'GetAllMedia'],
   });
 
   useEffect(() => {
+    // Prevent double execution from StrictMode
+    if (hasRestoredRef.current) return;
+    
     // Try to restore the last used path from localStorage
     const lastPath = localStorage.getItem('lastWatchPath');
+    const currentPath = currentPathData?.getCurrentWatchPath;
     
-    if (lastPath) {
+    // Only restore if we have a lastPath and it's different from current
+    if (lastPath && lastPath !== currentPath) {
       console.log('Restoring last watch path:', lastPath);
+      hasRestoredRef.current = true;
       
       // Attempt to change to the last used path
       changeWatchPath({
@@ -31,7 +45,7 @@ export default function PathRestorer() {
         // If it fails, the backend will use its default
       });
     }
-  }, []); // Only run once on mount
+  }, [currentPathData, changeWatchPath]); // Include dependencies
 
   return null; // This component doesn't render anything
 }

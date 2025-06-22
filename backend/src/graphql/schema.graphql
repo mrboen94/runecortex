@@ -54,6 +54,8 @@ type Query {
   getCurrentWatchPath: String!
   getWatchPathHistory: [String!]!
   validatePath(path: String!): PathValidation!
+  streamingServerStatus: StreamingServerStatus!
+  streamingFolderStatus: StreamingFolderStatus!
 }
 
 type WatcherStatus {
@@ -104,6 +106,41 @@ type PathValidation {
   error: String
 }
 
+type StreamingServerStatus {
+  isRunning: Boolean!
+  port: Int!
+  host: String!
+  name: String!
+  url: String!
+  totalItems: Int!
+  currentlyPlaying: Int
+}
+
+type StreamingFolderStatus {
+  totalItems: Int!
+  currentlyPlaying: Int
+  items: [StreamingItem!]!
+}
+
+type StreamingItem {
+  id: Int!
+  filename: String!
+  isCurrentlyPlaying: Boolean!
+}
+
+input StreamingMediaInput {
+  id: Int!
+  filename: String!
+  filepath: String!
+  fileType: String!
+  createdAt: String!
+  fileSize: Int!
+  duration: Float
+  width: Int!
+  height: Int!
+  thumbnailId: String
+}
+
 type Mutation {
   triggerScan(path: String!): ScanResult!
   regenerateThumbnails: Int!
@@ -116,4 +153,7 @@ type Mutation {
   clearAllThumbnails: ReindexResult!
   logPlaybackError(mediaId: Int!, error: String!, browserInfo: String): Boolean!
   changeWatchPath(path: String!): WatcherStatus!
+  startStreamingServer: StreamingServerStatus!
+  stopStreamingServer: Boolean!
+  updateStreamingFolder(mediaItems: [StreamingMediaInput!]!, currentlyPlayingId: Int): StreamingFolderStatus!
 }

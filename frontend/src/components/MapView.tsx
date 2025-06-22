@@ -4,6 +4,7 @@ import { gql } from '@apollo/client';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from './MarkerClusterGroup';
 import MediaViewer from './MediaViewer';
+import SendToStreamingButton from './SendToStreamingButton';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.css';
@@ -157,7 +158,26 @@ export default function MapView({ onMediaClick }: MapViewProps) {
   return (
     <div className="map-view-container">
       <div className="map-header compact">
-        <h3>📍 {mediaWithLocation.length} items • {locationGroups.size} locations</h3>
+        <div className="map-header-content">
+          <h3>📍 {mediaWithLocation.length} items • {locationGroups.size} locations</h3>
+          {mediaWithLocation.length > 0 && (
+            <SendToStreamingButton 
+              mediaItems={mediaWithLocation.map(item => ({
+                id: item.id,
+                filename: item.filename,
+                filepath: '', // Will be populated from database in mutation
+                fileType: item.fileType,
+                createdAt: item.createdAt,
+                fileSize: 0, // Will be populated from database in mutation
+                duration: item.duration,
+                width: item.width,
+                height: item.height
+              }))}
+              variant="primary"
+              size="small"
+            />
+          )}
+        </div>
       </div>
       
       {showMap ? (

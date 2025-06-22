@@ -1,5 +1,5 @@
 import { db, schema } from '../db';
-import { between, eq, and, gte, lt, desc } from 'drizzle-orm';
+import { between, eq, and, gte, lt, desc, inArray } from 'drizzle-orm';
 import { MediaScanner } from '../services/scanner';
 import { ThumbnailGenerator } from '../services/thumbnail';
 import { MediaWatcher } from '../services/watcher';
@@ -10,6 +10,7 @@ import { unlink, readdir, rename, access, stat } from 'fs/promises';
 import { join, basename, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { constants } from 'fs';
+import type { StreamingServer } from '../services/streamingServer';
 
 const scanner = new MediaScanner();
 const thumbnailGenerator = new ThumbnailGenerator();
@@ -255,6 +256,45 @@ export const resolvers = {
           };
         }
       }
+    },
+
+    streamingServerStatus: () => {
+      const streamingServer = (resolvers as any).streamingServer;
+      if (!streamingServer) {
+        return {
+          isRunning: false,
+          port: 4001,
+          host: '0.0.0.0',
+          name: 'RuneCortex Media Server',
+          url: 'http://localhost:4001',
+          totalItems: 0,
+          currentlyPlaying: null
+        };
+      }
+      
+      // Since streaming is integrated into main server, always report as running
+      const folderStatus = streamingServer.getStreamingFolderStatus();
+      return {
+        isRunning: true,
+        port: 4001, // Same as main server
+        host: '0.0.0.0',
+        name: 'RuneCortex Media Server',
+        url: 'http://localhost:4001',
+        totalItems: folderStatus.totalItems,
+        currentlyPlaying: folderStatus.currentlyPlaying
+      };
+    },
+
+    streamingFolderStatus: () => {
+      const streamingServer = (resolvers as any).streamingServer;
+      if (!streamingServer) {
+        return {
+          totalItems: 0,
+          currentlyPlaying: null,
+          items: []
+        };
+      }
+      return streamingServer.getStreamingFolderStatus();
     },
   },
 
@@ -534,6 +574,91 @@ export const resolvers = {
         lastProcessed: lastProcessedTime,
         scanProgress: scanProgress.getProgress()
       };
+    },
+
+    startStreamingServer: async () => {
+      const streamingServer = (resolvers as any).streamingServer;
+      if (!streamingServer) {
+        throw new Error('Streaming server not initialized');
+      }
+      
+      // Since we're handling streaming endpoints in the main Bun server,
+      // just return the status as "running"
+      return {
+        isRunning: true,
+        port: 4001, // Same as main server
+        host: '0.0.0.0',
+        name: 'RuneCortex Media Server',
+        url: `http://localhost:4001`,
+        totalItems: streamingServer.currentStreamingItems.size,
+        currentlyPlaying: streamingServer.currentlyPlayingId
+      };
+    },
+
+    stopStreamingServer: async () => {
+      // Since streaming is integrated into main server, we can't really "stop" it
+      // Just return true to indicate the operation was successful
+      return true;
+    },
+
+    updateStreamingFolder: async (_: any, { mediaItems, currentlyPlayingId }: { 
+      mediaItems: Array<{
+        id: number;
+        filename: string;
+        filepath: string;
+        fileType: string;
+        createdAt: string;
+        fileSize: number;
+        duration?: number;
+        width: number;
+        height: number;
+      }>;
+      currentlyPlayingId?: number;
+    }) => {
+      const streamingServer = (resolvers as any).streamingServer;
+      if (!streamingServer) {
+        throw new Error('Streaming server not initialized');
+      }
+
+      try {
+        // Fetch complete media information from database for the given IDs
+        const mediaIds = mediaItems.map(item => item.id);
+        console.log(`Updating streaming folder with ${mediaIds.length} media IDs:`, mediaIds);
+        
+        if (mediaIds.length === 0) {
+          console.log('No media items provided, clearing streaming folder');
+          const result = streamingServer.updateStreamingFolderFromExternal([], currentlyPlayingId);
+          return result;
+        }
+        
+        const completeMediaItems = await db
+          .select()
+          .from(schema.mediaItems)
+          .where(inArray(schema.mediaItems.id, mediaIds));
+
+        // Map the complete data to the streaming format
+        const streamingMediaItems = completeMediaItems.map(dbItem => ({
+          id: dbItem.id,
+          filename: dbItem.filename,
+          filepath: dbItem.filepath,
+          fileType: dbItem.fileType,
+          createdAt: dbItem.createdAt.toISOString(),
+          fileSize: dbItem.fileSize,
+          duration: dbItem.duration || undefined,
+          width: dbItem.width,
+          height: dbItem.height,
+          thumbnailId: dbItem.thumbnailId || undefined
+        }));
+
+        console.log(`Found ${completeMediaItems.length} complete media items in database`);
+        
+        const result = streamingServer.updateStreamingFolderFromExternal(streamingMediaItems, currentlyPlayingId);
+        console.log(`Updated streaming folder with ${streamingMediaItems.length} items. Server status:`, result);
+        return result;
+      } catch (error) {
+        console.error('Failed to update streaming folder:', error);
+        throw new Error(`Failed to update streaming folder: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      }
     },
   },
 
