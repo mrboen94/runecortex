@@ -636,21 +636,28 @@ export const resolvers = {
           .from(schema.mediaItems)
           .where(inArray(schema.mediaItems.id, mediaIds));
 
-        // Map the complete data to the streaming format
-        const streamingMediaItems = completeMediaItems.map(dbItem => ({
-          id: dbItem.id,
-          filename: dbItem.filename,
-          filepath: dbItem.filepath,
-          fileType: dbItem.fileType,
-          createdAt: dbItem.createdAt.toISOString(),
-          fileSize: dbItem.fileSize,
-          duration: dbItem.duration || undefined,
-          width: dbItem.width,
-          height: dbItem.height,
-          thumbnailId: dbItem.thumbnailId || undefined
-        }));
+        // Create a map for quick lookup
+        const itemsMap = new Map(completeMediaItems.map(item => [item.id, item]));
+
+        // Map the complete data to the streaming format, preserving the order from mediaIds
+        const streamingMediaItems = mediaIds
+          .map(id => itemsMap.get(id))
+          .filter(item => item !== undefined)
+          .map(dbItem => ({
+            id: dbItem!.id,
+            filename: dbItem!.filename,
+            filepath: dbItem!.filepath,
+            fileType: dbItem!.fileType,
+            createdAt: dbItem!.createdAt.toISOString(),
+            fileSize: dbItem!.fileSize,
+            duration: dbItem!.duration || undefined,
+            width: dbItem!.width,
+            height: dbItem!.height,
+            thumbnailId: dbItem!.thumbnailId || undefined
+          }));
 
         console.log(`Found ${completeMediaItems.length} complete media items in database`);
+        console.log(`Streaming items order: ${streamingMediaItems.map(i => i.id).join(', ')}`);
         
         const result = streamingServer.updateStreamingFolderFromExternal(streamingMediaItems, currentlyPlayingId);
         console.log(`Updated streaming folder with ${streamingMediaItems.length} items. Server status:`, result);

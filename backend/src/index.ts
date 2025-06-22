@@ -77,12 +77,16 @@ const server = Bun.serve({
       
       // GET /streaming
       if (url.pathname === '/streaming' && request.method === 'GET') {
-        const streamingItems = Array.from(streamingServerInstance.currentStreamingItems.values());
+        // Get items in order with prefixes
+        const orderedItems = streamingServerInstance.orderedItemIds
+          .map(id => streamingServerInstance.currentStreamingItems.get(id))
+          .filter(item => item !== undefined);
+        
         const response = {
           name: 'Current Selection',
           type: 'folder',
-          children: streamingItems.map(item => ({
-            name: item.filename,
+          children: orderedItems.map((item, index) => ({
+            name: `${(index + 1).toString().padStart(6, '0')} - ${item.filename}`,
             path: `/stream/${item.id}`,
             type: 'media',
             fileType: item.fileType,
@@ -290,6 +294,23 @@ const server = Bun.serve({
           // Let the streaming server handle the browse action
           const response = await streamingServerInstance.handleBrowseAction(context, body, requestHost || undefined);
           return response;
+        } else if (soapAction?.includes('GetSystemUpdateID')) {
+          // Return the current system update ID
+          const soapResponse = `<?xml version="1.0" encoding="utf-8"?>
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/" s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+  <s:Body>
+    <u:GetSystemUpdateIDResponse xmlns:u="urn:schemas-upnp-org:service:ContentDirectory:1">
+      <Id>${streamingServerInstance.systemUpdateId || 0}</Id>
+    </u:GetSystemUpdateIDResponse>
+  </s:Body>
+</s:Envelope>`;
+          
+          return new Response(soapResponse, {
+            headers: {
+              'Content-Type': 'text/xml; charset=utf-8',
+              'Access-Control-Allow-Origin': '*',
+            },
+          });
         }
         
         return new Response('Unsupported SOAP action', { status: 400 });

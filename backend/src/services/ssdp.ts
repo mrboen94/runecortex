@@ -67,10 +67,11 @@ export class SSDPServer {
       // Send initial announcement
       this.sendNotify();
       
-      // Send periodic announcements every 30 seconds
+      // Send periodic announcements every 5 minutes (300 seconds)
+      // This reduces duplicate entries in VLC
       this.intervalId = setInterval(() => {
         this.sendNotify();
-      }, 30000);
+      }, 300000);
     });
     
     this.socket.bind(this.port);

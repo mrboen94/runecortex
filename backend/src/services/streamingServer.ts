@@ -38,7 +38,9 @@ export class StreamingServer {
   private config: StreamingServerConfig;
   private isRunning = false;
   public currentStreamingItems: Map<number, StreamingMediaItem> = new Map(); // Make public for direct access
+  public orderedItemIds: number[] = []; // Maintain order from frontend
   public currentlyPlayingId: number | null = null; // Make public for direct access
+  public systemUpdateId: number = 0; // Track content changes for DLNA
 
   constructor(config: StreamingServerConfig) {
     this.config = config;
@@ -60,7 +62,10 @@ export class StreamingServer {
 
     // Current streaming folder - shows dynamically selected media
     this.app.get('/streaming', async (c) => {
-      const streamingItems = Array.from(this.currentStreamingItems.values());
+      // Get items in the order they were sent from frontend
+      const streamingItems = this.orderedItemIds
+        .map(id => this.currentStreamingItems.get(id))
+        .filter(item => item !== undefined) as StreamingMediaItem[];
       return c.json({
         name: 'Current Selection',
         type: 'folder',
@@ -288,18 +293,22 @@ export class StreamingServer {
     const currentlyPlayingItem = preserveCurrentlyPlaying ? 
       this.currentStreamingItems.get(this.currentlyPlayingId!) : null;
 
-    // Clear the current items map
+    // Clear the current items map and order array
     this.currentStreamingItems.clear();
+    this.orderedItemIds = [];
 
-    // Add all new items
+    // Add all new items preserving the order from frontend
     newItems.forEach(item => {
       this.currentStreamingItems.set(item.id, item);
+      this.orderedItemIds.push(item.id);
     });
 
     // Re-add currently playing item if it's not in the new selection
     if (currentlyPlayingItem && !this.currentStreamingItems.has(currentlyPlayingItem.id)) {
       console.log(`Preserving currently playing item: ${currentlyPlayingItem.filename}`);
       this.currentStreamingItems.set(currentlyPlayingItem.id, currentlyPlayingItem);
+      // Add to end of ordered list
+      this.orderedItemIds.push(currentlyPlayingItem.id);
     }
 
     // Update currently playing ID if provided
@@ -307,18 +316,32 @@ export class StreamingServer {
       this.currentlyPlayingId = currentlyPlayingId;
     }
 
+    // Increment systemUpdateId to notify DLNA clients of content change
+    this.systemUpdateId++;
+    
     console.log(`Updated streaming folder: ${this.currentStreamingItems.size} items (currently playing: ${this.currentlyPlayingId})`);
+    console.log(`Order preserved: ${this.orderedItemIds.slice(0, 5).join(', ')}${this.orderedItemIds.length > 5 ? '...' : ''}`);
   }
 
   public getStreamingFolderStatus() {
+    // Return items in the order they were sent from frontend
+    const orderedItems = this.orderedItemIds
+      .map(id => this.currentStreamingItems.get(id))
+      .filter(item => item !== undefined)
+      .map(item => ({
+        id: item!.id,
+        filename: item!.filename,
+        isCurrentlyPlaying: item!.id === this.currentlyPlayingId
+      }));
+    
+    // Debug log to verify order preservation
+    console.log(`getStreamingFolderStatus - orderedItemIds: ${this.orderedItemIds.join(', ')}`);
+    console.log(`getStreamingFolderStatus - returned order: ${orderedItems.map(i => i.id).join(', ')}`);
+    
     return {
       totalItems: this.currentStreamingItems.size,
       currentlyPlaying: this.currentlyPlayingId,
-      items: Array.from(this.currentStreamingItems.values()).map(item => ({
-        id: item.id,
-        filename: item.filename,
-        isCurrentlyPlaying: item.id === this.currentlyPlayingId
-      }))
+      items: orderedItems
     };
   }
 
@@ -398,14 +421,6 @@ export class StreamingServer {
       .limit(1);
     
     return result[0] || null;
-  }
-
-  private getMonthName(month: number): string {
-    const months = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
-    return months[month - 1] || 'Unknown';
   }
 
   public generateDeviceDescription(requestHost?: string): string {
@@ -502,6 +517,16 @@ export class StreamingServer {
         </argument>
       </argumentList>
     </action>
+    <action>
+      <name>GetSystemUpdateID</name>
+      <argumentList>
+        <argument>
+          <name>Id</name>
+          <direction>out</direction>
+          <relatedStateVariable>SystemUpdateID</relatedStateVariable>
+        </argument>
+      </argumentList>
+    </action>
   </actionList>
   <serviceStateTable>
     <stateVariable sendEvents="no">
@@ -540,6 +565,10 @@ export class StreamingServer {
       <name>A_ARG_TYPE_UpdateID</name>
       <dataType>ui4</dataType>
     </stateVariable>
+    <stateVariable sendEvents="yes">
+      <name>SystemUpdateID</name>
+      <dataType>ui4</dataType>
+    </stateVariable>
   </serviceStateTable>
 </scpd>`;
   }
@@ -552,28 +581,12 @@ export class StreamingServer {
     let didlLite = '';
     let itemCount = 0;
     
+    // Always show all media items at the root level (no folders)
     if (objectId === '0') {
-      // Root - show folders for years or "All Media"
-      const years = await this.getStreamingYears();
-      didlLite = this.generateContainerDIDL(years);
-      itemCount = years.length;
-    } else if (objectId.startsWith('year:')) {
-      // Year folder - show months
-      const year = parseInt(objectId.split(':')[1]);
-      const months = await this.getStreamingMonths(year);
-      didlLite = this.generateMonthContainerDIDL(year, months);
-      itemCount = months.length;
-    } else if (objectId.startsWith('month:')) {
-      // Month folder - show media items
-      const [_, yearStr, monthStr] = objectId.split(':');
-      const year = parseInt(yearStr);
-      const month = parseInt(monthStr);
-      const items = await this.getStreamingItemsByYearMonth(year, month);
-      didlLite = this.generateDIDLLite(items, requestHost);
-      itemCount = items.length;
-    } else if (objectId === 'all') {
-      // All media
-      const streamingItems = Array.from(this.currentStreamingItems.values());
+      // Get items in the order they were sent from frontend
+      const streamingItems = this.orderedItemIds
+        .map(id => this.currentStreamingItems.get(id))
+        .filter(item => item !== undefined) as StreamingMediaItem[];
       didlLite = this.generateDIDLLite(streamingItems, requestHost);
       itemCount = streamingItems.length;
     }
@@ -585,104 +598,13 @@ export class StreamingServer {
       <Result>${this.escapeXml(didlLite)}</Result>
       <NumberReturned>${itemCount}</NumberReturned>
       <TotalMatches>${itemCount}</TotalMatches>
-      <UpdateID>0</UpdateID>
+      <UpdateID>${this.systemUpdateId}</UpdateID>
     </u:BrowseResponse>
   </s:Body>
 </s:Envelope>`;
 
     c.header('Content-Type', 'text/xml; charset=utf-8');
     return c.text(soapResponse);
-  }
-
-  private async getStreamingYears(): Promise<number[]> {
-    const items = Array.from(this.currentStreamingItems.values());
-    const years = new Set<number>();
-    
-    items.forEach(item => {
-      const year = new Date(item.createdAt).getFullYear();
-      years.add(year);
-    });
-    
-    return Array.from(years).sort((a, b) => b - a);
-  }
-  
-  private async getStreamingMonths(year: number): Promise<number[]> {
-    const items = Array.from(this.currentStreamingItems.values());
-    const months = new Set<number>();
-    
-    items.forEach(item => {
-      const date = new Date(item.createdAt);
-      if (date.getFullYear() === year) {
-        months.add(date.getMonth() + 1);
-      }
-    });
-    
-    return Array.from(months).sort((a, b) => a - b);
-  }
-  
-  private async getStreamingItemsByYearMonth(year: number, month: number): Promise<StreamingMediaItem[]> {
-    const items = Array.from(this.currentStreamingItems.values());
-    
-    return items.filter(item => {
-      const date = new Date(item.createdAt);
-      return date.getFullYear() === year && date.getMonth() + 1 === month;
-    });
-  }
-  
-  private generateContainerDIDL(years: number[]): string {
-    const containers = years.map(year => `
-      <container id="year:${year}" parentID="0" childCount="${this.getItemCountForYear(year)}">
-        <dc:title>${year}</dc:title>
-        <upnp:class>object.container</upnp:class>
-      </container>`
-    ).join('');
-    
-    // Add "All Media" container
-    const allContainer = `
-      <container id="all" parentID="0" childCount="${this.currentStreamingItems.size}">
-        <dc:title>All Media</dc:title>
-        <upnp:class>object.container</upnp:class>
-      </container>`;
-    
-    return `<?xml version="1.0" encoding="utf-8"?>
-<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
-  ${allContainer}${containers}
-</DIDL-Lite>`;
-  }
-  
-  private generateMonthContainerDIDL(year: number, months: number[]): string {
-    const containers = months.map(month => `
-      <container id="month:${year}:${month}" parentID="year:${year}" childCount="${this.getItemCountForYearMonth(year, month)}">
-        <dc:title>${this.getMonthName(month)}</dc:title>
-        <upnp:class>object.container</upnp:class>
-      </container>`
-    ).join('');
-    
-    return `<?xml version="1.0" encoding="utf-8"?>
-<DIDL-Lite xmlns="urn:schemas-upnp-org:metadata-1-0/DIDL-Lite/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/">
-  ${containers}
-</DIDL-Lite>`;
-  }
-  
-  private getItemCountForYear(year: number): number {
-    let count = 0;
-    this.currentStreamingItems.forEach(item => {
-      if (new Date(item.createdAt).getFullYear() === year) {
-        count++;
-      }
-    });
-    return count;
-  }
-  
-  private getItemCountForYearMonth(year: number, month: number): number {
-    let count = 0;
-    this.currentStreamingItems.forEach(item => {
-      const date = new Date(item.createdAt);
-      if (date.getFullYear() === year && date.getMonth() + 1 === month) {
-        count++;
-      }
-    });
-    return count;
   }
 
   public generateDIDLLite(mediaItems: StreamingMediaItem[], requestHost?: string): string {
@@ -712,9 +634,13 @@ export class StreamingServer {
         additionalMetadata.push(`<upnp:duration>${this.formatDuration(item.duration)}</upnp:duration>`);
       }
       
+      // Get the index of this item in the ordered list for prefix
+      const index = this.orderedItemIds.indexOf(item.id);
+      const prefix = index >= 0 ? `${(index + 1).toString().padStart(6, '0')} - ` : '';
+      
       return `
         <item id="${item.id}" parentID="0">
-          <dc:title>${this.escapeXml(item.filename)}</dc:title>
+          <dc:title>${this.escapeXml(prefix + item.filename)}</dc:title>
           <dc:date>${item.createdAt}</dc:date>
           <upnp:class>object.item.${isVideo ? 'videoItem' : 'imageItem'}</upnp:class>
           ${additionalMetadata.join('\n          ')}${resElements}
