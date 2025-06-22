@@ -46,6 +46,7 @@ type Query {
   mediaByYear(year: Int!, sourcePath: String): [MediaItem!]!
   mediaByYearMonth(year: Int!, month: Int!, sourcePath: String): [MediaItem!]!
   allMedia(limit: Int, offset: Int, sourcePath: String): [MediaItem!]!
+  allMediaUnfiltered(limit: Int, offset: Int): [MediaItem!]!
   mediaItem(id: Int!): MediaItem
   recentScanSessions(limit: Int = 10): [ScanSession!]!
   watcherStatus: WatcherStatus!

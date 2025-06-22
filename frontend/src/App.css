@@ -28,8 +28,14 @@
 
 .app-main {
   flex: 1;
-  padding: 20px;
   background: #f8f9fa;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main > * {
+  height: 100%;
 }
 
 @media (max-width: 768px) {
@@ -54,4 +60,35 @@
   right: 20px;
   max-width: 400px;
   z-index: 999;
+}
+
+.view-switcher {
+  display: flex;
+  gap: 4px;
+  background: #f0f0f0;
+  padding: 4px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.view-button {
+  background: transparent;
+  border: none;
+  color: #333;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.view-button:hover {
+  background: #e0e0e0;
+  color: #000;
+}
+
+.view-button.active {
+  background: #4a90e2;
+  color: white;
 }

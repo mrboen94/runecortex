@@ -36,8 +36,10 @@ interface MediaViewerProps {
     sortOrder: 'date-asc' | 'date-desc' | 'name-asc' | 'name-desc';
     showCounter?: boolean;
     showDate?: boolean;
+    showLocation?: boolean;
     counterDuration?: number;
     dateDuration?: number;
+    locationDuration?: number;
   };
 }
 
@@ -46,13 +48,16 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const [showControls, setShowControls] = useState(true);
   const [showCounter, setShowCounter] = useState(true);
   const [showDate, setShowDate] = useState(true);
+  const [showLocation, setShowLocation] = useState(true);
   const [playbackError, setPlaybackError] = useState(false);
   const slideInterval = viewerSettings?.slideInterval || 5;
   const autoPlay = viewerSettings?.autoPlay ?? true;
   const displayCounter = viewerSettings?.showCounter ?? true;
   const displayDate = viewerSettings?.showDate ?? true;
+  const displayLocation = viewerSettings?.showLocation ?? true;
   const counterDuration = viewerSettings?.counterDuration ?? 1;
   const dateDuration = viewerSettings?.dateDuration ?? 0;
+  const locationDuration = viewerSettings?.locationDuration ?? 0;
   const [currentMediaIndex, setCurrentMediaIndex] = useState(
     allMedia.findIndex(m => m.id === media.id)
   );
@@ -63,6 +68,7 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
   const slideTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const counterTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const dateTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const locationTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   
   const [logError] = useMutation(LOG_PLAYBACK_ERROR);
 
@@ -104,7 +110,20 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     } else if (displayDate && dateDuration === 0) {
       setShowDate(true); // Always show
     }
-  }, [currentMediaIndex, allMedia, onNavigate, displayCounter, displayDate, counterDuration, dateDuration]);
+    
+    // Show location briefly when navigating
+    if (displayLocation && locationDuration > 0) {
+      setShowLocation(true);
+      if (locationTimeoutRef.current) {
+        clearTimeout(locationTimeoutRef.current);
+      }
+      locationTimeoutRef.current = setTimeout(() => {
+        setShowLocation(false);
+      }, locationDuration * 1000);
+    } else if (displayLocation && locationDuration === 0) {
+      setShowLocation(true); // Always show
+    }
+  }, [currentMediaIndex, allMedia, onNavigate, displayCounter, displayDate, displayLocation, counterDuration, dateDuration, locationDuration]);
 
   // Handle media playback errors
   const handleMediaError = useCallback(async (error: Event | string) => {
@@ -308,6 +327,26 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
     };
   }, [displayDate, dateDuration]);
 
+  // Initial location display
+  useEffect(() => {
+    if (displayLocation && locationDuration > 0) {
+      setShowLocation(true);
+      locationTimeoutRef.current = setTimeout(() => {
+        setShowLocation(false);
+      }, locationDuration * 1000);
+    } else if (displayLocation && locationDuration === 0) {
+      setShowLocation(true); // Always show
+    } else {
+      setShowLocation(false);
+    }
+    
+    return () => {
+      if (locationTimeoutRef.current) {
+        clearTimeout(locationTimeoutRef.current);
+      }
+    };
+  }, [displayLocation, locationDuration]);
+
   return (
     <div 
       ref={viewerRef}
@@ -443,11 +482,11 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
               {currentMediaIndex + 1} / {allMedia.length}
             </div>
           )}
-          {currentMedia.latitude && currentMedia.longitude && (
+          {displayLocation && currentMedia.latitude && currentMedia.longitude && (
             <div 
               style={{ 
                 marginTop: '8px',
-                opacity: showDate ? 1 : 0,
+                opacity: showLocation ? 1 : 0,
                 transition: 'opacity 0.3s ease',
                 fontSize: '12px'
               }}

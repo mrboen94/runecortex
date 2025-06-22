@@ -146,6 +146,14 @@ export const resolvers = {
         .offset(offset);
     },
 
+    allMediaUnfiltered: async (_: any, { limit = 1000, offset = 0 }: { limit?: number; offset?: number }) => {
+      return await db.select()
+        .from(schema.mediaItems)
+        .orderBy(desc(schema.mediaItems.createdAt))
+        .limit(limit)
+        .offset(offset);
+    },
+
     mediaItem: async (_: any, { id }: { id: number }) => {
       const [item] = await db.select()
         .from(schema.mediaItems)

@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import Timeline from './components/Timeline'
+import MapView from './components/MapView'
+import SimpleMap from './components/SimpleMap'
 import ReindexControls from './components/ReindexControls'
 import StatusIndicator from './components/StatusIndicator'
 import FolderBrowser from './components/FolderBrowser'
@@ -10,6 +12,7 @@ import { FolderProvider } from './contexts/FolderContext'
 import './App.css'
 
 function App() {
+  const [currentView, setCurrentView] = useState<'timeline' | 'map'>('timeline');
   const [viewerSettings, setViewerSettings] = useState<ViewerSettings>({
     autoPlay: true,
     slideInterval: 5,
@@ -17,8 +20,10 @@ function App() {
     sortOrder: 'date-desc',
     showCounter: true,
     showDate: true,
+    showLocation: true,
     counterDuration: 1,
-    dateDuration: 0 // Always visible by default
+    dateDuration: 0, // Always visible by default
+    locationDuration: 0 // Always visible by default
   });
 
   // Use state for media count to persist across renders
@@ -38,6 +43,20 @@ function App() {
               <ReindexControls />
               <StatusIndicator />
               <FolderBrowser />
+              <div className="view-switcher">
+                <button 
+                  className={`view-button ${currentView === 'timeline' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('timeline')}
+                >
+                  📅 Timeline
+                </button>
+                <button 
+                  className={`view-button ${currentView === 'map' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('map')}
+                >
+                  🗺️ Map
+                </button>
+              </div>
             </div>
             <ViewerSettingsComponent 
               settings={viewerSettings}
@@ -47,7 +66,11 @@ function App() {
           </div>
         </header>
         <main className="app-main">
-          <Timeline viewerSettings={viewerSettings} onMediaCountUpdate={setMediaCount} />
+          {currentView === 'timeline' ? (
+            <Timeline viewerSettings={viewerSettings} onMediaCountUpdate={setMediaCount} />
+          ) : (
+            <MapView />
+          )}
         </main>
         
         {/* Global scan progress indicator */}

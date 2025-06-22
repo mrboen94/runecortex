@@ -12,8 +12,10 @@ interface ViewerSettings {
   sortOrder: SortOrder;
   showCounter: boolean;
   showDate: boolean;
+  showLocation: boolean;
   counterDuration: number; // 0 = always show, -1 = always hide, > 0 = duration in seconds
   dateDuration: number; // 0 = always show, -1 = always hide, > 0 = duration in seconds
+  locationDuration: number; // 0 = always show, -1 = always hide, > 0 = duration in seconds
 }
 
 interface ViewerSettingsProps {
@@ -172,6 +174,27 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
                   min="0"
                   value={settings.counterDuration || 1}
                   onChange={(e) => updateSetting('counterDuration', Math.max(0, parseInt(e.target.value) || 0))}
+                  className="duration-input"
+                  title="Duration in seconds (0 = always visible)"
+                />
+              )}
+            </div>
+            
+            <div className="setting-item with-duration">
+              <label className="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  checked={settings.showLocation}
+                  onChange={(e) => updateSetting('showLocation', e.target.checked)}
+                />
+                <span>Show GPS location</span>
+              </label>
+              {settings.showLocation && (
+                <input 
+                  type="number"
+                  min="0"
+                  value={settings.locationDuration || 0}
+                  onChange={(e) => updateSetting('locationDuration', Math.max(0, parseInt(e.target.value) || 0))}
                   className="duration-input"
                   title="Duration in seconds (0 = always visible)"
                 />
