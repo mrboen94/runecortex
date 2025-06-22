@@ -114,6 +114,7 @@ type StreamingServerStatus {
   url: String!
   totalItems: Int!
   currentlyPlaying: Int
+  localIp: String
 }
 
 type StreamingFolderStatus {
@@ -126,6 +127,11 @@ type StreamingItem {
   id: Int!
   filename: String!
   isCurrentlyPlaying: Boolean!
+}
+
+type GenericResponse {
+  success: Boolean!
+  message: String
 }
 
 input StreamingMediaInput {
@@ -155,5 +161,6 @@ type Mutation {
   changeWatchPath(path: String!): WatcherStatus!
   startStreamingServer: StreamingServerStatus!
   stopStreamingServer: Boolean!
-  updateStreamingFolder(mediaItems: [StreamingMediaInput!]!, currentlyPlayingId: Int): StreamingFolderStatus!
+  updateStreamingFolder(mediaItems: [StreamingMediaInput!]!, currentlyPlayingId: Int, forceRefresh: Boolean): StreamingFolderStatus!
+  forceVLCRefresh: GenericResponse!
 }

@@ -11,6 +11,7 @@ import { join, basename, extname } from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { constants } from 'fs';
 import type { StreamingServer } from '../services/streamingServer';
+import { getLocalIpAddress } from '../utils/network';
 
 const scanner = new MediaScanner();
 const thumbnailGenerator = new ThumbnailGenerator();
@@ -260,15 +261,18 @@ export const resolvers = {
 
     streamingServerStatus: () => {
       const streamingServer = (resolvers as any).streamingServer;
+      const localIp = getLocalIpAddress();
+      
       if (!streamingServer) {
         return {
           isRunning: false,
           port: 4001,
           host: '0.0.0.0',
           name: 'RuneCortex Media Server',
-          url: 'http://localhost:4001',
+          url: `http://${localIp}:4001`,
           totalItems: 0,
-          currentlyPlaying: null
+          currentlyPlaying: null,
+          localIp
         };
       }
       
@@ -279,9 +283,10 @@ export const resolvers = {
         port: 4001, // Same as main server
         host: '0.0.0.0',
         name: 'RuneCortex Media Server',
-        url: 'http://localhost:4001',
+        url: `http://${localIp}:4001`,
         totalItems: folderStatus.totalItems,
-        currentlyPlaying: folderStatus.currentlyPlaying
+        currentlyPlaying: folderStatus.currentlyPlaying,
+        localIp
       };
     },
 
@@ -601,7 +606,7 @@ export const resolvers = {
       return true;
     },
 
-    updateStreamingFolder: async (_: any, { mediaItems, currentlyPlayingId }: { 
+    updateStreamingFolder: async (_: any, { mediaItems, currentlyPlayingId, forceRefresh }: { 
       mediaItems: Array<{
         id: number;
         filename: string;
@@ -614,6 +619,7 @@ export const resolvers = {
         height: number;
       }>;
       currentlyPlayingId?: number;
+      forceRefresh?: boolean;
     }) => {
       const streamingServer = (resolvers as any).streamingServer;
       if (!streamingServer) {
@@ -627,7 +633,7 @@ export const resolvers = {
         
         if (mediaIds.length === 0) {
           console.log('No media items provided, clearing streaming folder');
-          const result = streamingServer.updateStreamingFolderFromExternal([], currentlyPlayingId);
+          const result = streamingServer.updateStreamingFolderFromExternal([], currentlyPlayingId, forceRefresh || false);
           return result;
         }
         
@@ -659,13 +665,23 @@ export const resolvers = {
         console.log(`Found ${completeMediaItems.length} complete media items in database`);
         console.log(`Streaming items order: ${streamingMediaItems.map(i => i.id).join(', ')}`);
         
-        const result = streamingServer.updateStreamingFolderFromExternal(streamingMediaItems, currentlyPlayingId);
+        const result = streamingServer.updateStreamingFolderFromExternal(streamingMediaItems, currentlyPlayingId, forceRefresh || false);
         console.log(`Updated streaming folder with ${streamingMediaItems.length} items. Server status:`, result);
         return result;
       } catch (error) {
         console.error('Failed to update streaming folder:', error);
         throw new Error(`Failed to update streaming folder: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
+    },
+    
+    forceVLCRefresh: async () => {
+      const streamingServer = (resolvers as any).streamingServer;
+      if (!streamingServer) {
+        throw new Error('Streaming server not initialized');
+      }
+      
+      streamingServer.forceVLCRefresh();
+      return { success: true };
     },
   },
 

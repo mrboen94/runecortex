@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { gql } from '@apollo/client';
 import './StreamingServerStatus.css';
@@ -13,6 +13,7 @@ const GET_STREAMING_SERVER_STATUS = gql`
       url
       totalItems
       currentlyPlaying
+      localIp
     }
   }
 `;
@@ -63,6 +64,14 @@ const STOP_STREAMING_SERVER = gql`
   }
 `;
 
+const FORCE_VLC_REFRESH = gql`
+  mutation ForceVLCRefresh {
+    forceVLCRefresh {
+      success
+    }
+  }
+`;
+
 interface StreamingServerStatus {
   isRunning: boolean;
   port: number;
@@ -71,6 +80,7 @@ interface StreamingServerStatus {
   url: string;
   totalItems: number;
   currentlyPlaying?: number;
+  localIp?: string;
 }
 
 interface StreamingFolderStatus {
@@ -85,6 +95,7 @@ interface StreamingFolderStatus {
 
 export default function StreamingServerStatus() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { data, loading, refetch } = useQuery(GET_STREAMING_SERVER_STATUS, {
     pollInterval: 5000, // Poll every 5 seconds
   });
@@ -107,7 +118,30 @@ export default function StreamingServerStatus() {
     },
   });
 
+  const [forceVLCRefresh, { loading: refreshing }] = useMutation(FORCE_VLC_REFRESH, {
+    onCompleted: () => {
+      console.log('VLC refresh forced successfully');
+    },
+    onError: (error) => {
+      console.error('Failed to force VLC refresh:', error);
+    },
+  });
+
   const status: StreamingServerStatus | null = data?.streamingServerStatus || null;
+
+  // Handle click outside to close dropdown
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsExpanded(false);
+      }
+    };
+
+    if (isExpanded) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isExpanded]);
 
   const handleToggleServer = async () => {
     if (!status) return;
@@ -137,87 +171,116 @@ export default function StreamingServerStatus() {
   }
 
   return (
-    <div className={`streaming-status ${isExpanded ? 'expanded' : ''}`}>
-      <div className="streaming-indicator" onClick={() => setIsExpanded(!isExpanded)}>
+    <div className="streaming-status" ref={dropdownRef}>
+      <button 
+        className="streaming-indicator" 
+        onClick={() => setIsExpanded(!isExpanded)}
+        type="button"
+      >
         <div className={`status-dot ${status?.isRunning ? 'running' : 'stopped'}`}></div>
         <span className="status-text">
           📺 {status?.isRunning ? 'Streaming' : 'Offline'}
         </span>
-        <button className="expand-toggle" aria-label={isExpanded ? 'Collapse' : 'Expand'}>
+        <span className="expand-toggle" aria-label={isExpanded ? 'Collapse' : 'Expand'}>
           {isExpanded ? '▼' : '▶'}
-        </button>
-      </div>
+        </span>
+      </button>
 
       {isExpanded && status && (
-        <div className="streaming-details">
-          <div className="server-info">
-            <h4>{status.name}</h4>
-            <div className="info-row">
-              <span className="label">Status:</span>
-              <span className={`value ${status.isRunning ? 'running' : 'stopped'}`}>
-                {status.isRunning ? 'Running' : 'Stopped'}
-              </span>
-            </div>
-            <div className="info-row">
-              <span className="label">Port:</span>
-              <span className="value">{status.port}</span>
-            </div>
-            {status.isRunning && (
+        <div className="streaming-dropdown">
+          <div className="streaming-details">
+            <div className="server-info">
+              <h4>{status.name}</h4>
               <div className="info-row">
-                <span className="label">URL:</span>
-                <span 
-                  className="value url clickable" 
-                  onClick={() => copyToClipboard(status.url)}
-                  title="Click to copy"
-                >
-                  {status.url}
+                <span className="label">Status:</span>
+                <span className={`value ${status.isRunning ? 'running' : 'stopped'}`}>
+                  {status.isRunning ? 'Running' : 'Stopped'}
                 </span>
               </div>
-            )}
-          </div>
-
-          <div className="server-controls">
-            <button
-              className={`control-button ${status.isRunning ? 'stop' : 'start'}`}
-              onClick={handleToggleServer}
-              disabled={starting || stopping}
-            >
-              {starting || stopping ? (
-                <span>⏳ {status.isRunning ? 'Stopping...' : 'Starting...'}</span>
-              ) : (
-                <span>{status.isRunning ? '⏹ Stop Server' : '▶ Start Server'}</span>
-              )}
-            </button>
-          </div>
-
-          {status.isRunning && (
-            <div className="streaming-folder-info">
               <div className="info-row">
-                <span className="label">Streaming folder:</span>
-                <span className="value">{status.totalItems} items</span>
+                <span className="label">Port:</span>
+                <span className="value">{status.port}</span>
               </div>
-              {status.currentlyPlaying && (
+              {status.localIp && (
                 <div className="info-row">
-                  <span className="label">Currently playing:</span>
-                  <span className="value playing">ID: {status.currentlyPlaying}</span>
+                  <span className="label">Local IP:</span>
+                  <span className="value">{status.localIp}</span>
+                </div>
+              )}
+              {status.isRunning && (
+                <div className="info-row">
+                  <span className="label">URL:</span>
+                  <span 
+                    className="value url clickable" 
+                    onClick={() => copyToClipboard(status.url)}
+                    title="Click to copy"
+                  >
+                    {status.url}
+                  </span>
                 </div>
               )}
             </div>
-          )}
 
-          {status.isRunning && (
-            <div className="usage-info">
-              <p className="info-text">
-                🎬 Connect external players to <strong>{status.url}</strong>
-              </p>
-              <p className="info-text">
-                📱 Compatible with Infuse, VLC, DLNA players, and more
-              </p>
-              <p className="info-text">
-                💡 Use "Send to Streaming" in Timeline or Map view to update content
-              </p>
+            <div className="server-controls">
+              <button
+                className={`control-button ${status.isRunning ? 'stop' : 'start'}`}
+                onClick={handleToggleServer}
+                disabled={starting || stopping}
+              >
+                {starting || stopping ? (
+                  <span>⏳ {status.isRunning ? 'Stopping...' : 'Starting...'}</span>
+                ) : (
+                  <span>{status.isRunning ? '⏹ Stop Server' : '▶ Start Server'}</span>
+                )}
+              </button>
+              {status.isRunning && (
+                <button
+                  className="control-button refresh"
+                  onClick={() => forceVLCRefresh()}
+                  disabled={refreshing}
+                  title="Force VLC to refresh and re-read the content list"
+                >
+                  {refreshing ? (
+                    <span>⏳ Refreshing...</span>
+                  ) : (
+                    <span>🔄 Refresh VLC</span>
+                  )}
+                </button>
+              )}
             </div>
-          )}
+
+            {status.isRunning && (
+              <div className="streaming-folder-info">
+                <div className="info-row">
+                  <span className="label">Streaming folder:</span>
+                  <span className="value">{status.totalItems} items</span>
+                </div>
+                {status.currentlyPlaying && (
+                  <div className="info-row">
+                    <span className="label">Currently playing:</span>
+                    <span className="value playing">ID: {status.currentlyPlaying}</span>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {status.isRunning && (
+              <div className="usage-info">
+                <p className="info-text">
+                  🎬 Connect external players to <strong>{status.url}</strong>
+                </p>
+                <p className="info-text">
+                  📱 Compatible with Infuse, VLC, DLNA players, and more
+                </p>
+                <p className="info-text">
+                  💡 Use "Send to Streaming" in Timeline or Map view to update content
+                </p>
+                <p className="info-text">
+                  🔄 Use "Refresh VLC" if VLC doesn't show updated content
+                </p>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

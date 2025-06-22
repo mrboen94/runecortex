@@ -12,8 +12,8 @@ const GET_STREAMING_SERVER_STATUS = gql`
 `;
 
 const UPDATE_STREAMING_FOLDER = gql`
-  mutation UpdateStreamingFolder($mediaItems: [StreamingMediaInput!]!, $currentlyPlayingId: Int) {
-    updateStreamingFolder(mediaItems: $mediaItems, currentlyPlayingId: $currentlyPlayingId) {
+  mutation UpdateStreamingFolder($mediaItems: [StreamingMediaInput!]!, $currentlyPlayingId: Int, $forceRefresh: Boolean) {
+    updateStreamingFolder(mediaItems: $mediaItems, currentlyPlayingId: $currentlyPlayingId, forceRefresh: $forceRefresh) {
       totalItems
       currentlyPlaying
     }
@@ -96,6 +96,7 @@ export default function SendToStreamingButton({
         variables: {
           mediaItems: streamingMediaItems,
           currentlyPlayingId: currentlyPlayingId || null,
+          forceRefresh: false,  // Don't force refresh by default
         },
       });
       

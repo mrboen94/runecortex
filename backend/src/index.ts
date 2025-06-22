@@ -40,6 +40,11 @@ const server = Bun.serve({
   async fetch(request) {
     const url = new URL(request.url);
     
+    // Log all incoming requests for debugging DLNA issues
+    if (url.pathname !== '/graphql' && !url.pathname.startsWith('/thumbnails/') && !url.pathname.startsWith('/media/')) {
+      console.log(`🌐 Request: ${request.method} ${url.pathname} from ${request.headers.get('user-agent') || 'unknown'}`);
+    }
+    
     // Handle all streaming server endpoints directly without Hono framework
     if (url.pathname.startsWith('/streaming') || 
         url.pathname.startsWith('/stream/') ||
@@ -248,6 +253,7 @@ const server = Bun.serve({
       
       // GET /device.xml - DLNA device description
       if (url.pathname === '/device.xml' && request.method === 'GET') {
+        console.log(`📱 DLNA device.xml requested from ${request.headers.get('user-agent') || 'unknown'}`);
         const requestHost = request.headers.get('host');
         const deviceXml = streamingServerInstance.generateDeviceDescription(requestHost || undefined);
         return new Response(deviceXml, {
@@ -260,6 +266,7 @@ const server = Bun.serve({
       
       // GET /contentdirectory.xml - Content directory service description
       if (url.pathname === '/contentdirectory.xml' && request.method === 'GET') {
+        console.log(`📋 DLNA contentdirectory.xml requested from ${request.headers.get('user-agent') || 'unknown'}`);
         const serviceXml = streamingServerInstance.generateContentDirectoryService();
         return new Response(serviceXml, {
           headers: {
@@ -269,9 +276,11 @@ const server = Bun.serve({
         });
       }
       
+      
       // POST /control - SOAP endpoint for UPnP actions
       if (url.pathname === '/control' && request.method === 'POST') {
         const soapAction = request.headers.get('soapaction');
+        console.log(`🎯 DLNA SOAP action requested: ${soapAction} from ${request.headers.get('user-agent') || 'unknown'}`);
         const body = await request.text();
         const requestHost = request.headers.get('host');
         
@@ -437,6 +446,9 @@ const streamingServer = new StreamingServer({
 // Start SSDP discovery server
 const ssdpServer = new SSDPServer(serverPort);
 ssdpServer.start();
+
+// Make SSDP server available to streaming server for notifications
+streamingServer.setSSDPServer(ssdpServer);
 
 // Start media watcher if watch paths are configured
 const watchPaths = process.env.WATCH_PATHS?.split(',').map(p => p.trim()) || [];

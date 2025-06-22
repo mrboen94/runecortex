@@ -41,6 +41,7 @@ export class StreamingServer {
   public orderedItemIds: number[] = []; // Maintain order from frontend
   public currentlyPlayingId: number | null = null; // Make public for direct access
   public systemUpdateId: number = 0; // Track content changes for DLNA
+  private ssdpServer: any = null; // Reference to SSDP server for notifications
 
   constructor(config: StreamingServerConfig) {
     this.config = config;
@@ -287,7 +288,10 @@ export class StreamingServer {
     };
   }
 
-  private updateStreamingFolder(newItems: StreamingMediaItem[], currentlyPlayingId?: number) {
+  private updateStreamingFolder(newItems: StreamingMediaItem[], currentlyPlayingId?: number, forceRefresh: boolean = false) {
+    // Store previous item count to detect significant changes
+    const previousItemCount = this.currentStreamingItems.size;
+    
     // Preserve currently playing item if it exists
     const preserveCurrentlyPlaying = this.currentlyPlayingId !== null;
     const currentlyPlayingItem = preserveCurrentlyPlaying ? 
@@ -319,8 +323,25 @@ export class StreamingServer {
     // Increment systemUpdateId to notify DLNA clients of content change
     this.systemUpdateId++;
     
+    // If the content changed significantly (more than 50% different), increment by a larger amount
+    // This helps DLNA clients recognize it as a major update
+    if (Math.abs(previousItemCount - this.currentStreamingItems.size) > previousItemCount * 0.5) {
+      this.systemUpdateId += 100;
+    }
+    
     console.log(`Updated streaming folder: ${this.currentStreamingItems.size} items (currently playing: ${this.currentlyPlayingId})`);
     console.log(`Order preserved: ${this.orderedItemIds.slice(0, 5).join(', ')}${this.orderedItemIds.length > 5 ? '...' : ''}`);
+    
+    // Send SSDP notification when content changes
+    if (this.ssdpServer && this.currentStreamingItems.size > 0) {
+      if (forceRefresh) {
+        console.log('📢 Forcing VLC refresh with SSDP byebye + notify');
+        this.ssdpServer.sendNotify(true);
+      } else {
+        console.log('📢 Sending SSDP notification for content update');
+        this.ssdpServer.sendNotify(false);
+      }
+    }
   }
 
   public getStreamingFolderStatus() {
@@ -334,10 +355,6 @@ export class StreamingServer {
         isCurrentlyPlaying: item!.id === this.currentlyPlayingId
       }));
     
-    // Debug log to verify order preservation
-    console.log(`getStreamingFolderStatus - orderedItemIds: ${this.orderedItemIds.join(', ')}`);
-    console.log(`getStreamingFolderStatus - returned order: ${orderedItems.map(i => i.id).join(', ')}`);
-    
     return {
       totalItems: this.currentStreamingItems.size,
       currentlyPlaying: this.currentlyPlayingId,
@@ -345,9 +362,16 @@ export class StreamingServer {
     };
   }
 
-  public updateStreamingFolderFromExternal(mediaItems: StreamingMediaItem[], currentlyPlayingId?: number) {
-    this.updateStreamingFolder(mediaItems, currentlyPlayingId);
+  public updateStreamingFolderFromExternal(mediaItems: StreamingMediaItem[], currentlyPlayingId?: number, forceRefresh: boolean = false) {
+    this.updateStreamingFolder(mediaItems, currentlyPlayingId, forceRefresh);
     return this.getStreamingFolderStatus();
+  }
+  
+  public forceVLCRefresh() {
+    if (this.ssdpServer) {
+      console.log('🔄 Forcing VLC refresh');
+      this.ssdpServer.sendNotify(true);
+    }
   }
 
   private async getAvailableYears(): Promise<number[]> {
@@ -425,7 +449,7 @@ export class StreamingServer {
 
   public generateDeviceDescription(requestHost?: string): string {
     return `<?xml version="1.0" encoding="utf-8"?>
-<root xmlns="urn:schemas-upnp-org:device-1-0">
+<root xmlns="urn:schemas-upnp-org:device-1-0" xmlns:dlna="urn:schemas-dlna-org:device-1-0">
   <specVersion>
     <major>1</major>
     <minor>0</minor>
@@ -439,8 +463,12 @@ export class StreamingServer {
     <modelDescription>RuneCortex Media Server</modelDescription>
     <modelName>RuneCortex</modelName>
     <modelNumber>1.0</modelNumber>
+    <modelURL>https://github.com/runecortex</modelURL>
     <serialNumber>12345</serialNumber>
     <UDN>uuid:${this.generateUUID()}</UDN>
+    <dlna:X_DLNADOC>DMS-1.50</dlna:X_DLNADOC>
+    <dlna:X_DLNACAP/>
+    <presentationURL>${this.getBaseUrl(requestHost)}/</presentationURL>
     <serviceList>
       <service>
         <serviceType>urn:schemas-upnp-org:service:ContentDirectory:1</serviceType>
@@ -573,6 +601,7 @@ export class StreamingServer {
 </scpd>`;
   }
 
+
   public async handleBrowseAction(c: any, soapBody: string, requestHost?: string) {
     // Parse the SOAP request to get ObjectID
     const objectIdMatch = soapBody.match(/<ObjectID>([^<]+)<\/ObjectID>/);
@@ -670,11 +699,9 @@ export class StreamingServer {
   }
 
   private generateUUID(): string {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
+    // Use a consistent UUID for the DLNA server
+    // This prevents VLC from seeing multiple server instances
+    return 'f47ac10b-58cc-4372-a567-0e02b2c3d479';
   }
 
   async start(): Promise<void> {
@@ -731,6 +758,10 @@ export class StreamingServer {
       name: this.config.name,
       url: `http://${this.config.host || 'localhost'}:${this.config.port}`
     };
+  }
+  
+  setSSDPServer(ssdpServer: any) {
+    this.ssdpServer = ssdpServer;
   }
 
   // Handle requests directly for integration with main Bun server
