@@ -199,10 +199,6 @@ const server = Bun.serve({
   },
 });
 
-// Ensure thumbnails directory exists
-import { mkdir } from 'fs/promises';
-await mkdir('./thumbnails', { recursive: true }).catch(() => {});
-
 // Start all plugins
 await pluginManager.startAll();
 
