@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState, useMemo, useEffect } from 'react';
 import { GET_ALL_MEDIA } from '../graphql/queries';
-import MediaGrid from './MediaGrid';
-import TimelineView from './TimelineView';
+import VirtualMediaGrid from './VirtualMediaGrid';
 import Navigation from './Navigation';
 import { useFolderContext } from '../contexts/FolderContext';
 import type { ViewMode, GroupBy } from './Navigation';
@@ -49,6 +48,9 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
   const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<string | null>(null);
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
+  const [zoomLevel, setZoomLevel] = useState<number>(() => 
+    parseInt(localStorage.getItem('zoomLevel') || '3')
+  );
   
   const { currentPath, showAllFolders } = useFolderContext();
   
@@ -66,6 +68,10 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
   useEffect(() => {
     localStorage.setItem('groupBy', groupBy);
   }, [groupBy]);
+
+  useEffect(() => {
+    localStorage.setItem('zoomLevel', zoomLevel.toString());
+  }, [zoomLevel]);
 
   const handleViewModeChange = (mode: ViewMode) => {
     setViewMode(mode);
@@ -263,29 +269,103 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
     );
   };
 
+  // Create grouped data structure for timeline view
+  const getTimelineGroupedData = () => {
+    if (groupBy === 'none') {
+      return [{ label: '', items: sortedMedia }];
+    }
+
+    const groups = new Map<string, { label: string; items: MediaItem[]; date: Date }>();
+    
+    sortedMedia.forEach(item => {
+      const date = new Date(item.createdAt);
+      let key: string;
+      let label: string;
+      
+      switch (groupBy) {
+        case 'year':
+          key = date.getFullYear().toString();
+          label = key;
+          break;
+        case 'month':
+          key = `${date.getFullYear()}-${date.getMonth()}`;
+          label = date.toLocaleDateString('default', { year: 'numeric', month: 'long' });
+          break;
+        case 'day':
+          key = date.toDateString();
+          label = date.toLocaleDateString('default', { 
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+          });
+          break;
+        default:
+          key = '';
+          label = '';
+      }
+      
+      if (!groups.has(key)) {
+        groups.set(key, { label, items: [], date });
+      }
+      
+      groups.get(key)!.items.push(item);
+    });
+    
+    // Sort groups based on viewer settings
+    const groupsArray = Array.from(groups.values());
+    
+    // Sort groups according to the sort order
+    switch (viewerSettings.sortOrder) {
+      case 'date-asc':
+        return groupsArray.sort((a, b) => a.date.getTime() - b.date.getTime());
+      case 'date-desc':
+        return groupsArray.sort((a, b) => b.date.getTime() - a.date.getTime());
+      case 'name-asc':
+        return groupsArray.sort((a, b) => a.label.localeCompare(b.label));
+      case 'name-desc':
+        return groupsArray.sort((a, b) => b.label.localeCompare(a.label));
+      default:
+        return groupsArray;
+    }
+  };
+
   const renderContent = () => {
+    // Timeline view mode
     if (viewMode === 'timeline') {
-      return <TimelineView media={sortedMedia} groupBy={groupBy} viewerSettings={viewerSettings} />;
+      const groups = getTimelineGroupedData();
+      return (
+        <div className="media-grid-container">
+          <VirtualMediaGrid 
+            media={sortedMedia} 
+            viewerSettings={viewerSettings}
+            groups={groupBy !== 'none' ? groups : undefined}
+            zoomLevel={zoomLevel}
+          />
+        </div>
+      );
     }
 
     // Folder-based views (year, month, day)
     if (!selectedYear) {
       return (
-        <div className="year-grid">
-          {years.map(year => {
-            const totalItems = groupedByYear[year].all.length;
-            
-            return (
-              <button
-                key={year}
-                className="year-card"
-                onClick={() => setSelectedYear(year)}
-              >
-                <h2>{year}</h2>
-                <p>{totalItems} items</p>
-              </button>
-            );
-          })}
+        <div className="grid-wrapper">
+          <div className="year-grid">
+            {years.map(year => {
+              const totalItems = groupedByYear[year].all.length;
+              
+              return (
+                <button
+                  key={year}
+                  className="year-card"
+                  onClick={() => setSelectedYear(year)}
+                >
+                  <h2>{year}</h2>
+                  <p>{totalItems} items</p>
+                </button>
+              );
+            })}
+          </div>
         </div>
       );
     }
@@ -302,27 +382,37 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
 
       if (viewMode === 'year') {
         // Show all items for the year
-        return <MediaGrid media={groupedByYear[selectedYear]?.all || []} viewerSettings={viewerSettings} />;
+        return (
+          <div className="media-grid-container">
+            <VirtualMediaGrid media={groupedByYear[selectedYear]?.all || []} viewerSettings={viewerSettings} zoomLevel={zoomLevel} />
+          </div>
+        );
       }
 
       return (
-        <div className="month-grid">
-          {months.map(month => (
-            <button
-              key={month}
-              className="month-card"
-              onClick={() => setSelectedMonth(month)}
-            >
-              <h3>{month}</h3>
-              <p>{groupedByMonth[selectedYear]?.[month]?.length || 0} items</p>
-            </button>
-          ))}
+        <div className="grid-wrapper">
+          <div className="month-grid">
+            {months.map(month => (
+              <button
+                key={month}
+                className="month-card"
+                onClick={() => setSelectedMonth(month)}
+              >
+                <h3>{month}</h3>
+                <p>{groupedByMonth[selectedYear]?.[month]?.length || 0} items</p>
+              </button>
+            ))}
+          </div>
         </div>
       );
     }
 
     if (viewMode === 'month' && selectedMonth) {
-      return <MediaGrid media={groupedByMonth[selectedYear]?.[selectedMonth] || []} viewerSettings={viewerSettings} />;
+      return (
+        <div className="media-grid-container">
+          <VirtualMediaGrid media={groupedByMonth[selectedYear]?.[selectedMonth] || []} viewerSettings={viewerSettings} zoomLevel={zoomLevel} />
+        </div>
+      );
     }
 
     if (viewMode === 'day' && selectedMonth && !selectedDay) {
@@ -336,24 +426,30 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
         .sort((a, b) => parseInt(a.day) - parseInt(b.day));
 
       return (
-        <div className="day-grid">
-          {days.map(({ day, key }) => (
-            <button
-              key={key}
-              className="day-card"
-              onClick={() => setSelectedDay(day)}
-            >
-              <h3>{selectedMonth} {day}</h3>
-              <p>{groupedByDay[selectedYear]?.[key]?.length || 0} items</p>
-            </button>
-          ))}
+        <div className="grid-wrapper">
+          <div className="day-grid">
+            {days.map(({ day, key }) => (
+              <button
+                key={key}
+                className="day-card"
+                onClick={() => setSelectedDay(day)}
+              >
+                <h3>{selectedMonth} {day}</h3>
+                <p>{groupedByDay[selectedYear]?.[key]?.length || 0} items</p>
+              </button>
+            ))}
+          </div>
         </div>
       );
     }
 
     if (viewMode === 'day' && selectedMonth && selectedDay) {
       const key = `${selectedMonth}|${selectedDay}`;
-      return <MediaGrid media={groupedByDay[selectedYear]?.[key] || []} viewerSettings={viewerSettings} />;
+      return (
+        <div className="media-grid-container">
+          <VirtualMediaGrid media={groupedByDay[selectedYear]?.[key] || []} viewerSettings={viewerSettings} zoomLevel={zoomLevel} />
+        </div>
+      );
     }
 
     return null;
@@ -378,6 +474,8 @@ export default function Timeline({ viewerSettings, onMediaCountUpdate }: Timelin
           width: item.width,
           height: item.height
         }))}
+        zoomLevel={zoomLevel}
+        onZoomChange={setZoomLevel}
       />
 
       <main className="timeline-content">

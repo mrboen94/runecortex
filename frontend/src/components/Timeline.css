@@ -7,8 +7,24 @@
 
 .timeline-content {
   flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Wrapper for grid views to handle scrolling and padding */
+.grid-wrapper {
+  height: 100%;
   overflow-y: auto;
   padding: 2rem;
+}
+
+/* Container for VirtualMediaGrid to ensure proper height and padding */
+.media-grid-container {
+  height: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Loading and error states */

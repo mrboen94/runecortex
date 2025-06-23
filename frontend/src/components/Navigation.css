@@ -61,6 +61,54 @@
   margin-left: auto;
 }
 
+/* Zoom controls */
+.nav-zoom {
+  margin-left: auto;
+}
+
+.zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+}
+
+.zoom-button {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #666;
+  border-radius: 4px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.zoom-button:hover:not(:disabled) {
+  background: #f0f0f0;
+  color: #333;
+}
+
+.zoom-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.zoom-level {
+  font-size: 0.875rem;
+  color: #666;
+  min-width: 20px;
+  text-align: center;
+  font-weight: 500;
+}
+
 .nav-breadcrumb .breadcrumb {
   margin: 0;
 }

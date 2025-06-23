@@ -26,9 +26,11 @@ interface NavigationProps {
   breadcrumb?: React.ReactNode;
   currentMedia?: MediaItem[];
   currentlyPlayingId?: number;
+  zoomLevel?: number;
+  onZoomChange?: (zoom: number) => void;
 }
 
-export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange, breadcrumb, currentMedia, currentlyPlayingId }: NavigationProps) {
+export default function Navigation({ viewMode, groupBy, onViewModeChange, onGroupByChange, breadcrumb, currentMedia, currentlyPlayingId, zoomLevel = 3, onZoomChange }: NavigationProps) {
   return (
     <nav className="navigation">
       <div className="nav-section">
@@ -96,6 +98,31 @@ export default function Navigation({ viewMode, groupBy, onViewModeChange, onGrou
       {breadcrumb && (
         <div className="nav-section nav-breadcrumb">
           {breadcrumb}
+        </div>
+      )}
+      
+      {onZoomChange && (
+        <div className="nav-section nav-zoom">
+          <label>Zoom:</label>
+          <div className="zoom-controls">
+            <button 
+              className="zoom-button"
+              onClick={() => onZoomChange(Math.max(1, zoomLevel - 1))}
+              disabled={zoomLevel <= 1}
+              title="Zoom out"
+            >
+              −
+            </button>
+            <span className="zoom-level">{zoomLevel}</span>
+            <button 
+              className="zoom-button"
+              onClick={() => onZoomChange(Math.min(8, zoomLevel + 1))}
+              disabled={zoomLevel >= 8}
+              title="Zoom in"
+            >
+              +
+            </button>
+          </div>
         </div>
       )}
       
