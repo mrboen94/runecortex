@@ -1,0 +1,419 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+👁️  Watching directories: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+🚀 Server ready at http://localhost:4001/graphql
+📁 Media files served at http://localhost:4001/media/:id
+🖼️ Thumbnails served at http://localhost:4001/thumbnails/:id.jpg
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+🎬 Starting streaming server on 0.0.0.0:8002...
+🎬 Streaming server started on http://0.0.0.0:8002
+📺 DLNA/UPnP device available as "RuneCortex Media Server"
+🔗 Test URL: http://localhost:8002/streaming
+Updating streaming folder with 14 media IDs: [
+  12, 1, 21, 31, 40, 58, 44, 22, 9, 52, 55, 4, 64, 63
+]
+Found 14 complete media items in database
+Updated streaming folder: 14 items (currently playing: null)
+Updated streaming folder with 14 items. Server status: {
+  totalItems: 14,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 4,
+      filename: "SANY0010.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 9,
+      filename: "SANY0013.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 12,
+      filename: "SANY0020.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 21,
+      filename: "SANY0018 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 22,
+      filename: "SANY0014.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 31,
+      filename: "SANY0017 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 40,
+      filename: "SANY0016 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 44,
+      filename: "SANY0012.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 52,
+      filename: "SANY0011.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 55,
+      filename: "SANY0001.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 58,
+      filename: "SANY0015 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 63,
+      filename: "SANY0008.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 64,
+      filename: "SANY0009.JPG",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+[Bun.serve]: request timed out after 10 seconds. Pass `idleTimeout` to configure.
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0010.JPG\",\"path\":\"/stream/4\",\"type\":\"media\",\"fileType\":\"image\",\"size\":647693,\"created\":\"2010-08-01T23:09:22.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0013.JPG\",\"path\":\"/stream/9\",\"type\":\"media\",\"fileType\":\"image\",\"size\":428370,\"created\":\"2010-08-02T11:08:31.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0020.MP4\",\"path\":\"/stream/12\",\"type\":\"media\",\"fileType\":\"video\",\"size\":108036096,\"duration\":93.9939,\"created\":\"2010-08-02T19:36:35.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0018 (1).MP4\",\"path\":\"/stream/21\",\"type\":\"media\",\"fileType\":\"video\",\"size\":191332352,\"duration\":167.2671,\"created\":\"2010-08-02T17:15:59.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0014.JPG\",\"path\":\"/stream/22\",\"type\":\"media\",\"fileType\":\"image\",\"size\":387398,\"created\":\"2010-08-02T11:08:46.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0017 (1).MP4\",\"path\":\"/stream/31\",\"type\":\"media\",\"fileType\":\"video\",\"size\":128221184,\"duration\":111.9118,\"created\":\"2010-08-02T17:13:55.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0016 (1).MP4\",\"path\":\"/stream/40\",\"type\":\"media\",\"fileType\":\"video\",\"size\":93257728,\"duration\":81.081,\"created\":\"2010-08-02T17:11:07.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0012.MP4\",\"path\":\"/stream/44\",\"type\":\"media\",\"fileType\":\"video\",\"size\":121110528,\"duration\":106.3062,\"created\":\"2010-08-02T12:12:22.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0011.MP4\",\"path\":\"/stream/52\",\"type\":\"media\",\"fileType\":\"video\",\"size\":50429952,\"duration\":43.476767,\"created\":\"2010-08-02T01:09:36.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0001.MP4\",\"path\":\"/stream/55\",\"type\":\"media\",\"fileType\":\"video\",\"size\":873758720,\"duration\":765.0643,\"created\":\"2010-08-01T23:32:08.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0015 (1).MP4\",\"path\":\"/stream/58\",\"type\":\"media\",\"fileType\":\"video\",\"size\":122126336,\"duration\":107.4073,\"created\":\"2010-08-02T16:33:24.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0008.JPG\",\"path\":\"/stream/63\",\"type\":\"media\",\"fileType\":\"image\",\"size\":602682,\"created\":\"2010-08-01T23:08:26.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false},{\"name\":\"SANY0009.JPG\",\"path\":\"/stream/64\",\"type\":\"media\",\"fileType\":\"image\",\"size\":233807,\"created\":\"2010-08-01T23:09:07.000Z\",\"mimeType\":\"image/jpeg\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'

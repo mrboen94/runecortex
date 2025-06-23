@@ -6,6 +6,7 @@ import { join, dirname, basename, extname } from 'path';
 import { db, schema } from '../db';
 import { eq, sql } from 'drizzle-orm';
 import { getLocalIpAddress } from '../utils/network';
+import { playlistService } from './playlistService';
 
 export interface StreamingServerConfig {
   port: number;
@@ -65,12 +66,24 @@ export class StreamingServer {
     // M3U playlist endpoint
     this.app.get('/playlist.m3u', async (c) => {
       const host = c.req.header('host') || `${this.getNetworkIP()}:${this.config.port}`;
-      const items = this.orderedItemIds
-        .map(id => this.currentStreamingItems.get(id))
-        .filter(item => item !== undefined) as StreamingMediaItem[];
+      
+      // Check for active playlist first
+      let items: StreamingMediaItem[] = [];
+      let playlistName = this.config.name;
+      
+      const activePlaylist = await playlistService.getActivePlaylist();
+      if (activePlaylist) {
+        items = await playlistService.getPlaylistAsStreamingItems(activePlaylist.id);
+        playlistName = activePlaylist.name;
+      } else {
+        // Fall back to current streaming items
+        items = this.orderedItemIds
+          .map(id => this.currentStreamingItems.get(id))
+          .filter(item => item !== undefined) as StreamingMediaItem[];
+      }
       
       let m3u = '#EXTM3U\n';
-      m3u += `#PLAYLIST:${this.config.name}\n`;
+      m3u += `#PLAYLIST:${playlistName}\n`;
       
       items.forEach((item, index) => {
         const title = `${(index + 1).toString().padStart(3, '0')} - ${item.filename}`;
@@ -95,9 +108,19 @@ export class StreamingServer {
     // M3U8 (HLS) playlist endpoint for better compatibility
     this.app.get('/playlist.m3u8', async (c) => {
       const host = c.req.header('host') || `${this.getNetworkIP()}:${this.config.port}`;
-      const items = this.orderedItemIds
-        .map(id => this.currentStreamingItems.get(id))
-        .filter(item => item !== undefined) as StreamingMediaItem[];
+      
+      // Check for active playlist first
+      let items: StreamingMediaItem[] = [];
+      
+      const activePlaylist = await playlistService.getActivePlaylist();
+      if (activePlaylist) {
+        items = await playlistService.getPlaylistAsStreamingItems(activePlaylist.id);
+      } else {
+        // Fall back to current streaming items
+        items = this.orderedItemIds
+          .map(id => this.currentStreamingItems.get(id))
+          .filter(item => item !== undefined) as StreamingMediaItem[];
+      }
       
       let m3u8 = '#EXTM3U\n';
       m3u8 += '#EXT-X-VERSION:3\n';

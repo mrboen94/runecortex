@@ -1,0 +1,196 @@
+.save-to-playlist {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 40px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+/* Variants */
+.save-to-playlist.primary {
+  background: #9c27b0;
+  color: white;
+}
+
+.save-to-playlist.primary:hover:not(:disabled) {
+  background: #7b1fa2;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+}
+
+.save-to-playlist.secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.save-to-playlist.secondary:hover:not(:disabled) {
+  background: #e8e8e8;
+  border-color: #ccc;
+}
+
+/* Sizes */
+.save-to-playlist.small {
+  padding: 6px 12px;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+.save-to-playlist.medium {
+  padding: 10px 20px;
+  font-size: 14px;
+  min-height: 40px;
+}
+
+.save-to-playlist.large {
+  padding: 14px 28px;
+  font-size: 16px;
+  min-height: 48px;
+}
+
+/* States */
+.save-to-playlist:disabled,
+.save-to-playlist.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Dialog */
+.playlist-dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.playlist-dialog {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.playlist-dialog h2 {
+  margin: 0 0 12px 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.item-count {
+  margin: 0 0 20px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.playlist-options {
+  margin-bottom: 24px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.option input[type="radio"] {
+  margin-right: 8px;
+}
+
+.new-playlist-input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0 16px 24px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.existing-playlists {
+  margin-left: 24px;
+  margin-top: 8px;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.playlist-option {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.2s;
+}
+
+.playlist-option:hover {
+  background: #f5f5f5;
+}
+
+.playlist-option input[type="radio"] {
+  margin-right: 8px;
+}
+
+.no-playlists {
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+  margin: 8px 0;
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.dialog-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.dialog-actions button:first-child {
+  background: #f5f5f5;
+  color: #666;
+}
+
+.dialog-actions button:first-child:hover {
+  background: #e8e8e8;
+}
+
+.save-button {
+  background: #9c27b0;
+  color: white;
+}
+
+.save-button:hover:not(:disabled) {
+  background: #7b1fa2;
+}
+
+.save-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

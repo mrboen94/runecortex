@@ -43,6 +43,9 @@ export const mediaItems = sqliteTable('media_items', {
     ratingIdx: index('media_rating_idx').on(table.rating),
     sourcePathIdx: index('media_source_path_idx').on(table.sourcePath),
     locationIdx: index('media_location_idx').on(table.latitude, table.longitude),
+    thumbnailGeneratedIdx: index('media_thumbnail_generated_idx').on(table.thumbnailGenerated),
+    checksumIdx: index('media_checksum_idx').on(table.checksum),
+    processingStatusIdx: index('media_processing_status_idx').on(table.processingStatus),
   };
 });
 
@@ -226,3 +229,54 @@ export type CustomField = typeof customFields.$inferSelect;
 export type NewCustomField = typeof customFields.$inferInsert;
 export type ErrorLog = typeof errorLogs.$inferSelect;
 export type NewErrorLog = typeof errorLogs.$inferInsert;
+
+// Re-export playlist schema
+export { playlists, playlistItems } from './schema/playlists';
+export type { Playlist, NewPlaylist, PlaylistItem, NewPlaylistItem } from './schema/playlists';
+
+// Duplicate tracking table
+export const duplicateGroups = sqliteTable('duplicate_groups', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  checksum: text('checksum').notNull(), // Common checksum for the group
+  phash: text('phash'), // Common perceptual hash
+  fileSize: integer('file_size').notNull(),
+  fileType: text('file_type').notNull(),
+  duplicateCount: integer('duplicate_count').default(2),
+  totalSize: integer('total_size'), // Total size of all duplicates
+  firstSeenAt: integer('first_seen_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  lastSeenAt: integer('last_seen_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  markedForReview: integer('marked_for_review', { mode: 'boolean' }).default(false),
+}, (table) => {
+  return {
+    checksumIdx: index('duplicate_group_checksum_idx').on(table.checksum),
+    markedIdx: index('duplicate_group_marked_idx').on(table.markedForReview),
+  };
+});
+
+export const duplicateFiles = sqliteTable('duplicate_files', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  groupId: integer('group_id').notNull().references(() => duplicateGroups.id, { onDelete: 'cascade' }),
+  mediaId: integer('media_id').references(() => mediaItems.id, { onDelete: 'set null' }),
+  filepath: text('filepath').notNull(),
+  filename: text('filename').notNull(),
+  fileExists: integer('file_exists', { mode: 'boolean' }).default(true),
+  lastVerified: integer('last_verified', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+  suggestedForDeletion: integer('suggested_for_deletion', { mode: 'boolean' }).default(false),
+  reason: text('reason'), // Why this file was suggested for deletion
+}, (table) => {
+  return {
+    groupIdx: index('duplicate_file_group_idx').on(table.groupId),
+    mediaIdx: index('duplicate_file_media_idx').on(table.mediaId),
+    filepathIdx: index('duplicate_file_filepath_idx').on(table.filepath),
+  };
+});
+
+// Re-export app config schema
+export { appConfig, indexedFolders, folderScanCache } from './schema/appConfig';
+export type { AppConfig, NewAppConfig, IndexedFolder, NewIndexedFolder, FolderScanCache, NewFolderScanCache } from './schema/appConfig';
+
+// Export duplicate types
+export type DuplicateGroup = typeof duplicateGroups.$inferSelect;
+export type NewDuplicateGroup = typeof duplicateGroups.$inferInsert;
+export type DuplicateFile = typeof duplicateFiles.$inferSelect;
+export type NewDuplicateFile = typeof duplicateFiles.$inferInsert;

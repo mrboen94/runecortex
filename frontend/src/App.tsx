@@ -2,16 +2,18 @@ import { useState } from 'react'
 import Timeline from './components/Timeline'
 import MapView from './components/MapView'
 import SimpleMap from './components/SimpleMap'
-import StatusIndicator from './components/StatusIndicator'
+import PlaylistView from './components/PlaylistView'
 import FolderBrowser from './components/FolderBrowser'
 import ScanProgress from './components/ScanProgress'
 import PathRestorer from './components/PathRestorer'
 import ViewerSettingsComponent, { type ViewerSettings } from './components/ViewerSettings'
+import StreamingServerStatus from './components/StreamingServerStatus'
+import SystemStatusControl from './components/SystemStatusControl'
 import { FolderProvider } from './contexts/FolderContext'
 import './App.css'
 
 function App() {
-  const [currentView, setCurrentView] = useState<'timeline' | 'map'>('timeline');
+  const [currentView, setCurrentView] = useState<'timeline' | 'map' | 'playlists'>('timeline');
   const [viewerSettings, setViewerSettings] = useState<ViewerSettings>({
     autoPlay: true,
     slideInterval: 5,
@@ -52,8 +54,14 @@ function App() {
                 >
                   🗺️ Map
                 </button>
+                <button 
+                  className={`view-button ${currentView === 'playlists' ? 'active' : ''}`}
+                  onClick={() => setCurrentView('playlists')}
+                >
+                  📋 Playlists
+                </button>
               </div>
-              <StatusIndicator />
+              <SystemStatusControl />
               <FolderBrowser />
               <label className="folder-toggle">
                 <input 
@@ -63,6 +71,7 @@ function App() {
                 />
                 <span>All folders</span>
               </label>
+              <StreamingServerStatus />
             </div>
             <ViewerSettingsComponent 
               settings={viewerSettings}
@@ -74,8 +83,10 @@ function App() {
         <main className="app-main">
           {currentView === 'timeline' ? (
             <Timeline viewerSettings={viewerSettings} onMediaCountUpdate={setMediaCount} />
-          ) : (
+          ) : currentView === 'map' ? (
             <MapView />
+          ) : (
+            <PlaylistView />
           )}
         </main>
         

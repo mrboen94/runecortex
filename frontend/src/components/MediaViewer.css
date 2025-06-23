@@ -73,7 +73,7 @@
 }
 
 /* Control buttons */
-.close-button,
+.viewer-close-button,
 .fullscreen-button {
   position: absolute;
   background: rgba(0, 0, 0, 0.7);
@@ -90,12 +90,13 @@
   transition: opacity 0.3s ease;
   z-index: 10;
   border-radius: 4px;
+  text-align: center;
+  padding: 0;
 }
 
-.close-button {
+.viewer-close-button {
   top: 20px;
   right: 20px;
-  font-size: 32px;
 }
 
 .fullscreen-button {
@@ -103,12 +104,12 @@
   right: 70px;
 }
 
-.close-button.show,
+.viewer-close-button.show,
 .fullscreen-button.show {
   opacity: 0.8;
 }
 
-.close-button:hover,
+.viewer-close-button:hover,
 .fullscreen-button:hover {
   opacity: 1 !important;
   background: rgba(0, 0, 0, 0.9);
@@ -225,9 +226,9 @@
   bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(74, 144, 226, 0.9);
-  color: white;
-  border: none;
+  background: rgba(0, 0, 0, 0.85);
+  color: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 16px 32px;
   border-radius: 50px;
   cursor: pointer;
@@ -237,14 +238,16 @@
   align-items: center;
   gap: 12px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 20px rgba(74, 144, 226, 0.4);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
   z-index: 20;
 }
 
 .autoplay-start-button:hover {
-  background: rgba(74, 144, 226, 1);
+  background: rgba(0, 0, 0, 0.95);
+  color: white;
   transform: translateX(-50%) translateY(-2px);
-  box-shadow: 0 6px 30px rgba(74, 144, 226, 0.6);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .autoplay-start-button .play-icon {

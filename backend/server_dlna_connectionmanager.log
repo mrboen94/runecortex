@@ -1,0 +1,20 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+32 |     credentials: true,
+33 |   },
+34 | });
+35 | 
+36 | // Create and configure server
+37 | const server = Bun.serve({
+                        ^
+error: Failed to start server. Is port 4001 in use?
+ syscall: "listen",
+   errno: 0,
+    code: "EADDRINUSE"
+
+      at /Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/index.ts:37:20

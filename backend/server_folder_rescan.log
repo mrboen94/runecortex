@@ -1,0 +1,391 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+🔍 SSDP Discovery server started on port 1900
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing smart initial scan of watch directories...
+Starting smart scan for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Smart scan failed for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing: 129 |     indexedFolderId: number,
+130 |     rootPath: string,
+131 |     options: SmartScanOptions = {}
+132 |   ): Promise<number> {
+133 |     console.log(`Starting smart scan for ${rootPath}`);
+134 |     scanProgress.startScanning(rootPath);
+                       ^
+TypeError: scanProgress.startScanning is not a function. (In 'scanProgress.startScanning(rootPath)', 'scanProgress.startScanning' is undefined)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:134:18)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:129:5)
+      at performSmartInitialScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:313:51)
+      at performSmartInitialScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:298:43)
+      at start (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:65:16)
+
+Smart initial scan complete. Total files processed: 0
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Thumbnail queue status: waiting, queued: 6
+👁️  Watcher enabled. Watching 1 directories
+🚀 Server ready at http://localhost:4001/graphql
+📁 Media files served at http://localhost:4001/media/:id
+🖼️ Thumbnails served at http://localhost:4001/thumbnails/:id.jpg
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+📡 SSDP M-SEARCH received from 192.168.0.219:56717, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56717, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58438, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58438, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.138:60677, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.138:60677, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57485, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57485, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60568, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60568, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54822, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54822, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54822, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54822, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56080, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56080, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54616, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54616, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+📡 SSDP M-SEARCH received from 192.168.0.219:64099, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64099, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61525, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61525, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62395, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62395, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61136, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61136, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61136, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61136, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53320, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53320, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58559, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58559, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65098, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65098, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63081, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63081, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55057, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55057, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54311, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54311, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53976, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53976, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59925, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59925, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52531, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52531, ST: 239.255.255.250:1900
+Performing periodic check for missed files...
+Starting smart scan for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Periodic check failed: 129 |     indexedFolderId: number,
+130 |     rootPath: string,
+131 |     options: SmartScanOptions = {}
+132 |   ): Promise<number> {
+133 |     console.log(`Starting smart scan for ${rootPath}`);
+134 |     scanProgress.startScanning(rootPath);
+                       ^
+TypeError: scanProgress.startScanning is not a function. (In 'scanProgress.startScanning(rootPath)', 'scanProgress.startScanning' is undefined)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:134:18)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:129:5)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:360:53)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:338:40)
+      at <anonymous> (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:69:12)
+
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📡 SSDP M-SEARCH received from 192.168.0.219:56874, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56874, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56874, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56874, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54698, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54698, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56760, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56760, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61934, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61934, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55974, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55974, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55974, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55974, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62900, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62900, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65206, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65206, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58939, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58939, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58440, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58440, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58138, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58138, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64575, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64575, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64575, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64575, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54709, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54709, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65211, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65211, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64442, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64442, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51988, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51988, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62091, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62091, ST: 239.255.255.250:1900
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+📡 SSDP M-SEARCH received from 192.168.0.219:57073, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57073, ST: 239.255.255.250:1900
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+Performing periodic check for missed files...
+Starting smart scan for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Periodic check failed: 129 |     indexedFolderId: number,
+130 |     rootPath: string,
+131 |     options: SmartScanOptions = {}
+132 |   ): Promise<number> {
+133 |     console.log(`Starting smart scan for ${rootPath}`);
+134 |     scanProgress.startScanning(rootPath);
+                       ^
+TypeError: scanProgress.startScanning is not a function. (In 'scanProgress.startScanning(rootPath)', 'scanProgress.startScanning' is undefined)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:134:18)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:129:5)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:360:53)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:338:40)
+      at <anonymous> (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:69:12)
+
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61243, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61243, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54483, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54483, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50841, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50841, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54665, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54665, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54665, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54665, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55574, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55574, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60599, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60599, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61581, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61581, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52957, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52957, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60201, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60201, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49259, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51703, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51703, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49259, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49259, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49259, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62341, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62341, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58517, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58517, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54597, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54597, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50695, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50695, ST: 239.255.255.250:1900
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+Performing periodic check for missed files...
+Starting smart scan for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Periodic check failed: 129 |     indexedFolderId: number,
+130 |     rootPath: string,
+131 |     options: SmartScanOptions = {}
+132 |   ): Promise<number> {
+133 |     console.log(`Starting smart scan for ${rootPath}`);
+134 |     scanProgress.startScanning(rootPath);
+                       ^
+TypeError: scanProgress.startScanning is not a function. (In 'scanProgress.startScanning(rootPath)', 'scanProgress.startScanning' is undefined)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:134:18)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:129:5)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:360:53)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:338:40)
+      at <anonymous> (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:69:12)
+
+📡 SSDP M-SEARCH received from 192.168.0.219:65174, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65174, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65174, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65174, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53348, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53348, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59145, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59145, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60193, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60193, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60000, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60000, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57260, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57260, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51294, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51294, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51294, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51294, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63455, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63455, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55731, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55731, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56967, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56967, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60943, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60943, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49479, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49479, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53419, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53419, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53419, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:53419, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54338, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54338, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50007, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50007, ST: 239.255.255.250:1900
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+Performing periodic check for missed files...
+Starting smart scan for /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Periodic check failed: 129 |     indexedFolderId: number,
+130 |     rootPath: string,
+131 |     options: SmartScanOptions = {}
+132 |   ): Promise<number> {
+133 |     console.log(`Starting smart scan for ${rootPath}`);
+134 |     scanProgress.startScan(rootPath);
+                       ^
+TypeError: scanProgress.startScanning is not a function. (In 'scanProgress.startScanning(rootPath)', 'scanProgress.startScanning' is undefined)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:134:18)
+      at smartScan (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/smartScanner.ts:129:5)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:360:53)
+      at performPeriodicCheck (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:338:40)
+      at <anonymous> (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/watcher.ts:69:12)
+
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49674, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49674, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52806, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52806, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52325, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:52325, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57290, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58651, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58651, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56417, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:56417, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65512, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65512, ST: 239.255.255.250:1900

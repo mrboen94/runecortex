@@ -1,0 +1,1517 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+🔍 SSDP Discovery server started on port 1900
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+📡 SSDP M-SEARCH received from 192.168.0.219:58522, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58522, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:49178, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:49178, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+👁️  Watching directories: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+🚀 Server ready at http://localhost:4001/graphql
+📁 Media files served at http://localhost:4001/media/:id
+🖼️ Thumbnails served at http://localhost:4001/thumbnails/:id.jpg
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+📡 SSDP M-SEARCH received from 192.168.0.219:58724, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58724, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+getStreamingFolderStatus - orderedItemIds: 
+getStreamingFolderStatus - returned order: 
+Updating streaming folder with 4 media IDs: [ 53, 50, 49, 48 ]
+Found 4 complete media items in database
+Streaming items order: 53, 50, 49, 48
+Updated streaming folder: 4 items (currently playing: null)
+Order preserved: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+Updated streaming folder with 4 items. Server status: {
+  totalItems: 4,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 53,
+      filename: "recorded-6393367071361.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 50,
+      filename: "7133BBB9-13FF-4999-9C45-201CCA91D70E.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 49,
+      filename: "B1ECB574-6DE8-4751-88E3-3FA63F0852C4.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 48,
+      filename: "A57FCCA7-377D-4675-A84A-29D53346B413.mp4",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:50558, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50558, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:57077, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:57077, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:54816, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54816, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63512, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63512, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50572, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50572, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63512, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63512, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:62601, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:62601, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63033, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63033, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: GET /device.xml from curl/8.6.0
+📱 DLNA device.xml requested from curl/8.6.0
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: GET /contentdirectory.xml from curl/8.6.0
+📋 DLNA contentdirectory.xml requested from curl/8.6.0
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:64489, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:64489, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:55479, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55479, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: POST /control from curl/8.6.0
+🎯 DLNA SOAP action requested: "urn:schemas-upnp-org:service:ContentDirectory:1#Browse" from curl/8.6.0
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:51775, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:51775, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: HEAD /connectionmanager.xml from curl/8.6.0
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49955, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60366, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60366, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49955, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49955, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49955, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:57456, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:57456, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58823, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58823, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:51986, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:51986, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64145, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64145, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📡 SSDP M-SEARCH received from 192.168.0.219:59802, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59802, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:50076, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:50076, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49499, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49499, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+Performing periodic check for missed files...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58016, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58016, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:61876, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61876, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61876, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:61876, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.183:60531, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.183:60531, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58981, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58981, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60955, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60955, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49842, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49842, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:61340, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61340, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63324, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:63324, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63324, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:63324, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50395, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:50395, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:57969, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:57969, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:64951, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64951, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:54979, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54979, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:55449, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55449, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58848, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58848, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58848, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58848, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+🌐 Request: GET /device.xml from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+📱 DLNA device.xml requested from Darwin/23.5.0, UPnP/1.0, Portable SDK for UPnP devices/1.14.13
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60968, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:60968, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+Performing periodic check for missed files...
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:55737, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:55737, ST: 239.255.255.250:1900
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58643, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58643, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:61258, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:61258, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:58789, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:58789, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:64989, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64989, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:64989, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:64989, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:49759, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:49759, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:54175, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:54175, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:60045, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65506, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:65506, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+📡 SSDP M-SEARCH received from 192.168.0.219:59084, ST: 239.255.255.250:1900
+📡 SSDP M-SEARCH received from 192.168.0.219:59084, ST: 239.255.255.250:1900
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48
+getStreamingFolderStatus - orderedItemIds: 53, 50, 49, 48
+getStreamingFolderStatus - returned order: 53, 50, 49, 48

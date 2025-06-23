@@ -181,22 +181,41 @@ export class MediaScanner {
           const duplicate = await this.checkForDuplicate(filepath, fileType, checksum, stats.size);
           if (duplicate) {
             console.log(`Duplicate detected: ${filepath} is similar to ${duplicate.filepath}`);
-            this.scanResult.duplicatesSkipped++;
             
-            // Store duplicate relationship in a custom field
-            await db.insert(schema.customFields).values({
-              entityType: 'media',
-              entityId: duplicate.id,
-              fieldName: 'duplicate_paths',
-              fieldValue: JSON.stringify([...(JSON.parse(duplicate.duplicatePaths || '[]')), filepath]),
-              fieldType: 'array'
-            }).onConflictDoUpdate({
-              target: [schema.customFields.entityType, schema.customFields.entityId, schema.customFields.fieldName],
-              set: {
-                fieldValue: JSON.stringify([...(JSON.parse(duplicate.duplicatePaths || '[]')), filepath])
-              }
-            });
-            return;
+            // Check if the original file still exists
+            try {
+              await stat(duplicate.filepath);
+              // Original file exists, this is a true duplicate
+              console.log(`Original file still exists at ${duplicate.filepath}, skipping duplicate`);
+              this.scanResult.duplicatesSkipped++;
+              
+              // Store in duplicate tracking tables
+              await this.storeTrueDuplicate(duplicate, filepath, checksum, fileType, stats.size);
+              return;
+            } catch (error) {
+              // Original file doesn't exist, update the path
+              console.log(`Original file not found at ${duplicate.filepath}, updating to new location ${filepath}`);
+              
+              const metadata = await this.extractMetadata(filepath, fileType);
+              const createdAt = await this.extractCreationDate(filepath, fileType, stats);
+              
+              await db.update(schema.mediaItems)
+                .set({
+                  filepath,
+                  filename: basename(filepath),
+                  fileSize: stats.size,
+                  lastModified: stats.mtime,
+                  checksum,
+                  sourcePath: this.currentSourcePath,
+                  createdAt,
+                  ...metadata
+                })
+                .where(eq(schema.mediaItems.id, duplicate.id));
+              
+              this.scanResult.updated++;
+              console.log(`Updated file path from ${duplicate.filepath} to ${filepath}`);
+              return;
+            }
           }
         }
         
@@ -410,6 +429,115 @@ export class MediaScanner {
     }
     
     return null;
+  }
+
+  private async storeTrueDuplicate(
+    existingItem: any,
+    newFilepath: string,
+    checksum: string,
+    fileType: string,
+    fileSize: number
+  ): Promise<void> {
+    try {
+      // Check if we already have a duplicate group for this checksum
+      let [duplicateGroup] = await db.select()
+        .from(schema.duplicateGroups)
+        .where(eq(schema.duplicateGroups.checksum, checksum))
+        .limit(1);
+
+      if (!duplicateGroup) {
+        // Create new duplicate group
+        [duplicateGroup] = await db.insert(schema.duplicateGroups).values({
+          checksum,
+          phash: existingItem.phash,
+          fileSize,
+          fileType,
+          duplicateCount: 2,
+          totalSize: fileSize * 2,
+          firstSeenAt: new Date(),
+          lastSeenAt: new Date()
+        }).returning();
+
+        // Add the original file to the group
+        await db.insert(schema.duplicateFiles).values({
+          groupId: duplicateGroup.id,
+          mediaId: existingItem.id,
+          filepath: existingItem.filepath,
+          filename: existingItem.filename,
+          fileExists: true,
+          lastVerified: new Date()
+        });
+      } else {
+        // Check if the original file is already in the duplicate_files table
+        const [existingOriginal] = await db.select()
+          .from(schema.duplicateFiles)
+          .where(
+            and(
+              eq(schema.duplicateFiles.groupId, duplicateGroup.id),
+              eq(schema.duplicateFiles.filepath, existingItem.filepath)
+            )
+          )
+          .limit(1);
+
+        if (!existingOriginal) {
+          // Add the original file to the group only if it's not already there
+          await db.insert(schema.duplicateFiles).values({
+            groupId: duplicateGroup.id,
+            mediaId: existingItem.id,
+            filepath: existingItem.filepath,
+            filename: existingItem.filename,
+            fileExists: true,
+            lastVerified: new Date()
+          });
+        }
+
+        // We'll update the group counts after checking if files were actually added
+      }
+
+      // Check if the new duplicate file is already in the table
+      const [existingDuplicate] = await db.select()
+        .from(schema.duplicateFiles)
+        .where(
+          and(
+            eq(schema.duplicateFiles.groupId, duplicateGroup.id),
+            eq(schema.duplicateFiles.filepath, newFilepath)
+          )
+        )
+        .limit(1);
+
+      if (!existingDuplicate) {
+        // Add the new duplicate file only if it's not already there
+        await db.insert(schema.duplicateFiles).values({
+          groupId: duplicateGroup.id,
+          mediaId: null, // This file is not in the media items table
+          filepath: newFilepath,
+          filename: basename(newFilepath),
+          fileExists: true,
+          lastVerified: new Date(),
+          suggestedForDeletion: true, // Suggest the duplicate for deletion
+          reason: 'Duplicate of indexed file'
+        });
+
+        // Update the group counts since we actually added a new duplicate
+        const currentFileCount = await db.select()
+          .from(schema.duplicateFiles)
+          .where(eq(schema.duplicateFiles.groupId, duplicateGroup.id));
+        
+        await db.update(schema.duplicateGroups)
+          .set({
+            duplicateCount: currentFileCount.length,
+            totalSize: currentFileCount.length * fileSize,
+            lastSeenAt: new Date()
+          })
+          .where(eq(schema.duplicateGroups.id, duplicateGroup.id));
+
+        console.log(`Stored duplicate: ${newFilepath} is duplicate of ${existingItem.filepath} in group ${duplicateGroup.id}`);
+      } else {
+        console.log(`Duplicate already tracked: ${newFilepath} in group ${duplicateGroup.id}`);
+      }
+    } catch (error) {
+      console.error(`Failed to store duplicate information:`, error);
+    }
   }
 
   private extractGPSFromExif(exifData: any): { latitude: number; longitude: number; altitude?: number } | null {

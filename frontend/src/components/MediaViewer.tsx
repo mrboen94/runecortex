@@ -410,11 +410,11 @@ export default function MediaViewer({ media, allMedia, onClose, onNavigate, view
 
         {/* Close button */}
         <button 
-          className={`close-button ${showControls || !isFullscreen ? 'show' : ''}`} 
+          className={`viewer-close-button ${showControls || !isFullscreen ? 'show' : ''}`} 
           onClick={handleClose}
           title="Close (Esc)"
         >
-          ×
+          ⊗
         </button>
 
         {/* Fullscreen button */}

@@ -96,19 +96,15 @@ export default function VirtualMediaGrid({ media, viewerSettings, groups, zoomLe
     return result;
   }, [media, groups, approximateColumns]);
   
-  // Virtual rows with dynamic height measurement
+  // Virtual rows - fixed heights for better performance
   const virtualizer = useVirtualizer({
     count: rows.length,
     getScrollElement: () => parentRef.current,
     estimateSize: (index) => {
-      // Headers are smaller than item rows
-      return rows[index].type === 'header' ? 60 : 300;
+      // Fixed heights: header = 60px + 16px margin, items = estimated
+      return rows[index].type === 'header' ? 76 : (gridItemMinWidth + 100);
     },
-    measureElement: (element) => {
-      // Let the browser measure actual height
-      return element.getBoundingClientRect().height;
-    },
-    overscan: 5,
+    overscan: 10, // Increase buffer for smoother scrolling
   });
 
   const handleNavigate = (newMedia: MediaItem) => {
@@ -186,7 +182,8 @@ export default function VirtualMediaGrid({ media, viewerSettings, groups, zoomLe
               <div
                 key={virtualRow.key}
                 data-index={virtualRow.index}
-                ref={virtualizer.measureElement}
+                // Remove dynamic measurement for better performance
+                // ref={virtualizer.measureElement}
                 style={{
                   position: 'absolute',
                   top: 0,

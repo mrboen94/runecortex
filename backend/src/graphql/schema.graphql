@@ -36,9 +36,56 @@ type ScanResult {
   errors: [ScanError!]!
 }
 
+type ScanFoldersResult {
+  success: Boolean!
+  message: String
+  scannedCount: Int!
+}
+
 type ScanError {
   path: String!
   error: String!
+}
+
+type DuplicateGroup {
+  id: Int!
+  checksum: String!
+  phash: String
+  fileSize: Int!
+  fileType: String!
+  duplicateCount: Int!
+  totalSize: Int!
+  firstSeenAt: DateTime!
+  lastSeenAt: DateTime!
+  markedForReview: Boolean!
+  files: [DuplicateFile!]!
+}
+
+type DuplicateFile {
+  id: Int!
+  groupId: Int!
+  mediaId: Int
+  filepath: String!
+  filename: String!
+  fileExists: Boolean!
+  lastVerified: DateTime!
+  suggestedForDeletion: Boolean!
+  reason: String
+}
+
+type DuplicateExport {
+  groupId: Int!
+  checksum: String!
+  totalFiles: Int!
+  totalSize: Int!
+  files: [DuplicateFileInfo!]!
+}
+
+type DuplicateFileInfo {
+  filepath: String!
+  filename: String!
+  suggestedForDeletion: Boolean!
+  reason: String
 }
 
 type Query {
@@ -56,6 +103,15 @@ type Query {
   validatePath(path: String!): PathValidation!
   streamingServerStatus: StreamingServerStatus!
   streamingFolderStatus: StreamingFolderStatus!
+  playlists: [Playlist!]!
+  playlist(id: Int!): Playlist
+  activePlaylist: Playlist
+  indexedFolders: [IndexedFolder!]!
+  getSubfolders(parentPath: String!): [SubfolderInfo!]!
+  appConfig(key: String!): String
+  duplicateGroups(markedForReview: Boolean): [DuplicateGroup!]!
+  duplicateGroup(id: Int!): DuplicateGroup
+  exportDuplicates: [DuplicateExport!]!
 }
 
 type WatcherStatus {
@@ -63,6 +119,7 @@ type WatcherStatus {
   watchPaths: [String!]!
   lastProcessed: DateTime
   scanProgress: ScanProgress
+  watcherEnabled: Boolean!
 }
 
 type ScanProgress {
@@ -134,6 +191,59 @@ type GenericResponse {
   message: String
 }
 
+type IndexedFolder {
+  id: Int!
+  path: String!
+  enabled: Boolean!
+  lastScanned: DateTime
+  lastModifiedTime: DateTime
+  lastDeepScan: DateTime
+  scanStrategy: String!
+  totalFiles: Int!
+  totalFolders: Int!
+  addedAt: DateTime!
+}
+
+type SubfolderInfo {
+  path: String!
+  name: String!
+  fileCount: Int!
+  hasSubfolders: Boolean!
+  lastModified: DateTime
+}
+
+type Playlist {
+  id: Int!
+  name: String!
+  description: String
+  isActive: Boolean!
+  itemCount: Int!
+  totalDuration: Float
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  items: [PlaylistItemDetail!]!
+}
+
+type PlaylistItemDetail {
+  id: Int!
+  position: Int!
+  mediaItem: MediaItem!
+  addedAt: DateTime!
+}
+
+input CreatePlaylistInput {
+  name: String!
+  description: String
+  mediaItemIds: [Int!]!
+}
+
+input UpdatePlaylistInput {
+  id: Int!
+  name: String
+  description: String
+  mediaItemIds: [Int!]
+}
+
 input StreamingMediaInput {
   id: Int!
   filename: String!
@@ -148,7 +258,7 @@ input StreamingMediaInput {
 }
 
 type Mutation {
-  triggerScan(path: String!): ScanResult!
+  triggerScan(path: String!, forceDeepScan: Boolean): ScanResult!
   regenerateThumbnails: Int!
   generateThumbnail(mediaItemId: Int!): Boolean!
   startWatcher(paths: [String!]!): WatcherStatus!
@@ -163,4 +273,21 @@ type Mutation {
   stopStreamingServer: Boolean!
   updateStreamingFolder(mediaItems: [StreamingMediaInput!]!, currentlyPlayingId: Int, forceRefresh: Boolean): StreamingFolderStatus!
   forceVLCRefresh: GenericResponse!
+  createPlaylist(input: CreatePlaylistInput!): Playlist!
+  updatePlaylist(input: UpdatePlaylistInput!): Playlist!
+  deletePlaylist(id: Int!): GenericResponse!
+  activatePlaylist(id: Int!): Playlist!
+  deactivatePlaylist: GenericResponse!
+  exportPlaylist(id: Int!, format: String): String!
+  toggleWatcher(enabled: Boolean!): WatcherStatus!
+  setAppConfig(key: String!, value: String!): Boolean!
+  addIndexedFolder(path: String!, scanStrategy: String): IndexedFolder!
+  removeIndexedFolder(id: Int!): Boolean!
+  toggleIndexedFolder(id: Int!, enabled: Boolean!): IndexedFolder!
+  setScanStrategy(id: Int!, strategy: String!): IndexedFolder!
+  performDeepScan(id: Int!): ScanResult!
+  scanFolders(folderIds: [Int!]!): ScanFoldersResult!
+  markDuplicateGroupForReview(groupId: Int!, mark: Boolean!): DuplicateGroup!
+  exportDuplicatePaths(format: String): String!
+  clearDuplicateData: GenericResponse!
 }

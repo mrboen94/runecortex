@@ -101,11 +101,13 @@ export class ThumbnailGenerator {
     // Extract frame at 10% of video duration
     const seekTime = Math.max(1, duration * 0.1);
 
-    await $`ffmpeg -i "${inputPath}" -ss ${seekTime} -vframes 1 -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -q:v 2 -strict unofficial "${outputPath}" -y`.quiet();
+    // Optimized FFmpeg command with hardware acceleration and better performance
+    await $`ffmpeg -hwaccel auto -ss ${seekTime} -i "${inputPath}" -vframes 1 -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -threads 0 -preset ultrafast -q:v 2 "${outputPath}" -y`.quiet();
   }
 
   private async generateImageThumbnail(inputPath: string, outputPath: string): Promise<void> {
-    await $`ffmpeg -i "${inputPath}" -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -q:v 2 "${outputPath}" -y`.quiet();
+    // Optimized FFmpeg command for image thumbnails
+    await $`ffmpeg -hwaccel auto -i "${inputPath}" -vf "scale=${this.thumbnailSize}:${this.thumbnailSize}:force_original_aspect_ratio=decrease,pad=${this.thumbnailSize}:${this.thumbnailSize}:(ow-iw)/2:(oh-ih)/2" -threads 0 -preset ultrafast -q:v 2 "${outputPath}" -y`.quiet();
   }
 
   async generateMissingThumbnails(batchSize: number = 10): Promise<number> {
@@ -132,9 +134,6 @@ export class ThumbnailGenerator {
       generated += results.reduce((a, b) => a + b, 0);
 
       offset += batchSize;
-
-      // Small delay to prevent overwhelming the system
-      await new Promise(resolve => setTimeout(resolve, 100));
     }
 
     return generated;

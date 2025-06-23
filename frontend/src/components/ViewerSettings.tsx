@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useMutation, useApolloClient } from '@apollo/client';
-import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS } from '../graphql/queries';
-import StreamingServerStatus from './StreamingServerStatus';
+import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS, EXPORT_DUPLICATES, CLEAR_DUPLICATE_DATA } from '../graphql/queries';
 import './ViewerSettings.css';
 
 export type MediaFilter = 'all' | 'videos' | 'images';
@@ -38,13 +37,18 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
   const settingsRef = useRef<HTMLDivElement>(null);
   const [isReindexing, setIsReindexing] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
+  const [isClearingDuplicates, setIsClearingDuplicates] = useState(false);
   const [result, setResult] = useState<ReindexResult | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [showClearDuplicatesConfirm, setShowClearDuplicatesConfirm] = useState(false);
   const [showDisplayOptions, setShowDisplayOptions] = useState(false);
   
   const apolloClient = useApolloClient();
   const [reindexThumbnails] = useMutation(REINDEX_THUMBNAILS);
   const [clearAllThumbnails] = useMutation(CLEAR_ALL_THUMBNAILS);
+  const [exportDuplicates] = useMutation(EXPORT_DUPLICATES);
+  const [clearDuplicateData] = useMutation(CLEAR_DUPLICATE_DATA);
 
   const updateSetting = <K extends keyof ViewerSettings>(key: K, value: ViewerSettings[K]) => {
     onSettingsChange({ ...settings, [key]: value });
@@ -96,6 +100,70 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
       });
     } finally {
       setIsClearing(false);
+    }
+  };
+
+  const handleExportDuplicates = async () => {
+    setIsExporting(true);
+    
+    try {
+      const { data } = await exportDuplicates({
+        variables: { format: 'json' }
+      });
+      
+      // exportDuplicatePaths returns the file content as a string
+      if (data.exportDuplicatePaths) {
+        // Create a blob from the JSON content
+        const blob = new Blob([data.exportDuplicatePaths], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `duplicates_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(link);
+        link.click();
+        
+        // Cleanup
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        setResult({
+          success: false,
+          message: 'No duplicate data to export',
+          thumbnailsProcessed: 0,
+          errors: ['No duplicates found']
+        });
+      }
+    } catch (error) {
+      setResult({
+        success: false,
+        message: `Export failed: ${error}`,
+        thumbnailsProcessed: 0,
+        errors: [String(error)]
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleClearDuplicates = async () => {
+    setIsClearingDuplicates(true);
+    setResult(null);
+    setShowClearDuplicatesConfirm(false);
+    
+    try {
+      const { data } = await clearDuplicateData();
+      setResult(data.clearDuplicateData);
+    } catch (error) {
+      setResult({
+        success: false,
+        message: `Failed to clear duplicates: ${error}`,
+        thumbnailsProcessed: 0,
+        errors: [String(error)]
+      });
+    } finally {
+      setIsClearingDuplicates(false);
     }
   };
 
@@ -266,10 +334,6 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
             )}
           </div>
 
-          <div className="settings-section">
-            <h4>Media Streaming</h4>
-            <StreamingServerStatus />
-          </div>
 
           <div className="settings-section">
             <h4>Thumbnail Management</h4>
@@ -285,7 +349,7 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
               {!showClearConfirm ? (
                 <button 
                   onClick={() => setShowClearConfirm(true)}
-                  disabled={isReindexing || isClearing}
+                  disabled={isReindexing || isClearing || isExporting}
                   className="settings-btn secondary"
                 >
                   🗑️ Clear All
@@ -309,6 +373,7 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
                   </button>
                 </div>
               )}
+              
             </div>
             
             {result && (
@@ -320,7 +385,7 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
                   <p>Processed: {result.thumbnailsProcessed} thumbnails</p>
                 )}
                 
-                {result.errors.length > 0 && (
+                {result.errors && result.errors.length > 0 && (
                   <details className="error-details">
                     <summary>Errors ({result.errors.length})</summary>
                     <ul>
@@ -339,6 +404,48 @@ export default function ViewerSettingsComponent({ settings, onSettingsChange, me
                 </button>
               </div>
             )}
+          </div>
+
+          <div className="settings-section">
+            <h4>Duplicate Management</h4>
+            <div className="thumbnail-controls">
+              <button 
+                onClick={handleExportDuplicates}
+                disabled={isReindexing || isClearing || isExporting || isClearingDuplicates}
+                className="settings-btn primary"
+                title="Export duplicate files to JSON"
+              >
+                {isExporting ? 'Exporting...' : '📤 Export Duplicates'}
+              </button>
+              
+              {!showClearDuplicatesConfirm ? (
+                <button 
+                  onClick={() => setShowClearDuplicatesConfirm(true)}
+                  disabled={isReindexing || isClearing || isExporting || isClearingDuplicates}
+                  className="settings-btn secondary"
+                >
+                  🗑️ Clear Duplicate Data
+                </button>
+              ) : (
+                <div className="clear-confirm">
+                  <span>Clear all duplicate tracking data?</span>
+                  <button 
+                    onClick={handleClearDuplicates}
+                    disabled={isClearingDuplicates}
+                    className="settings-btn danger"
+                  >
+                    {isClearingDuplicates ? 'Clearing...' : 'Yes, Clear All'}
+                  </button>
+                  <button 
+                    onClick={() => setShowClearDuplicatesConfirm(false)}
+                    disabled={isClearingDuplicates}
+                    className="settings-btn secondary"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}

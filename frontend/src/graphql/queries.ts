@@ -92,3 +92,18 @@ export const CLEAR_ALL_THUMBNAILS = gql`
     }
   }
 `;
+
+export const EXPORT_DUPLICATES = gql`
+  mutation ExportDuplicates($format: String) {
+    exportDuplicatePaths(format: $format)
+  }
+`;
+
+export const CLEAR_DUPLICATE_DATA = gql`
+  mutation ClearDuplicateData {
+    clearDuplicateData {
+      success
+      message
+    }
+  }
+`;

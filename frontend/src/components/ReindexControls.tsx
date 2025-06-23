@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useApolloClient } from '@apollo/client';
-import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS } from '../graphql/queries';
+import { REINDEX_THUMBNAILS, CLEAR_ALL_THUMBNAILS, EXPORT_DUPLICATES } from '../graphql/queries';
 import './ReindexControls.css';
 
 interface ReindexResult {
@@ -13,12 +13,14 @@ interface ReindexResult {
 export default function ReindexControls() {
   const [isReindexing, setIsReindexing] = useState(false);
   const [isClearing, setIsClearing] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const [result, setResult] = useState<ReindexResult | null>(null);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const apolloClient = useApolloClient();
   const [reindexThumbnails] = useMutation(REINDEX_THUMBNAILS);
   const [clearAllThumbnails] = useMutation(CLEAR_ALL_THUMBNAILS);
+  const [exportDuplicates] = useMutation(EXPORT_DUPLICATES);
 
   const handleReindex = async () => {
     setIsReindexing(true);
@@ -69,6 +71,42 @@ export default function ReindexControls() {
     }
   };
 
+  const handleExportDuplicates = async () => {
+    setIsExporting(true);
+    setResult(null);
+    
+    try {
+      const { data } = await exportDuplicates({
+        variables: { format: 'json' }
+      });
+      
+      if (data.exportDuplicates.success) {
+        setResult({
+          success: true,
+          message: `Duplicates exported to: ${data.exportDuplicates.filePath}`,
+          thumbnailsProcessed: 0,
+          errors: []
+        });
+      } else {
+        setResult({
+          success: false,
+          message: data.exportDuplicates.error || 'Failed to export duplicates',
+          thumbnailsProcessed: 0,
+          errors: [data.exportDuplicates.error || 'Unknown error']
+        });
+      }
+    } catch (error) {
+      setResult({
+        success: false,
+        message: `Network error: ${error}`,
+        thumbnailsProcessed: 0,
+        errors: [String(error)]
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   return (
     <div className="reindex-controls">
       <div className="reindex-buttons">
@@ -108,6 +146,15 @@ export default function ReindexControls() {
           </div>
         )}
       </div>
+
+      <button 
+        onClick={handleExportDuplicates}
+        disabled={isReindexing || isClearing || isExporting}
+        className="reindex-btn secondary"
+        title="Export duplicate files to JSON"
+      >
+        {isExporting ? 'Exporting...' : '📤 Export Duplicates'}
+      </button>
 
       <button 
         onClick={() => window.location.reload()}

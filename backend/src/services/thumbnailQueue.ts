@@ -36,11 +36,11 @@ export class ThumbnailQueueService {
 
   constructor() {
     this.config = {
-      debounceSeconds: parseInt(process.env.THUMBNAIL_DEBOUNCE_SECONDS || '60'),
-      cooldownSeconds: parseInt(process.env.THUMBNAIL_COOLDOWN_SECONDS || '300'),
-      maxConcurrent: parseInt(process.env.THUMBNAIL_MAX_CONCURRENT || '4'),
-      batchSize: parseInt(process.env.THUMBNAIL_BATCH_SIZE || '20'),
-      batchWaitSeconds: parseInt(process.env.THUMBNAIL_BATCH_WAIT_SECONDS || '10')
+      debounceSeconds: parseInt(process.env.THUMBNAIL_DEBOUNCE_SECONDS || '5'),
+      cooldownSeconds: parseInt(process.env.THUMBNAIL_COOLDOWN_SECONDS || '0'),
+      maxConcurrent: parseInt(process.env.THUMBNAIL_MAX_CONCURRENT || '8'),
+      batchSize: parseInt(process.env.THUMBNAIL_BATCH_SIZE || '50'),
+      batchWaitSeconds: parseInt(process.env.THUMBNAIL_BATCH_WAIT_SECONDS || '0')
     };
 
     console.log('ThumbnailQueue initialized with config:', this.config);

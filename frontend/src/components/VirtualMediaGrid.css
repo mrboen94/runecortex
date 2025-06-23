@@ -11,17 +11,19 @@
   gap: 1rem;
   padding: 0 2rem;
   width: 100%;
+  /* Contain layout to prevent reflow */
+  contain: layout style;
 }
 
 /* Headers */
 .timeline-group-header {
   padding: 0 2rem;
-  margin: 0;
+  margin: 0 0 1rem 0;
   font-size: 1.5rem;
   color: #333;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #e0e0e0;
-  height: 60px;
+  min-height: 60px;
   display: flex;
   align-items: center;
 }

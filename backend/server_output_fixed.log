@@ -1,0 +1,855 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+👁️  Watching directories: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+🚀 Server ready at http://localhost:4001/graphql
+📁 Media files served at http://localhost:4001/media/:id
+🖼️ Thumbnails served at http://localhost:4001/thumbnails/:id.jpg
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+Updating streaming folder with 1 media IDs: [ 1 ]
+Found 1 complete media items in database
+Updated streaming folder: 1 items (currently playing: null)
+Updated streaming folder with 1 items. Server status: {
+  totalItems: 1,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+🎬 Starting streaming server on 0.0.0.0:8002...
+🎬 Streaming server started on http://0.0.0.0:8002
+📺 DLNA/UPnP device available as "RuneCortex Media Server"
+🔗 Test URL: http://localhost:8002/streaming
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "image/jpeg",
+      "Cache-Control": "public, max-age=31536000",
+      "Content-Length": "9424",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "image/jpeg",
+      "Cache-Control": "public, max-age=31536000",
+      "Content-Length": "7637",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-122126335/122126336",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "122126336",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-121110527/121110528",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "121110528",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "application/octet-stream",
+      "Content-Length": "387398",
+      "Accept-Ranges": "bytes",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "application/octet-stream",
+      "Content-Length": "428370",
+      "Accept-Ranges": "bytes",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+ThumbnailQueue: Added 0 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-50429951/50429952",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "50429952",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-873758719/873758720",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "873758720",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "application/octet-stream",
+      "Content-Length": "647693",
+      "Accept-Ranges": "bytes",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "application/octet-stream",
+      "Content-Length": "233807",
+      "Accept-Ranges": "bytes",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "application/octet-stream",
+      "Content-Length": "602682",
+      "Accept-Ranges": "bytes",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-108036095/108036096",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "108036096",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-108036095/108036096",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "108036096",
+      "Content-Type": "application/octet-stream",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Type": "image/jpeg",
+      "Cache-Control": "public, max-age=31536000",
+      "Content-Length": "12742",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 206, ReadableStream {
+      locked: [Getter],
+      cancel: [Function],
+      getReader: [Function],
+      pipeTo: [Function],
+      pipeThrough: [Function],
+      tee: [Function],
+      values: [Function],
+      [Symbol(Symbol.asyncIterator)]: [Function],
+    }, {
+      "Content-Range": "bytes 0-25318936/25318937",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "25318937",
+      "Content-Type": "video/mp4",
+    } ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+error: Expected a Response object, but received '_Response {
+  [Symbol(cache)]: [ 200, "{\"name\":\"Current Selection\",\"type\":\"folder\",\"children\":[{\"name\":\"SANY0019 (1).MP4\",\"path\":\"/stream/1\",\"type\":\"media\",\"fileType\":\"video\",\"size\":84410368,\"duration\":73.2732,\"created\":\"2010-08-02T19:35:13.000Z\",\"mimeType\":\"video/mp4\",\"isCurrentlyPlaying\":false}]}",
+    {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+    }
+  ],
+  headers: [Getter],
+  status: [Getter],
+  ok: [Getter],
+  body: [Getter],
+  bodyUsed: [Getter],
+  redirected: [Getter],
+  statusText: [Getter],
+  trailers: [Getter],
+  type: [Getter],
+  url: [Getter],
+  arrayBuffer: [Function: value],
+  blob: [Function: value],
+  clone: [Function: value],
+  formData: [Function: value],
+  json: [Function: value],
+  text: [Function: value],
+  [Symbol(getResponseCache)]: [Function],
+  bytes: [Function: bytes],
+}'
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+ThumbnailQueue: Added 0 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle

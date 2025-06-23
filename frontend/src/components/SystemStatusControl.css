@@ -1,0 +1,481 @@
+.system-status-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.status-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.status-button:hover {
+  background: rgba(0, 0, 0, 0.08);
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.status-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+}
+
+.status-dot.status-active {
+  background-color: #4caf50;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+}
+
+.status-dot.status-inactive {
+  background-color: #ff9800;
+  box-shadow: 0 0 4px rgba(255, 152, 0, 0.5);
+}
+
+.status-dot.status-disabled {
+  background-color: #9e9e9e;
+}
+
+.status-dot.status-error {
+  background-color: #f44336;
+  box-shadow: 0 0 4px rgba(244, 67, 54, 0.5);
+}
+
+.status-dot.status-loading {
+  background-color: #2196f3;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(33, 150, 243, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+  }
+}
+
+.status-label {
+  font-weight: 500;
+}
+
+.watch-paths-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1000;
+}
+
+.system-status-control:hover .watch-paths-tooltip {
+  opacity: 1;
+}
+
+.tooltip-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+.watch-path {
+  display: block;
+  padding-left: 1rem;
+  color: #a0d4ff;
+}
+
+/* Add busy status for thumbnail processing */
+.status-dot.status-busy {
+  background-color: #ff9800;
+  animation: pulse-orange 1.5s infinite;
+}
+
+@keyframes pulse-orange {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 152, 0, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(255, 152, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 152, 0, 0);
+  }
+}
+
+/* Error details styles */
+.status-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.status-item.status-error {
+  background: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
+  color: #d32f2f;
+}
+
+.status-item.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.status-item.clickable:hover {
+  background: rgba(244, 67, 54, 0.2);
+}
+
+.status-arrow {
+  font-size: 0.8rem;
+  margin-left: 0.25rem;
+}
+
+.error-details-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.error-details-content {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 500px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.error-details-content h3 {
+  margin: 0 0 1rem 0;
+  color: #d32f2f;
+}
+
+.error-details-content p {
+  margin: 0.5rem 0;
+}
+
+.error-hint {
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.error-details-content ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.error-action {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #666;
+}
+
+.close-button {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s ease;
+}
+
+.close-button:hover {
+  background: #e8e8e8;
+}
+
+/* Folder selection modal styles */
+.folder-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+}
+
+.folder-modal-content {
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.folder-modal-content h3 {
+  margin: 0 0 1rem 0;
+  color: #333;
+}
+
+/* Watcher controls styles */
+.watcher-controls {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.watcher-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.watcher-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.watcher-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+.watcher-indicator {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.watcher-indicator.status-active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.watcher-indicator.status-inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.watcher-indicator.status-error {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Enhanced folder hierarchy styles */
+.folder-hierarchy {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.folder-tree-item {
+  margin: 0.25rem 0;
+}
+
+.folder-children {
+  margin-left: 1rem;
+  border-left: 2px solid #e9ecef;
+  padding-left: 0.5rem;
+}
+
+.level-0 {
+  font-weight: 600;
+  color: #0066cc;
+}
+
+.level-1 {
+  color: #495057;
+}
+
+.level-2 {
+  color: #6c757d;
+  font-size: 0.95rem;
+}
+
+.level-3 {
+  color: #868e96;
+  font-size: 0.9rem;
+}
+
+.modal-hint {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.folder-list {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 1.5rem;
+  max-height: 400px;
+}
+
+.folder-group {
+  margin-bottom: 1rem;
+}
+
+.parent-folder {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.folder-item {
+  margin: 0.25rem 0;
+}
+
+.folder-item.child {
+  margin-left: 1.5rem;
+}
+
+.folder-item label,
+.parent-folder label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  min-height: 2rem; /* Prevent height changes */
+}
+
+.folder-item label:hover,
+.parent-folder label:hover {
+  background: #f5f5f5;
+}
+
+.folder-path {
+  flex: 1;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.parent-path {
+  color: #0066cc;
+  font-weight: 600;
+}
+
+.folder-stats {
+  font-size: 0.8rem;
+  color: #666;
+  margin-left: auto;
+}
+
+.no-folders {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.action-button {
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.action-button.cancel {
+  background: #f5f5f5;
+}
+
+.action-button.cancel:hover {
+  background: #e8e8e8;
+}
+
+.action-button.rescan {
+  background: #0066cc;
+  color: white;
+  border-color: #0066cc;
+}
+
+.action-button.rescan:hover:not(:disabled) {
+  background: #0052a3;
+}
+
+.action-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Prevent layout shifts in folder tree */
+.folder-item input[type="checkbox"] {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin: 0;
+}
+
+.folder-item input[type="checkbox"]:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.folder-item button {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Prevent content jumping during loading */
+.folder-hierarchy {
+  min-height: 100px;
+}
+
+.folder-children {
+  min-height: 0;
+  transition: none; /* Disable transitions that might cause flashing */
+}

@@ -12,7 +12,7 @@ import { SSDPServer } from './services/ssdp';
 const typeDefs = readFileSync(join(__dirname, 'graphql/schema.graphql'), 'utf-8');
 
 // Create executable schema
-const schema = makeExecutableSchema({
+const graphqlSchema = makeExecutableSchema({
   typeDefs: [DateTimeTypeDefinition, typeDefs],
   resolvers: {
     ...resolvers,
@@ -25,7 +25,7 @@ const serverPort = parseInt(process.env.PORT || '4001');
 
 // Create GraphQL Yoga instance
 const yoga = createYoga({
-  schema,
+  schema: graphqlSchema,
   landingPage: true,
   cors: {
     origin: '*',
@@ -465,18 +465,54 @@ ssdpServer.start();
 // Make SSDP server available to streaming server for notifications
 streamingServer.setSSDPServer(ssdpServer);
 
-// Start media watcher if watch paths are configured
-const watchPaths = process.env.WATCH_PATHS?.split(',').map(p => p.trim()) || [];
+// Initialize watcher based on configuration
+const { db, schema } = await import('./db');
+const { eq } = await import('drizzle-orm');
 
-if (watchPaths.length > 0) {
-  // Use the resolver to start the watcher so it's properly tracked
-  await resolvers.Mutation.startWatcher(null, { paths: watchPaths });
-  console.log(`👁️  Watching directories: ${watchPaths.join(', ')}`);
+// Check if watcher is enabled in appConfig
+const [watcherConfig] = await db.select()
+  .from(schema.appConfig)
+  .where(eq(schema.appConfig.key, 'watcherEnabled'))
+  .limit(1);
+
+const isWatcherEnabled = watcherConfig ? JSON.parse(watcherConfig.value) : false;
+
+if (isWatcherEnabled) {
+  // Load indexed folders from database
+  const enabledFolders = await db.select()
+    .from(schema.indexedFolders)
+    .where(eq(schema.indexedFolders.enabled, true));
+
+  if (enabledFolders.length > 0) {
+    const paths = enabledFolders.map(f => f.path);
+    // Enable the watcher using the toggle mutation to ensure proper state tracking
+    await resolvers.Mutation.toggleWatcher(null, { enabled: true });
+    console.log(`👁️  Watcher enabled. Watching ${enabledFolders.length} directories`);
+  } else {
+    console.log(`👁️  Watcher enabled but no folders configured`);
+  }
 } else {
-  // If no watch paths configured, use a default
-  const defaultPath = '/Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing';
-  await resolvers.Mutation.startWatcher(null, { paths: [defaultPath] });
-  console.log(`👁️  Watching default directory: ${defaultPath}`);
+  console.log(`👁️  Watcher is disabled`);
+  
+  // Check for legacy environment variable configuration
+  const watchPaths = process.env.WATCH_PATHS?.split(',').map(p => p.trim()) || [];
+  
+  if (watchPaths.length > 0) {
+    console.log(`📌 Found legacy WATCH_PATHS environment variable. Migrating to indexed folders...`);
+    
+    // Migrate legacy paths to indexed folders
+    for (const path of watchPaths) {
+      await db.insert(schema.indexedFolders)
+        .values({
+          path,
+          enabled: true,
+          addedAt: new Date()
+        })
+        .onConflictDoNothing();
+    }
+    
+    console.log(`✅ Migrated ${watchPaths.length} paths to indexed folders (watcher remains disabled)`);
+  }
 }
 
 // Graceful shutdown

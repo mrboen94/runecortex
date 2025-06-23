@@ -1,0 +1,1055 @@
+ThumbnailQueue initialized with config: {
+  debounceSeconds: 10,
+  cooldownSeconds: 10,
+  maxConcurrent: 4,
+  batchSize: 100,
+  batchWaitSeconds: 5,
+}
+Starting media watcher...
+🔍 SSDP Discovery server started on port 1900
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+👁️  Watching directories: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+🚀 Server ready at http://localhost:4001/graphql
+📁 Media files served at http://localhost:4001/media/:id
+🖼️ Thumbnails served at http://localhost:4001/thumbnails/:id.jpg
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+Updating streaming folder with 39 media IDs: [
+  46, 18, 13, 41, 45, 51, 47, 66, 60, 16, 19, 12, 1, 21, 31, 40, 58, 44, 22, 9, 52,
+  55, 4, 64, 63, 67, 10, 6, 5, 17, 15, 7, 62, 11, 65, 61, 54, 59, 42
+]
+Found 39 complete media items in database
+Updated streaming folder: 39 items (currently playing: null)
+Updated streaming folder with 39 items. Server status: {
+  totalItems: 39,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 4,
+      filename: "SANY0010.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 5,
+      filename: "SANY0004.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 6,
+      filename: "SANY0005.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 7,
+      filename: "SANY0019.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 9,
+      filename: "SANY0013.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 10,
+      filename: "SANY0006.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 11,
+      filename: "SANY0018.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 12,
+      filename: "SANY0020.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 13,
+      filename: "SANY0008.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 15,
+      filename: "SANY0002.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 16,
+      filename: "SANY0001 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 17,
+      filename: "SANY0003.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 18,
+      filename: "SANY0009.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 19,
+      filename: "SANY0021.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 21,
+      filename: "SANY0018 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 22,
+      filename: "SANY0014.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 31,
+      filename: "SANY0017 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 40,
+      filename: "SANY0016 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 41,
+      filename: "SANY0007.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 42,
+      filename: "SANY0013.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 44,
+      filename: "SANY0012.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 45,
+      filename: "SANY0006.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 46,
+      filename: "SANY0010.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 47,
+      filename: "SANY0004.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 51,
+      filename: "SANY0005.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 52,
+      filename: "SANY0011.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 54,
+      filename: "SANY0015.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 55,
+      filename: "SANY0001.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 58,
+      filename: "SANY0015 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 59,
+      filename: "SANY0014.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 60,
+      filename: "SANY0002.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 61,
+      filename: "SANY0016.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 62,
+      filename: "SANY0020.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 63,
+      filename: "SANY0008.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 64,
+      filename: "SANY0009.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 65,
+      filename: "SANY0017.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 66,
+      filename: "SANY0003.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 67,
+      filename: "SANY00076.JPG",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+Updating streaming folder with 38 media IDs: [
+  46, 18, 13, 41, 45, 51, 47, 66, 60, 16, 19, 12, 1, 21, 31, 40, 58, 44, 22, 9, 52,
+  55, 4, 64, 63, 67, 10, 6, 5, 17, 15, 7, 62, 11, 65, 61, 54, 59
+]
+Found 38 complete media items in database
+Updated streaming folder: 38 items (currently playing: null)
+Updated streaming folder with 38 items. Server status: {
+  totalItems: 38,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 4,
+      filename: "SANY0010.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 5,
+      filename: "SANY0004.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 6,
+      filename: "SANY0005.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 7,
+      filename: "SANY0019.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 9,
+      filename: "SANY0013.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 10,
+      filename: "SANY0006.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 11,
+      filename: "SANY0018.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 12,
+      filename: "SANY0020.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 13,
+      filename: "SANY0008.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 15,
+      filename: "SANY0002.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 16,
+      filename: "SANY0001 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 17,
+      filename: "SANY0003.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 18,
+      filename: "SANY0009.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 19,
+      filename: "SANY0021.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 21,
+      filename: "SANY0018 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 22,
+      filename: "SANY0014.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 31,
+      filename: "SANY0017 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 40,
+      filename: "SANY0016 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 41,
+      filename: "SANY0007.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 44,
+      filename: "SANY0012.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 45,
+      filename: "SANY0006.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 46,
+      filename: "SANY0010.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 47,
+      filename: "SANY0004.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 51,
+      filename: "SANY0005.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 52,
+      filename: "SANY0011.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 54,
+      filename: "SANY0015.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 55,
+      filename: "SANY0001.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 58,
+      filename: "SANY0015 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 59,
+      filename: "SANY0014.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 60,
+      filename: "SANY0002.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 61,
+      filename: "SANY0016.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 62,
+      filename: "SANY0020.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 63,
+      filename: "SANY0008.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 64,
+      filename: "SANY0009.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 65,
+      filename: "SANY0017.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 66,
+      filename: "SANY0003.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 67,
+      filename: "SANY00076.JPG",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+Performing periodic check for missed files...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+Updating streaming folder with 38 media IDs: [
+  46, 18, 13, 41, 45, 51, 47, 66, 60, 16, 19, 12, 1, 21, 31, 40, 58, 44, 22, 9, 52,
+  55, 4, 64, 63, 67, 10, 6, 5, 17, 15, 7, 62, 11, 65, 61, 54, 59
+]
+Found 38 complete media items in database
+Updated streaming folder: 38 items (currently playing: null)
+Updated streaming folder with 38 items. Server status: {
+  totalItems: 38,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 4,
+      filename: "SANY0010.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 5,
+      filename: "SANY0004.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 6,
+      filename: "SANY0005.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 7,
+      filename: "SANY0019.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 9,
+      filename: "SANY0013.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 10,
+      filename: "SANY0006.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 11,
+      filename: "SANY0018.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 12,
+      filename: "SANY0020.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 13,
+      filename: "SANY0008.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 15,
+      filename: "SANY0002.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 16,
+      filename: "SANY0001 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 17,
+      filename: "SANY0003.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 18,
+      filename: "SANY0009.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 19,
+      filename: "SANY0021.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 21,
+      filename: "SANY0018 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 22,
+      filename: "SANY0014.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 31,
+      filename: "SANY0017 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 40,
+      filename: "SANY0016 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 41,
+      filename: "SANY0007.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 44,
+      filename: "SANY0012.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 45,
+      filename: "SANY0006.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 46,
+      filename: "SANY0010.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 47,
+      filename: "SANY0004.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 51,
+      filename: "SANY0005.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 52,
+      filename: "SANY0011.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 54,
+      filename: "SANY0015.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 55,
+      filename: "SANY0001.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 58,
+      filename: "SANY0015 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 59,
+      filename: "SANY0014.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 60,
+      filename: "SANY0002.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 61,
+      filename: "SANY0016.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 62,
+      filename: "SANY0020.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 63,
+      filename: "SANY0008.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 64,
+      filename: "SANY0009.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 65,
+      filename: "SANY0017.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 66,
+      filename: "SANY0003.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 67,
+      filename: "SANY00076.JPG",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Updating streaming folder with 4 media IDs: [ 53, 50, 49, 48 ]
+Found 4 complete media items in database
+Preserving currently playing item: SANY0019 (1).MP4
+Updated streaming folder: 5 items (currently playing: null)
+Updated streaming folder with 4 items. Server status: {
+  totalItems: 5,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 48,
+      filename: "A57FCCA7-377D-4675-A84A-29D53346B413.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 49,
+      filename: "B1ECB574-6DE8-4751-88E3-3FA63F0852C4.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 50,
+      filename: "7133BBB9-13FF-4999-9C45-201CCA91D70E.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 53,
+      filename: "recorded-6393367071361.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle
+Updating streaming folder with 4 media IDs: [ 48, 49, 50, 53 ]
+Found 4 complete media items in database
+Updated streaming folder: 4 items (currently playing: null)
+Updated streaming folder with 4 items. Server status: {
+  totalItems: 4,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 48,
+      filename: "A57FCCA7-377D-4675-A84A-29D53346B413.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 49,
+      filename: "B1ECB574-6DE8-4751-88E3-3FA63F0852C4.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 50,
+      filename: "7133BBB9-13FF-4999-9C45-201CCA91D70E.mp4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 53,
+      filename: "recorded-6393367071361.mp4",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+Stopping media watcher...
+Starting media watcher...
+Watching directory: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+Performing initial scan of watch directories...
+Updating streaming folder with 39 media IDs: [
+  46, 18, 13, 41, 45, 51, 47, 66, 60, 16, 19, 12, 1, 21, 31, 40, 58, 44, 22, 9, 52,
+  55, 4, 64, 63, 67, 10, 6, 5, 17, 15, 7, 62, 11, 65, 61, 54, 59, 42
+]
+Found 39 complete media items in database
+Preserving currently playing item: A57FCCA7-377D-4675-A84A-29D53346B413.mp4
+Updated streaming folder: 40 items (currently playing: null)
+Updated streaming folder with 39 items. Server status: {
+  totalItems: 40,
+  currentlyPlaying: null,
+  items: [
+    {
+      id: 1,
+      filename: "SANY0019 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 4,
+      filename: "SANY0010.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 5,
+      filename: "SANY0004.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 6,
+      filename: "SANY0005.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 7,
+      filename: "SANY0019.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 9,
+      filename: "SANY0013.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 10,
+      filename: "SANY0006.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 11,
+      filename: "SANY0018.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 12,
+      filename: "SANY0020.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 13,
+      filename: "SANY0008.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 15,
+      filename: "SANY0002.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 16,
+      filename: "SANY0001 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 17,
+      filename: "SANY0003.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 18,
+      filename: "SANY0009.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 19,
+      filename: "SANY0021.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 21,
+      filename: "SANY0018 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 22,
+      filename: "SANY0014.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 31,
+      filename: "SANY0017 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 40,
+      filename: "SANY0016 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 41,
+      filename: "SANY0007.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 42,
+      filename: "SANY0013.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 44,
+      filename: "SANY0012.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 45,
+      filename: "SANY0006.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 46,
+      filename: "SANY0010.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 47,
+      filename: "SANY0004.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 51,
+      filename: "SANY0005.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 52,
+      filename: "SANY0011.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 54,
+      filename: "SANY0015.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 55,
+      filename: "SANY0001.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 58,
+      filename: "SANY0015 (1).MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 59,
+      filename: "SANY0014.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 60,
+      filename: "SANY0002.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 61,
+      filename: "SANY0016.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 62,
+      filename: "SANY0020.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 63,
+      filename: "SANY0008.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 64,
+      filename: "SANY0009.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 65,
+      filename: "SANY0017.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 66,
+      filename: "SANY0003.MP4",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 67,
+      filename: "SANY00076.JPG",
+      isCurrentlyPlaying: false,
+    }, {
+      id: 48,
+      filename: "A57FCCA7-377D-4675-A84A-29D53346B413.mp4",
+      isCurrentlyPlaying: false,
+    }
+  ],
+}
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-27 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 2.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 3.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152 1.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-25 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+Duplicate detected: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/test/25-01-01-12-26 AM-7728 x 5152.jpg is similar to /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+ThumbnailQueue: Added 6 items to queue. Total in queue: 6
+ThumbnailQueue: Waiting 10 second(s) before processing...
+Initial scan complete. Thumbnail queue status: waiting, queued: 6
+Changed watch path to: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing
+ThumbnailQueue: Starting processing of 6 items
+ThumbnailQueue: Error processing item 232: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-25 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 233: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 234: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 2.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 235: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152 3.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 236: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-26 AM-7728 x 5152.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Error processing item 238: 71 | 
+72 |     // Check if source file exists
+73 |     try {
+74 |       await access(item.filepath, constants.F_OK);
+75 |     } catch {
+76 |       throw new Error(`Source file not found: ${item.filepath}`);
+                 ^
+error: Source file not found: /Users/mathiasboe/Projects/runecortex/images-and-video-folder-for-testing/25-01-01-12-27 AM-7728 x 5152 1.jpg
+      at generateForMediaItem (/Users/mathiasboe/Projects/runecortex/stash-clone/backend/src/services/thumbnail.ts:76:13)
+
+ThumbnailQueue: Batch complete. Processed: 0, Skipped: 0, Failed: 6
+ThumbnailQueue: Queue empty, returning to idle

@@ -2,6 +2,7 @@ import { watch } from 'fs';
 import { join, extname, relative } from 'path';
 import { stat } from 'fs/promises';
 import { MediaScanner } from './scanner';
+import { SmartScanner, SmartScanOptions } from './smartScanner';
 import { thumbnailQueue } from './thumbnailQueue';
 import { db, schema } from '../db';
 import { eq } from 'drizzle-orm';
@@ -22,6 +23,7 @@ interface QueuedFile {
 export class MediaWatcher {
   private watchers: Map<string, any> = new Map();
   private scanner = new MediaScanner();
+  private smartScanner = new SmartScanner();
   private fileQueue: Map<string, QueuedFile> = new Map();
   private processTimer: NodeJS.Timeout | null = null;
   private periodicCheckTimer: NodeJS.Timeout | null = null;
@@ -29,6 +31,7 @@ export class MediaWatcher {
   private isProcessing = false;
   private lastPeriodicCheck = new Date();
   private newMediaIds: number[] = [];
+  private indexedFolderMap: Map<string, number> = new Map(); // Maps path to indexedFolder ID
 
   constructor(private options: WatcherOptions) {
     this.debounceMs = options.debounceMs || 1000;
@@ -36,6 +39,17 @@ export class MediaWatcher {
 
   async start() {
     console.log('Starting media watcher...');
+    
+    // Load indexed folders from database
+    const indexedFolders = await db
+      .select()
+      .from(schema.indexedFolders)
+      .where(eq(schema.indexedFolders.enabled, true));
+
+    // Build path to ID mapping
+    for (const folder of indexedFolders) {
+      this.indexedFolderMap.set(folder.path, folder.id);
+    }
     
     for (const watchPath of this.options.paths) {
       try {
@@ -47,8 +61,8 @@ export class MediaWatcher {
       }
     }
 
-    // Initial scan
-    await this.performInitialScan();
+    // Perform smart initial scan
+    await this.performSmartInitialScan();
 
     // Start periodic check every 5 minutes to catch any missed files
     this.periodicCheckTimer = setInterval(() => {
@@ -281,6 +295,40 @@ export class MediaWatcher {
     console.log(`Initial scan complete. Thumbnail queue status: ${queueResult.status}, queued: ${queueResult.queued}`);
   }
 
+  private async performSmartInitialScan() {
+    console.log('Performing smart initial scan of watch directories...');
+    
+    let totalProcessed = 0;
+    
+    for (const watchPath of this.options.paths) {
+      try {
+        const indexedFolderId = this.indexedFolderMap.get(watchPath);
+        if (!indexedFolderId) {
+          console.warn(`No indexed folder ID found for ${watchPath}, using regular scan`);
+          await this.scanner.scanDirectory(watchPath);
+          continue;
+        }
+
+        // Use smart scanner with startup strategy - only scan changed folders
+        const processed = await this.smartScanner.smartScan(
+          indexedFolderId,
+          watchPath,
+          { scanStrategy: 'startup' }
+        );
+        
+        totalProcessed += processed;
+      } catch (error) {
+        console.error(`Smart scan failed for ${watchPath}:`, error);
+      }
+    }
+    
+    console.log(`Smart initial scan complete. Total files processed: ${totalProcessed}`);
+    
+    // Ping thumbnail queue to generate any missing thumbnails
+    const queueResult = await thumbnailQueue.ping();
+    console.log(`Thumbnail queue status: ${queueResult.status}, queued: ${queueResult.queued}`);
+  }
+
   private emitUpdate(update: any) {
     // This will be used for GraphQL subscriptions
     // For now, just log the update
@@ -296,20 +344,34 @@ export class MediaWatcher {
     console.log('Performing periodic check for missed files...');
     
     try {
-      let totalNewFiles = 0;
+      let totalProcessed = 0;
       
       for (const watchPath of this.options.paths) {
-        // Just do a quick scan for new files, not a full scan
-        const result = await this.scanner.scanDirectory(watchPath);
-        
-        if (result.newFiles > 0) {
-          console.log(`Periodic check found ${result.newFiles} new files in ${watchPath}`);
-          totalNewFiles += result.newFiles;
+        const indexedFolderId = this.indexedFolderMap.get(watchPath);
+        if (!indexedFolderId) {
+          // Fallback to regular scan if no ID found
+          const result = await this.scanner.scanDirectory(watchPath);
+          if (result.newFiles > 0) {
+            console.log(`Periodic check found ${result.newFiles} new files in ${watchPath}`);
+            totalProcessed += result.newFiles;
+          }
+        } else {
+          // Use smart scanner for shallow scan
+          const processed = await this.smartScanner.smartScan(
+            indexedFolderId,
+            watchPath,
+            { scanStrategy: 'shallow' }
+          );
+          
+          if (processed > 0) {
+            console.log(`Periodic check processed ${processed} files in ${watchPath}`);
+            totalProcessed += processed;
+          }
         }
       }
       
       // If new files were found, ping the thumbnail queue
-      if (totalNewFiles > 0) {
+      if (totalProcessed > 0) {
         const queueResult = await thumbnailQueue.ping();
         console.log(`Periodic check: Queued items for thumbnail generation. Status: ${queueResult.status}`);
       }

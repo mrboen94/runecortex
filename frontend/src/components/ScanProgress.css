@@ -1,9 +1,9 @@
 .scan-progress {
   background: #f8f9fa;
   border: 1px solid #e1e4e8;
-  border-radius: 8px;
-  padding: 16px;
-  margin: 16px 0;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 0;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   animation: slideIn 0.3s ease-out;
 }
@@ -11,28 +11,28 @@
 .scan-header {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
+  gap: 6px;
+  margin-bottom: 8px;
   font-weight: 600;
   color: #24292e;
 }
 
 .scan-emoji {
-  font-size: 20px;
-  animation: pulse 1s ease-in-out infinite;
+  font-size: 16px;
+  /* Removed animation */
 }
 
 .scan-message {
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .progress-bar {
   width: 100%;
-  height: 20px;
+  height: 16px;
   background: #e1e4e8;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   position: relative;
 }
 
@@ -68,21 +68,21 @@
 
 .progress-text {
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;
   color: #586069;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .current-path {
-  font-size: 12px;
+  font-size: 11px;
   color: #6a737d;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin-top: 8px;
-  padding: 4px 8px;
+  margin-top: 6px;
+  padding: 3px 6px;
   background: rgba(0, 0, 0, 0.03);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 @keyframes slideIn {
@@ -96,17 +96,7 @@
   }
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
+/* Removed pulse animation as it's no longer used */
 
 @keyframes progress-stripes {
   0% {
