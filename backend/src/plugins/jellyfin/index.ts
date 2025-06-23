@@ -1,7 +1,7 @@
 import { db, schema } from '../../db';
 import { eq, desc, and, gte, lte, sql } from 'drizzle-orm';
-import { existsSync } from 'fs';
-import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
+import { join, dirname } from 'path';
 
 export class JellyfinPlugin {
   private enabled: boolean;
@@ -27,7 +27,25 @@ export class JellyfinPlugin {
   isEnabled() {
     return this.enabled;
   }
-
+  
+  // Simplified codec detection for videos
+  private getCodecInfo(item: any): { videoCodec: string; audioCodec: string } {
+    const extension = item.filepath.split('.').pop()?.toLowerCase() || '';
+    
+    // Common codec mappings
+    if (extension === 'mov' || extension === 'mp4' || extension === 'm4v') {
+      return { videoCodec: 'h264', audioCodec: 'aac' };
+    } else if (extension === 'mkv') {
+      return { videoCodec: 'h264', audioCodec: 'ac3' };
+    } else if (extension === 'avi') {
+      return { videoCodec: 'mpeg4', audioCodec: 'mp3' };
+    } else if (extension === 'webm') {
+      return { videoCodec: 'vp8', audioCodec: 'vorbis' };
+    }
+    
+    // Default fallback
+    return { videoCodec: 'h264', audioCodec: 'aac' };
+  }
 
   // Handle Jellyfin API routes
   async handleRequest(request: Request): Promise<Response | null> {
@@ -36,15 +54,15 @@ export class JellyfinPlugin {
     const url = new URL(request.url);
     const path = url.pathname;
     
-    // Don't handle GraphQL requests - let main server handle them
+    // Don't handle GraphQL requests
     if (path === '/graphql') {
       return null;
     }
     
-    // Log all Jellyfin requests for debugging
+    // Log all Jellyfin requests
     console.log(`🎭 Jellyfin: ${request.method} ${path}${url.search ? '?' + url.search : ''}`);
     
-    // Handle CORS preflight requests
+    // Handle CORS preflight
     if (request.method === 'OPTIONS') {
       return new Response(null, {
         status: 204,
@@ -57,21 +75,15 @@ export class JellyfinPlugin {
       });
     }
     
-    // System endpoints
+    // Essential endpoints for Infuse
     if (path === '/System/Info/Public') {
       return this.getPublicSystemInfo();
     }
     
-    if (path === '/System/Info') {
-      return this.getSystemInfo();
-    }
-    
-    // User endpoints (simplified - no auth)
     if (path === '/Users/Public') {
       return this.getPublicUsers();
     }
     
-    // Authentication endpoint for Infuse
     if (path === '/Users/AuthenticateByName' && request.method === 'POST') {
       return this.authenticateUser(request);
     }
@@ -80,38 +92,29 @@ export class JellyfinPlugin {
       return this.getUser();
     }
     
-    // User views endpoint (library collections)
     if (path.match(/^\/Users\/[^\/]+\/Views$/)) {
       return this.getUserViews();
     }
     
-    // User grouping options
     if (path.match(/^\/Users\/[^\/]+\/GroupingOptions$/)) {
       return this.getGroupingOptions();
     }
     
-    // Library folder details (e.g., /Users/default-user/Items/library-streaming)
-    if (path.match(/^\/Users\/[^\/]+\/Items\/library-[^\/]+$/)) {
-      const libraryId = path.split('/')[4];
-      return this.getLibraryDetails(libraryId, url);
-    }
-    
-    // Individual item details with user context (e.g., /Users/default-user/Items/12)
-    // Must come before the generic Items endpoint
-    if (path.match(/^\/Users\/[^\/]+\/Items\/[^\/]+$/) && !path.includes('?') && !isNaN(parseInt(path.split('/')[4]))) {
-      const itemId = path.split('/')[4];
-      return this.getItem(itemId);
-    }
-    
-    // Items by grouping type (e.g., /Users/{userId}/Items/None)
-    if (path.match(/^\/Users\/[^\/]+\/Items\/[^\/]+$/) && isNaN(parseInt(path.split('/')[4]))) {
-      const groupingType = path.split('/')[4];
-      return this.getItemsByGrouping(url, groupingType);
-    }
-    
-    // Library endpoints (generic - must come after specific routes)
     if (path.match(/^\/Users\/[^\/]+\/Items$/)) {
       return this.getItems(url);
+    }
+    
+    if (path.match(/^\/Users\/[^\/]+\/Items\/[^\/]+$/) && !path.includes('?')) {
+      const itemId = path.split('/')[4];
+      // Handle library folder details request
+      if (itemId.startsWith('library-')) {
+        return this.getLibraryDetails(itemId, request);
+      }
+      // Handle grouping type requests (e.g., /Users/{userId}/Items/None)
+      if (isNaN(parseInt(itemId))) {
+        return this.getItemsByGrouping(url, itemId);
+      }
+      return this.getItem(itemId);
     }
     
     if (path.match(/^\/Items\/[^\/]+$/)) {
@@ -119,7 +122,6 @@ export class JellyfinPlugin {
       return this.getItem(itemId);
     }
     
-    // Image endpoints
     if (path.match(/^\/Items\/[^\/]+\/Images\/(Primary|Backdrop|Thumb)/)) {
       const parts = path.split('/');
       const itemId = parts[2];
@@ -127,84 +129,28 @@ export class JellyfinPlugin {
       return this.getImage(itemId, imageType);
     }
     
-    // Video streaming
+    // Handle photo download requests
+    if (path.match(/^\/Items\/[^\/]+\/Download$/)) {
+      const itemId = path.split('/')[2];
+      return this.downloadItem(itemId);
+    }
+    
     if (path.match(/^\/Videos\/[^\/]+\/stream/)) {
       const videoId = path.split('/')[2];
       return this.streamVideo(videoId, request);
     }
     
-    // Item download
-    if (path.match(/^\/Items\/[^\/]+\/Download$/)) {
-      const itemId = path.split('/')[2];
-      return this.downloadItem(itemId, request);
-    }
-    
-    
-    // PlaybackInfo endpoint for streaming details
     if (path.match(/^\/Items\/[^\/]+\/PlaybackInfo$/)) {
       const itemId = path.split('/')[2];
       return this.getPlaybackInfo(itemId, url);
     }
     
-    // MediaSegments endpoint (for chapter/segment info)
-    if (path.match(/^\/MediaSegments\/[^\/]+$/)) {
-      const itemId = path.split('/')[2];
-      return this.getMediaSegments(itemId);
-    }
-    
-    // Library structure
     if (path === '/Library/VirtualFolders') {
       return this.getVirtualFolders();
     }
     
-    // Server capabilities (Infuse may check this)
-    if (path === '/System/Endpoint') {
-      return this.getEndpoints();
-    }
-    
-    // Branding configuration
-    if (path === '/Branding/Configuration') {
-      return this.getBrandingConfiguration();
-    }
-    
-    // Session endpoints
-    if (path.match(/^\/Sessions/)) {
-      return this.handleSession(request);
-    }
-    
-    // Latest items endpoint
-    if (path.match(/^\/Users\/[^\/]+\/Items\/Latest$/)) {
-      return this.getLatestItems(url);
-    }
-    
-    // Display preferences
-    if (path.match(/^\/DisplayPreferences/)) {
+    if (path === '/DisplayPreferences/usersettings') {
       return this.getDisplayPreferences();
-    }
-    
-    // User settings
-    if (path === '/System/Configuration') {
-      return this.getSystemConfiguration();
-    }
-    
-    // Health check endpoint
-    if (path === '/health' || path === '/System/Ping') {
-      return this.getHealthCheck();
-    }
-    
-    // User configuration
-    if (path.match(/^\/Users\/[^\/]+\/Configuration$/)) {
-      return this.getUserConfiguration();
-    }
-    
-    // Plugins endpoint
-    if (path === '/Plugins') {
-      return this.getPlugins();
-    }
-    
-    // Shows/NextUp endpoint
-    if (path === '/Shows/NextUp') {
-      return this.getNextUp(url);
     }
     
     return null;
@@ -212,7 +158,6 @@ export class JellyfinPlugin {
 
   // System info for Infuse
   private async getPublicSystemInfo(): Promise<Response> {
-    // Get the actual network IP address
     const { getLocalIpAddress } = await import('../../utils/network');
     const localIp = getLocalIpAddress();
     const port = process.env.PORT || '4001';
@@ -225,49 +170,6 @@ export class JellyfinPlugin {
       OperatingSystem: 'Linux',
       Id: this.serverId,
     }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  private async getSystemInfo(): Promise<Response> {
-    // Get the actual network IP address
-    const { getLocalIpAddress } = await import('../../utils/network');
-    const localIp = getLocalIpAddress();
-    const port = process.env.PORT || '4001';
-    
-    const info = {
-      SystemUpdateLevel: 'Release',
-      OperatingSystemDisplayName: 'Linux',
-      HasPendingRestart: false,
-      IsShuttingDown: false,
-      SupportsLibraryMonitor: true,
-      WebSocketPortNumber: 8096,
-      CompletedInstallations: [],
-      CanSelfRestart: true,
-      CanLaunchWebBrowser: false,
-      ProgramDataPath: '/config',
-      ItemsByNamePath: '/config/metadata',
-      CachePath: '/cache',
-      LogPath: '/config/log',
-      InternalMetadataPath: '/config/metadata',
-      TranscodingTempPath: '/transcode',
-      HttpServerPortNumber: parseInt(port),
-      SupportsHttps: false,
-      HasUpdateAvailable: false,
-      SupportsAutoRunAtStartup: false,
-      HardwareAccelerationRequiresPremiere: false,
-      LocalAddress: `http://${localIp}:${port}`,
-      WanAddress: `http://${localIp}:${port}`,
-      ServerName: this.serverName,
-      Version: '10.8.0',
-      OperatingSystem: 'Linux',
-      Id: this.serverId,
-    };
-    
-    return new Response(JSON.stringify(info), {
       headers: {
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*'
@@ -304,10 +206,12 @@ export class JellyfinPlugin {
         IsAdministrator: true,
         IsHidden: false,
         IsDisabled: false,
-        EnableAllFolders: true,
+        EnableUserPreferenceAccess: true,
+        EnableRemoteAccess: true,
+        EnableLiveTvAccess: true,
         EnableMediaPlayback: true,
-        EnableVideoPlayback: true,
-        EnableAudioPlayback: true,
+        EnableAudioPlaybackTranscoding: true,
+        EnableVideoPlaybackTranscoding: true,
         EnablePlaybackRemuxing: true,
         EnableContentDeletion: false,
         EnableContentDownloading: true,
@@ -326,299 +230,157 @@ export class JellyfinPlugin {
     });
   }
 
-  // Handle authentication request from Infuse
+  // Authenticate endpoint (no-op for local use)
   private async authenticateUser(request: Request): Promise<Response> {
-    // Since we don't have real authentication, accept any credentials
-    const body = await request.json().catch(() => ({}));
-    console.log('🔐 Authentication request:', body);
+    // Generate a unique token for each authentication to avoid caching issues
+    const uniqueToken = `token-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     
-    const accessToken = 'runecortex-' + Date.now();
-    const sessionId = 'session-' + Date.now();
-    const userAgent = request.headers.get('user-agent') || 'Unknown';
-    
-    console.log('🎭 User-Agent:', userAgent);
-    
-    // Add a small delay to simulate real server processing
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    // Return a successful authentication response compatible with Jellyfin 10.8.x
     return new Response(JSON.stringify({
+      AccessToken: uniqueToken,
       User: {
-        Name: body.Username || 'guest',
+        Name: 'Default',
         ServerId: this.serverId,
         Id: 'default-user',
-        PrimaryImageTag: null,
         HasPassword: false,
         HasConfiguredPassword: false,
         HasConfiguredEasyPassword: false,
-        EnableAutoLogin: false,
-        LastLoginDate: new Date().toISOString(),
-        LastActivityDate: new Date().toISOString(),
-        Configuration: {
-          AudioLanguagePreference: '',
-          PlayDefaultAudioTrack: true,
-          SubtitleLanguagePreference: '',
-          DisplayMissingEpisodes: false,
-          GroupedFolders: [],
-          SubtitleMode: 'Default',
-          DisplayCollectionsView: false,
-          EnableLocalPassword: false,
-          OrderedViews: [],
-          LatestItemsExcludes: [],
-          MyMediaExcludes: [],
-          HidePlayedInLatest: true,
-          RememberAudioSelections: true,
-          RememberSubtitleSelections: true,
-          EnableNextEpisodeAutoPlay: true
-        },
-        Policy: {
-          IsAdministrator: true,
-          IsHidden: false,
-          IsDisabled: false,
-          MaxParentalRating: null,
-          BlockedTags: [],
-          EnableUserPreferenceAccess: true,
-          AccessSchedules: [],
-          BlockUnratedItems: [],
-          EnableRemoteControlOfOtherUsers: true,
-          EnableSharedDeviceControl: true,
-          EnableRemoteAccess: true,
-          EnableLiveTvManagement: true,
-          EnableLiveTvAccess: true,
-          EnableMediaPlayback: true,
-          EnableAudioPlaybackTranscoding: true,
-          EnableVideoPlaybackTranscoding: true,
-          EnablePlaybackRemuxing: true,
-          ForceRemoteSourceTranscoding: false,
-          EnableContentDeletion: false,
-          EnableContentDeletionFromFolders: [],
-          EnableContentDownloading: true,
-          EnableSyncTranscoding: true,
-          EnableMediaConversion: true,
-          EnabledDevices: [],
-          EnableAllDevices: true,
-          EnabledChannels: [],
-          EnableAllChannels: true,
-          EnabledFolders: [],
-          EnableAllFolders: true,
-          InvalidLoginAttemptCount: 0,
-          LoginAttemptsBeforeLockout: -1,
-          MaxActiveSessions: 0,
-          EnablePublicSharing: true,
-          BlockedMediaFolders: [],
-          BlockedChannels: [],
-          RemoteClientBitrateLimit: 0,
-          AuthenticationProviderId: 'Jellyfin.Server.Implementations.Users.DefaultAuthenticationProvider',
-          PasswordResetProviderId: 'Jellyfin.Server.Implementations.Users.DefaultPasswordResetProvider',
-          SyncPlayAccess: 'CreateAndJoinGroups'
-        }
+        EnableAutoLogin: true,
       },
       SessionInfo: {
-        PlayState: {
-          CanSeek: true,
-          IsPaused: false,
-          IsMuted: false,
-          RepeatMode: 'RepeatNone'
-        },
-        AdditionalUsers: [],
-        Capabilities: {
-          PlayableMediaTypes: ['Audio', 'Video', 'Photo'],
-          SupportedCommands: ['MoveUp', 'MoveDown', 'MoveLeft', 'MoveRight', 'Select'],
-          SupportsMediaControl: true,
-          SupportsContentUploading: false,
-          SupportsPersistentIdentifier: true,
-          SupportsSync: false,
-          DeviceProfile: {
-            MaxStreamingBitrate: 120000000,
-            MaxStaticBitrate: 100000000,
-            MusicStreamingTranscodingBitrate: 384000
-          }
-        },
-        RemoteEndPoint: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || '127.0.0.1',
         PlayableMediaTypes: ['Audio', 'Video', 'Photo'],
-        Id: sessionId,
+        Id: 'session-' + Date.now(),
         UserId: 'default-user',
-        UserName: body.Username || 'guest',
+        UserName: 'Default',
         Client: 'Infuse',
         LastActivityDate: new Date().toISOString(),
+        LastPlaybackCheckIn: new Date().toISOString(),
         DeviceName: 'Infuse',
-        DeviceId: 'infuse-device-' + Math.random().toString(36).substring(7),
-        ApplicationVersion: '7.8.1',
+        DeviceId: 'infuse-device',
+        ApplicationVersion: '1.0.0',
         IsActive: true,
         SupportsMediaControl: true,
         SupportsRemoteControl: true,
-        NowPlayingItem: null,
-        NowPlayingQueueFullItems: [],
-        HasCustomDeviceName: false,
+        PlayableMediaTypes: ['Audio', 'Video', 'Photo'],
+        SupportedCommands: [],
         ServerId: this.serverId,
-        SupportedCommands: ['MoveUp', 'MoveDown', 'MoveLeft', 'MoveRight', 'Select']
       },
-      AccessToken: accessToken,
-      ServerId: this.serverId
+      ServerId: this.serverId,
     }), {
-      status: 200,
       headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, X-Emby-Authorization, X-MediaBrowser-Token',
-        'Server': 'Jellyfin/10.8.0',
-        'X-Response-Time-ms': '50'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
       }
     });
   }
 
-  // Get user views (library collections)
+  // Get user views (libraries)
   private async getUserViews(): Promise<Response> {
-    // Get enabled folders as library views
     const folders = await db.select()
       .from(schema.indexedFolders)
       .where(eq(schema.indexedFolders.enabled, true));
     
-    console.log('📁 Jellyfin: Found', folders.length, 'indexed folders');
-    if (this.streamingServer) {
-    }
-    
-    // Create views array starting with streaming folder
     const views = [];
     
-    // Add streaming folder as first view (if it has items)
+    // Add streaming view if available
     if (this.streamingServer && this.streamingServer.currentStreamingItems.size > 0) {
+      const itemCount = this.streamingServer.currentStreamingItems.size;
       views.push({
         Name: '🎬 Now Playing',
         ServerId: this.serverId,
         Id: 'library-streaming',
-        Etag: 'library-streaming',
+        Etag: `library-streaming-${itemCount}`,
         DateCreated: new Date().toISOString(),
         CanDelete: false,
         CanDownload: true,
-        SortName: '!Streaming', // ! to sort first
-        ExternalUrls: [],
+        SortName: '!Streaming',
+        ParentId: null,
         Path: '/streaming',
-        EnableMediaSourceDisplay: false,
-        Taglines: [],
+        Type: 'CollectionFolder',
+        CollectionType: 'homevideos', // Use 'homevideos' for home media collections
+        LocationType: 'FileSystem',
+        DisplayPreferencesId: 'library-streaming',
+        RecursiveItemCount: itemCount,
+        ChildCount: itemCount,
+        // Include all fields that Infuse might request
         Genres: [],
-        PlayAccess: 'Full',
-        RemoteTrailers: [],
+        MediaSources: [],
+        AlternateMediaSources: [],
+        Overview: 'Currently playing media items',
+        People: [],
         ProviderIds: {},
         IsFolder: true,
-        ParentId: null,
-        Type: 'CollectionFolder',
-        People: [],
-        Studios: [],
-        GenreItems: [],
-        LocalTrailerCount: 0,
+        PlayAccess: 'Full',
         UserData: {
           PlaybackPositionTicks: 0,
           PlayCount: 0,
           IsFavorite: false,
           Played: false,
-          Key: 'library-streaming'
+          LastPlayedDate: null,
+          Key: `library-streaming-default-user`
         },
-        SpecialFeatureCount: 0,
-        DisplayPreferencesId: 'library-streaming',
-        Tags: [],
-        PrimaryImageAspectRatio: 1,
-        CollectionType: 'homevideos',
+        // Add these additional fields that might be required
         ImageTags: {},
         BackdropImageTags: [],
-        ScreenshotImageTags: [],
-        LocationType: 'FileSystem',
-        LockedFields: [],
-        LockData: false
+        PrimaryImageTag: null,
+        PrimaryImageAspectRatio: null,
+        PrimaryImageItemId: null,
+        LibraryOptions: null,
+        RefreshProgress: null,
+        RefreshStatus: null
       });
     }
     
-    // Add regular folder views
-    const folderViews = folders.length > 0 ? folders.map((folder, index) => ({
-      Name: folder.path.split('/').pop() || 'Media',
-      ServerId: this.serverId,
-      Id: `library-${folder.id}`,
-      Etag: `library-${folder.id}`,
-      DateCreated: folder.addedAt.toISOString(),
-      CanDelete: false,
-      CanDownload: true,
-      SortName: folder.path.split('/').pop() || 'Media',
-      ExternalUrls: [],
-      Path: folder.path,
-      EnableMediaSourceDisplay: false,
-      Taglines: [],
-      Genres: [],
-      PlayAccess: 'Full',
-      RemoteTrailers: [],
-      ProviderIds: {},
-      IsFolder: true,
-      ParentId: null,
-      Type: 'CollectionFolder',
-      People: [],
-      Studios: [],
-      GenreItems: [],
-      LocalTrailerCount: 0,
-      UserData: {
-        PlaybackPositionTicks: 0,
-        PlayCount: 0,
-        IsFavorite: false,
-        Played: false,
-        Key: `library-${folder.id}`
-      },
-      SpecialFeatureCount: 0,
-      DisplayPreferencesId: `library-${folder.id}`,
-      Tags: [],
-      PrimaryImageAspectRatio: 1,
-      CollectionType: 'homevideos',
-      ImageTags: {},
-      BackdropImageTags: [],
-      ScreenshotImageTags: [],
-      LocationType: 'FileSystem',
-      LockedFields: [],
-      LockData: false
-    })) : [{
-      Name: 'All Media',
-      ServerId: this.serverId,
-      Id: 'library-all',
-      Etag: 'library-all',
-      DateCreated: new Date().toISOString(),
-      CanDelete: false,
-      CanDownload: true,
-      SortName: 'All Media',
-      ExternalUrls: [],
-      Path: '/',
-      EnableMediaSourceDisplay: false,
-      Taglines: [],
-      Genres: [],
-      PlayAccess: 'Full',
-      RemoteTrailers: [],
-      ProviderIds: {},
-      IsFolder: true,
-      ParentId: null,
-      Type: 'CollectionFolder',
-      People: [],
-      Studios: [],
-      GenreItems: [],
-      LocalTrailerCount: 0,
-      UserData: {
-        PlaybackPositionTicks: 0,
-        PlayCount: 0,
-        IsFavorite: false,
-        Played: false,
-        Key: 'library-all'
-      },
-      SpecialFeatureCount: 0,
-      DisplayPreferencesId: 'library-all',
-      Tags: [],
-      PrimaryImageAspectRatio: 1,
-      CollectionType: 'homevideos',
-      ImageTags: {},
-      BackdropImageTags: [],
-      ScreenshotImageTags: [],
-      LocationType: 'FileSystem',
-      LockedFields: [],
-      LockData: false
-    }];
+    // Add regular indexed folders as well
+    for (const folder of folders) {
+      const [mediaCount] = await db.select({ count: sql`count(*)` })
+        .from(schema.mediaItems)
+        .where(eq(schema.mediaItems.sourcePath, folder.path));
+      
+      views.push({
+        Name: folder.path.split('/').pop() || folder.path,
+        ServerId: this.serverId,
+        Id: `folder-${folder.id}`,
+        Etag: `folder-${folder.id}-${mediaCount.count}`,
+        DateCreated: folder.addedAt || new Date().toISOString(),
+        CanDelete: false,
+        CanDownload: true,
+        SortName: folder.path,
+        ParentId: null,
+        Path: folder.path,
+        Type: 'CollectionFolder',
+        CollectionType: 'homevideos', // Use 'homevideos' for regular folders
+        LocationType: 'FileSystem',
+        DisplayPreferencesId: `folder-${folder.id}`,
+        RecursiveItemCount: Number(mediaCount.count),
+        ChildCount: Number(mediaCount.count),
+        Genres: [],
+        MediaSources: [],
+        AlternateMediaSources: [],
+        Overview: `Media from ${folder.path}`,
+        People: [],
+        ProviderIds: {},
+        IsFolder: true,
+        PlayAccess: 'Full',
+        UserData: {
+          PlaybackPositionTicks: 0,
+          PlayCount: 0,
+          IsFavorite: false,
+          Played: false,
+          LastPlayedDate: null,
+          Key: `folder-${folder.id}-default-user`
+        },
+        ImageTags: {},
+        BackdropImageTags: [],
+        PrimaryImageTag: null,
+        PrimaryImageAspectRatio: null,
+        PrimaryImageItemId: null,
+        LibraryOptions: null,
+        RefreshProgress: null,
+        RefreshStatus: null
+      });
+    }
     
-    // Combine streaming view with folder views
-    views.push(...folderViews);
-    
+    console.log(`📁 Jellyfin: Found ${folders.length} indexed folders`);
     console.log('📚 Jellyfin: Returning', views.length, 'views:', views.map(v => v.Name).join(', '));
     
     return new Response(JSON.stringify({
@@ -633,266 +395,20 @@ export class JellyfinPlugin {
     });
   }
 
-  // Get grouping options for user
-  private async getGroupingOptions(): Promise<Response> {
-    // Return available grouping options for organizing media
-    return new Response(JSON.stringify([
-      {
-        Id: 'None',
-        Name: 'None'
-      },
-      {
-        Id: 'Name',
-        Name: 'Name'
-      },
-      {
-        Id: 'ProductionYear',
-        Name: 'Year'
-      },
-      {
-        Id: 'DateCreated',
-        Name: 'Date Added'
-      },
-      {
-        Id: 'PremiereDate',
-        Name: 'Release Date'
-      },
-      {
-        Id: 'Random',
-        Name: 'Random'
-      }
-    ]), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get items by grouping type
-  private async getItemsByGrouping(url: URL, groupingType: string): Promise<Response> {
-    const params = url.searchParams;
-    const includeItemTypes = params.get('IncludeItemTypes');
-    const recursive = params.get('Recursive') === 'true';
-    const sortBy = params.get('SortBy') || 'DateCreated';
-    const sortOrder = params.get('SortOrder') || 'Descending';
-    const startIndex = parseInt(params.get('StartIndex') || '0');
-    const limit = parseInt(params.get('Limit') || '100');
-    const parentId = params.get('ParentId');
-    
-    // For "None" grouping, just return regular items
-    if (groupingType === 'None') {
-      // Check if this is the streaming library
-      if (parentId === 'library-streaming') {
-        // Get streaming server instance
-        if (!this.streamingServer) {
-          return new Response(JSON.stringify({
-            Items: [],
-            TotalRecordCount: 0,
-            StartIndex: 0,
-          }), {
-            headers: {
-              'Content-Type': 'application/json',
-              'Access-Control-Allow-Origin': '*'
-            }
-          });
-        }
-        
-        // Get streaming items in order
-        const streamingItems = this.streamingServer.orderedItemIds
-          .map(id => this.streamingServer.currentStreamingItems.get(id))
-          .filter(item => item !== undefined);
-        
-        // Convert to Jellyfin format
-        const jellyfinItems = streamingItems.map(item => ({
-          Name: item.filename,
-          ServerId: this.serverId,
-          Id: item.id.toString(),
-          DateCreated: item.createdAt,
-          PremiereDate: item.createdAt,
-          ProductionYear: new Date(item.createdAt).getFullYear(),
-          Type: item.fileType === 'video' ? 'Movie' : 'Photo',
-          MediaType: item.fileType === 'video' ? 'Video' : 'Photo',
-          LocationType: 'FileSystem',
-          MediaSources: item.fileType === 'video' ? [{
-            Protocol: 'File',
-            Id: item.id.toString(),
-            Path: item.filepath,
-            Type: 'Default',
-            Container: item.filepath.split('.').pop(),
-            Size: item.fileSize,
-            Name: item.filename,
-            IsRemote: false,
-            RunTimeTicks: item.duration ? item.duration * 10000000 : null,
-            SupportsDirectStream: true,
-            SupportsDirectPlay: true,
-            IsInfiniteStream: false,
-            RequiresOpening: false,
-            RequiresClosing: false,
-            SupportsProbing: true,
-            MediaStreams: [{
-              Codec: item.fileType === 'video' ? 'h264' : 'mjpeg',
-              Type: 'Video',
-              Height: item.height,
-              Width: item.width,
-              Index: 0,
-            }],
-          }] : null,
-          ImageTags: {
-            Primary: item.thumbnailId || null,
-          },
-          BackdropImageTags: [],
-          ParentId: 'library-streaming',
-          PlayAccess: 'Full',
-          UserData: {
-            PlaybackPositionTicks: 0,
-            PlayCount: 0,
-            IsFavorite: false,
-            Played: false,
-          },
-          Width: item.width,
-          Height: item.height,
-        }));
-        
-        // Apply pagination
-        const paginatedItems = jellyfinItems.slice(startIndex, startIndex + limit);
-        
-        return new Response(JSON.stringify({
-          Items: paginatedItems,
-          TotalRecordCount: jellyfinItems.length,
-          StartIndex: startIndex,
-        }), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-      
-      // Get media items from database
-      let query = db.select().from(schema.mediaItems);
-      
-      // If parentId is a library ID, filter by the corresponding folder
-      if (parentId && parentId.startsWith('library-')) {
-        const folderId = parseInt(parentId.replace('library-', ''));
-        if (!isNaN(folderId)) {
-          const [folder] = await db.select()
-            .from(schema.indexedFolders)
-            .where(eq(schema.indexedFolders.id, folderId))
-            .limit(1);
-          
-          if (folder) {
-            // Filter items by folder path
-            query = query.where(sql`${schema.mediaItems.filepath} LIKE ${folder.path + '%'}`);
-          }
-        }
-      }
-      
-      // Filter by type if specified
-      if (includeItemTypes) {
-        const types = includeItemTypes.split(',');
-        if (types.includes('Movie') && !types.includes('Photo')) {
-          query = query.where(eq(schema.mediaItems.fileType, 'video'));
-        } else if (types.includes('Photo') && !types.includes('Movie')) {
-          query = query.where(eq(schema.mediaItems.fileType, 'image'));
-        }
-      }
-      
-      // Apply sorting
-      if (sortOrder === 'Descending') {
-        query = query.orderBy(desc(schema.mediaItems.createdAt));
-      } else {
-        query = query.orderBy(schema.mediaItems.createdAt);
-      }
-      
-      // Get total count with same filters
-      let countQuery = db.select({ count: sql<number>`COUNT(*)` }).from(schema.mediaItems);
-      
-      // Apply same filters to count query
-      if (parentId && parentId.startsWith('library-')) {
-        const folderId = parseInt(parentId.replace('library-', ''));
-        if (!isNaN(folderId)) {
-          const [folder] = await db.select()
-            .from(schema.indexedFolders)
-            .where(eq(schema.indexedFolders.id, folderId))
-            .limit(1);
-          
-          if (folder) {
-            countQuery = countQuery.where(sql`${schema.mediaItems.filepath} LIKE ${folder.path + '%'}`);
-          }
-        }
-      }
-      
-      if (includeItemTypes) {
-        const types = includeItemTypes.split(',');
-        if (types.includes('Movie') && !types.includes('Photo')) {
-          countQuery = countQuery.where(eq(schema.mediaItems.fileType, 'video'));
-        } else if (types.includes('Photo') && !types.includes('Movie')) {
-          countQuery = countQuery.where(eq(schema.mediaItems.fileType, 'image'));
-        }
-      }
-      
-      const [{ count: totalCount }] = await countQuery;
-      
-      // Apply pagination
-      query = query.limit(limit).offset(startIndex);
-      
-      const items = await query;
-      
-      // Convert to Jellyfin format  
-      const jellyfinItems = items.map(item => {
-        const converted = this.convertToJellyfinItem(item);
-        // Set correct parent ID for library browsing
-        if (parentId) {
-          converted.ParentId = parentId;
-        }
-        return converted;
-      });
-      
-      return new Response(JSON.stringify({
-        Items: jellyfinItems,
-        TotalRecordCount: totalCount,
-        StartIndex: startIndex,
-      }), {
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
-        }
-      });
-    }
-    
-    // For other grouping types, return empty for now
-    return new Response(JSON.stringify({
-      Items: [],
-      TotalRecordCount: 0,
-      StartIndex: 0,
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get media items with Jellyfin format
+  // Get media items
   private async getItems(url: URL): Promise<Response> {
     // Handle double ?? in URL that some clients send
     const urlString = url.toString().replace('??', '?');
     const fixedUrl = new URL(urlString);
     const params = fixedUrl.searchParams;
     const parentId = params.get('ParentId') || params.get('parentId');
-    const includeItemTypes = params.get('IncludeItemTypes');
-    const recursive = params.get('Recursive') === 'true';
-    const sortBy = params.get('SortBy') || 'DateCreated';
-    const sortOrder = params.get('SortOrder') || 'Descending';
     const startIndex = parseInt(params.get('StartIndex') || '0');
     const limit = parseInt(params.get('Limit') || '100');
     
-    // Handle streaming library specially
+    // Handle streaming library
     if (parentId === 'library-streaming') {
       console.log('🎭 Jellyfin: Requested streaming library items');
       
-      // Get streaming server instance
       if (!this.streamingServer) {
         console.log('🎭 Jellyfin: No streaming server available');
         return new Response(JSON.stringify({
@@ -920,54 +436,104 @@ export class JellyfinPlugin {
       // Apply pagination
       const paginatedItems = streamingItems.slice(startIndex, startIndex + limit);
       
-      // Convert to Jellyfin format with minimal required fields
-      const jellyfinItems = paginatedItems.map(item => ({
-        Name: item.filename,
-        ServerId: this.serverId,
-        Id: item.id.toString(),
-        Etag: item.id.toString(),
-        DateCreated: item.createdAt,
-        Type: item.fileType === 'video' ? 'Movie' : 'Photo',
-        MediaType: item.fileType === 'video' ? 'Video' : 'Photo',
-        LocationType: 'FileSystem',
-        Path: item.filepath,
-        CanDelete: false,
-        CanDownload: true,
-        IsFolder: false,
-        MediaSources: [{
-          Protocol: 'File',
-          Id: item.id.toString(),
-          Path: item.filepath,
-          Type: 'Default',
-          Container: item.filepath.split('.').pop(),
-          Size: item.fileSize || 0,
-          Name: item.filename,
-          IsRemote: false,
-          SupportsDirectStream: true,
-          SupportsDirectPlay: true
-        }],
-        ParentId: 'library-streaming',
-        PlayAccess: 'Full',
-        UserData: {
-          PlaybackPositionTicks: 0,
-          PlayCount: 0,
-          IsFavorite: false,
-          Played: false
+      // Convert to Jellyfin format
+      const jellyfinItems = paginatedItems.map(item => {
+        const isVideo = item.fileType === 'video';
+        
+        // Only get codec info for videos
+        let videoCodec, audioCodec;
+        if (isVideo) {
+          const codecInfo = this.getCodecInfo(item);
+          videoCodec = codecInfo.videoCodec;
+          audioCodec = codecInfo.audioCodec;
         }
-      }));
+        
+        // Base item structure
+        const baseItem = {
+          Name: item.filename,
+          ServerId: this.serverId,
+          Id: item.id.toString(),
+          Etag: item.id.toString(),
+          DateCreated: item.createdAt,
+          Type: isVideo ? 'Movie' : 'Photo',
+          MediaType: isVideo ? 'Video' : 'Photo',
+          LocationType: 'FileSystem',
+          Path: item.filepath,
+          CanDelete: false,
+          CanDownload: true,
+          IsFolder: false,
+          ParentId: 'library-streaming',
+          PlayAccess: 'Full',
+          UserData: {
+            PlaybackPositionTicks: 0,
+            PlayCount: 0,
+            IsFavorite: false,
+            Played: false
+          }
+        };
+        
+        // Add video-specific fields
+        if (isVideo) {
+          return {
+            ...baseItem,
+            MediaSources: [{
+              Protocol: 'File',
+              Id: item.id.toString(),
+              Path: item.filepath,
+              Type: 'Default',
+              Container: item.filepath.split('.').pop(),
+              Size: item.fileSize || 0,
+              Name: item.filename,
+              IsRemote: false,
+              SupportsDirectStream: true,
+              SupportsDirectPlay: true,
+              MediaStreams: [
+                {
+                  Codec: videoCodec,
+                  Type: 'Video',
+                  Index: 0,
+                  IsDefault: true,
+                  Width: item.width || 1920,
+                  Height: item.height || 1080
+                },
+                {
+                  Codec: audioCodec,
+                  Type: 'Audio',
+                  Index: 1,
+                  IsDefault: true
+                }
+              ]
+            }]
+          };
+        } else {
+          // Photo-specific fields
+          return {
+            ...baseItem,
+            Width: item.width || undefined,
+            Height: item.height || undefined,
+            ImageTags: {
+              Primary: item.id.toString() // Use media ID as the primary image tag
+            },
+            // Photos don't have MediaSources in Jellyfin
+            MediaSources: null,
+            // Add photo-specific metadata
+            Orientation: 'TopLeft',
+            ImageType: 'Primary',
+            HasSubtitles: false,
+            IsPlaceHolder: false,
+            SupportsSync: true,
+            SyncStatus: 'Synced'
+          };
+        }
+      });
       
-      console.log('🎭 Jellyfin: Returning', jellyfinItems.length, 'items to Infuse (total:', streamingItems.length, ')');
-      if (jellyfinItems.length > 0) {
-        console.log('🎭 Jellyfin: First item sample:', JSON.stringify(jellyfinItems[0], null, 2));
-      }
+      console.log('🎭 Jellyfin: Returning', jellyfinItems.length, 'items to Infuse');
       
-      const response = {
+      return new Response(JSON.stringify({
         Items: jellyfinItems,
         TotalRecordCount: streamingItems.length,
         StartIndex: startIndex,
-      };
-      
-      return new Response(JSON.stringify(response), {
+      }), {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
@@ -975,54 +541,11 @@ export class JellyfinPlugin {
       });
     }
     
-    // Get media items from database
-    let query = db.select().from(schema.mediaItems);
-    
-    // If parentId is a library ID, filter by the corresponding folder
-    if (parentId && parentId.startsWith('library-')) {
-      const folderId = parseInt(parentId.replace('library-', ''));
-      if (!isNaN(folderId)) {
-        const [folder] = await db.select()
-          .from(schema.indexedFolders)
-          .where(eq(schema.indexedFolders.id, folderId))
-          .limit(1);
-        
-        if (folder) {
-          // Filter items by folder path
-          query = query.where(sql`${schema.mediaItems.filepath} LIKE ${folder.path + '%'}`);
-        }
-      }
-    }
-    
-    // Filter by type if specified
-    if (includeItemTypes) {
-      const types = includeItemTypes.split(',');
-      if (types.includes('Movie') && !types.includes('Series')) {
-        query = query.where(eq(schema.mediaItems.fileType, 'video'));
-      } else if (types.includes('Photo') && !types.includes('Movie')) {
-        query = query.where(eq(schema.mediaItems.fileType, 'image'));
-      }
-    }
-    
-    // Apply sorting
-    if (sortOrder === 'Descending') {
-      query = query.orderBy(desc(schema.mediaItems.createdAt));
-    } else {
-      query = query.orderBy(schema.mediaItems.createdAt);
-    }
-    
-    // Apply pagination
-    query = query.limit(limit).offset(startIndex);
-    
-    const items = await query;
-    
-    // Convert to Jellyfin format
-    const jellyfinItems = items.map(item => this.convertToJellyfinItem(item));
-    
+    // For other libraries, return empty for now
     return new Response(JSON.stringify({
-      Items: jellyfinItems,
-      TotalRecordCount: jellyfinItems.length,
-      StartIndex: startIndex,
+      Items: [],
+      TotalRecordCount: 0,
+      StartIndex: 0,
     }), {
       headers: {
         'Content-Type': 'application/json',
@@ -1033,11 +556,112 @@ export class JellyfinPlugin {
 
   // Get single item
   private async getItem(itemId: string): Promise<Response> {
+    console.log(`🎭 Jellyfin: Getting item details for ${itemId}`);
+    
     const mediaId = parseInt(itemId);
     if (isNaN(mediaId)) {
       return new Response('Not found', { status: 404 });
     }
     
+    // Check if item is in streaming folder first
+    if (this.streamingServer) {
+      const streamingItem = this.streamingServer.currentStreamingItems.get(mediaId);
+      if (streamingItem) {
+        console.log(`🎭 Jellyfin: Found item ${itemId} in streaming folder`);
+        const isVideo = streamingItem.fileType === 'video';
+        
+        let videoCodec, audioCodec;
+        if (isVideo) {
+          const codecInfo = this.getCodecInfo(streamingItem);
+          videoCodec = codecInfo.videoCodec;
+          audioCodec = codecInfo.audioCodec;
+        }
+        
+        const baseItem = {
+          Name: streamingItem.filename,
+          ServerId: this.serverId,
+          Id: streamingItem.id.toString(),
+          Etag: streamingItem.id.toString(),
+          DateCreated: streamingItem.createdAt,
+          Type: isVideo ? 'Movie' : 'Photo',
+          MediaType: isVideo ? 'Video' : 'Photo',
+          LocationType: 'FileSystem',
+          Path: streamingItem.filepath,
+          CanDelete: false,
+          CanDownload: true,
+          IsFolder: false,
+          ParentId: 'library-streaming',
+          PlayAccess: 'Full',
+          UserData: {
+            PlaybackPositionTicks: 0,
+            PlayCount: 0,
+            IsFavorite: false,
+            Played: false
+          }
+        };
+        
+        let jellyfinItem;
+        if (isVideo) {
+          jellyfinItem = {
+            ...baseItem,
+            MediaSources: [{
+              Protocol: 'File',
+              Id: streamingItem.id.toString(),
+              Path: streamingItem.filepath,
+              Type: 'Default',
+              Container: streamingItem.filepath.split('.').pop(),
+              Size: streamingItem.fileSize || 0,
+              Name: streamingItem.filename,
+              IsRemote: false,
+              SupportsDirectStream: true,
+              SupportsDirectPlay: true,
+              MediaStreams: [
+                {
+                  Codec: videoCodec,
+                  Type: 'Video',
+                  Index: 0,
+                  IsDefault: true,
+                  Width: streamingItem.width || 1920,
+                  Height: streamingItem.height || 1080
+                },
+                {
+                  Codec: audioCodec,
+                  Type: 'Audio',
+                  Index: 1,
+                  IsDefault: true
+                }
+              ]
+            }]
+          };
+        } else {
+          // Photo-specific structure
+          jellyfinItem = {
+            ...baseItem,
+            Width: streamingItem.width || undefined,
+            Height: streamingItem.height || undefined,
+            ImageTags: {
+              Primary: streamingItem.id.toString()
+            },
+            MediaSources: null,
+            Orientation: 'TopLeft',
+            ImageType: 'Primary',
+            HasSubtitles: false,
+            IsPlaceHolder: false,
+            SupportsSync: true,
+            SyncStatus: 'Synced'
+          };
+        }
+        
+        return new Response(JSON.stringify(jellyfinItem), {
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+    
+    // Fallback to database
     const [item] = await db.select()
       .from(schema.mediaItems)
       .where(eq(schema.mediaItems.id, mediaId))
@@ -1057,92 +681,60 @@ export class JellyfinPlugin {
     });
   }
 
-  // Convert our media item to Jellyfin format
+  // Convert database item to Jellyfin format
   private convertToJellyfinItem(item: any) {
     const isVideo = item.fileType === 'video';
-    // Use a method to get the base URL that can be overridden
-    const baseUrl = this.getBaseUrl();
+    const { videoCodec, audioCodec } = this.getCodecInfo(item);
     
     return {
       Name: item.filename,
       ServerId: this.serverId,
       Id: item.id.toString(),
+      Etag: item.id.toString(),
       DateCreated: item.createdAt,
-      PremiereDate: item.createdAt,
-      ProductionYear: new Date(item.createdAt).getFullYear(),
       Type: isVideo ? 'Movie' : 'Photo',
       MediaType: isVideo ? 'Video' : 'Photo',
       LocationType: 'FileSystem',
-      MediaSources: isVideo ? [{
+      Path: item.filepath,
+      CanDelete: false,
+      CanDownload: true,
+      IsFolder: false,
+      MediaSources: [{
         Protocol: 'File',
         Id: item.id.toString(),
         Path: item.filepath,
         Type: 'Default',
         Container: item.filepath.split('.').pop(),
-        Size: item.fileSize,
+        Size: item.fileSize || 0,
         Name: item.filename,
         IsRemote: false,
-        RunTimeTicks: item.duration ? item.duration * 10000000 : null,
         SupportsDirectStream: true,
         SupportsDirectPlay: true,
-        IsInfiniteStream: false,
-        RequiresOpening: false,
-        RequiresClosing: false,
-        SupportsProbing: true,
-        MediaStreams: [{
-          Codec: isVideo ? 'h264' : 'mjpeg',
-          CodecTag: isVideo ? 'avc1' : null,
-          Language: 'und',
-          ColorSpace: null,
-          Title: null,
-          VideoRange: 'SDR',
-          DisplayTitle: item.filename,
-          IsInterlaced: false,
-          BitRate: null,
-          BitDepth: 8,
-          RefFrames: 1,
-          IsDefault: true,
-          IsForced: false,
-          Height: item.height,
-          Width: item.width,
-          RealFrameRate: isVideo ? 30 : null,
-          Profile: isVideo ? 'High' : null,
-          Type: 'Video',
-          AspectRatio: item.width && item.height ? `${item.width}:${item.height}` : null,
-          Index: 0,
-          IsExternal: false,
-          IsTextSubtitleStream: false,
-          SupportsExternalStream: false,
-          PixelFormat: 'yuv420p',
-          Level: isVideo ? 41 : null,
-        }],
-        Bitrate: null,
-        RequiredHttpHeaders: {},
-      }] : null,
-      ImageTags: {
-        Primary: item.thumbnailGenerated ? item.id.toString() : null,
-      },
-      BackdropImageTags: [],
-      ParentId: null,
+        MediaStreams: isVideo ? [
+          {
+            Codec: videoCodec,
+            Type: 'Video',
+            Index: 0,
+            IsDefault: true,
+            Width: item.width || 1920,
+            Height: item.height || 1080
+          },
+          {
+            Codec: audioCodec,
+            Type: 'Audio',
+            Index: 1,
+            IsDefault: true
+          }
+        ] : undefined
+      }],
       PlayAccess: 'Full',
       UserData: {
         PlaybackPositionTicks: 0,
         PlayCount: 0,
         IsFavorite: false,
-        Played: false,
-      },
-      PrimaryImageAspectRatio: item.width && item.height ? item.width / item.height : 1,
-      Width: item.width,
-      Height: item.height,
+        Played: false
+      }
     };
-  }
-
-  // Get base URL with actual network IP
-  private getBaseUrl(): string {
-    const { getLocalIpAddress } = require('../../utils/network');
-    const localIp = getLocalIpAddress();
-    const port = process.env.PORT || '4001';
-    return `http://${localIp}:${port}`;
   }
 
   // Serve images
@@ -1152,8 +744,42 @@ export class JellyfinPlugin {
       return new Response('Not found', { status: 404 });
     }
     
-    // For now, just redirect to our thumbnail endpoint
+    // Check if this is a photo in streaming folder
+    if (this.streamingServer) {
+      const streamingItem = this.streamingServer.currentStreamingItems.get(mediaId);
+      if (streamingItem && streamingItem.fileType === 'image') {
+        // For photos, serve the original file as the primary image
+        const redirectUrl = `${this.getBaseUrl()}/stream/${mediaId}`;
+        return new Response(null, {
+          status: 302,
+          headers: {
+            'Location': redirectUrl,
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+    }
+    
+    // For videos or non-streaming items, redirect to thumbnail
     const redirectUrl = `${this.getBaseUrl()}/thumbnails/${mediaId}.jpg`;
+    return new Response(null, {
+      status: 302,
+      headers: {
+        'Location': redirectUrl,
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  }
+  
+  // Download original item (mainly for photos)
+  private async downloadItem(itemId: string): Promise<Response> {
+    const mediaId = parseInt(itemId);
+    if (isNaN(mediaId)) {
+      return new Response('Not found', { status: 404 });
+    }
+    
+    // Redirect to streaming endpoint which will serve the original file
+    const redirectUrl = `${this.getBaseUrl()}/stream/${mediaId}`;
     return new Response(null, {
       status: 302,
       headers: {
@@ -1181,174 +807,17 @@ export class JellyfinPlugin {
     });
   }
 
-  // Download item endpoint
-  private async downloadItem(itemId: string, request: Request): Promise<Response> {
-    const mediaId = parseInt(itemId);
-    if (isNaN(mediaId)) {
-      return new Response('Not found', { status: 404 });
-    }
+  // Get playback info
+  private async getPlaybackInfo(itemId: string, url: URL): Promise<Response> {
+    console.log(`🎭 Jellyfin: PlaybackInfo requested for item ${itemId}`);
     
-    // Redirect to our media serving endpoint
-    const redirectUrl = `${this.getBaseUrl()}/media/${mediaId}`;
-    return new Response(null, {
-      status: 302,
-      headers: {
-        'Location': redirectUrl,
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Virtual folders for library structure
-  private async getVirtualFolders(): Promise<Response> {
-    const folders = await db.select()
-      .from(schema.indexedFolders)
-      .where(eq(schema.indexedFolders.enabled, true));
-    
-    const virtualFolders = folders.map((folder, index) => ({
-      Name: folder.path.split('/').pop() || 'Media',
-      Locations: [folder.path],
-      CollectionType: 'homevideos',
-      LibraryOptions: {
-        EnablePhotos: true,
-        EnableRealtimeMonitor: false,
-        EnableChapterImageExtraction: false,
-        ExtractChapterImagesDuringLibraryScan: false,
-        PathInfos: [{
-          Path: folder.path,
-          NetworkPath: folder.path,
-        }],
-        SaveLocalMetadata: false,
-        EnableInternetProviders: false,
-        EnableAutomaticSeriesGrouping: false,
-        EnableEmbeddedTitles: false,
-        EnableEmbeddedEpisodeInfos: false,
-        AutomaticRefreshIntervalDays: 0,
-        PreferredMetadataLanguage: 'en',
-        MetadataCountryCode: 'US',
-        SeasonZeroDisplayName: 'Specials',
-        SaveLocalThumbnailSets: false,
-        EnableExternalContentInSuggestions: false,
-      },
-      ItemId: `folder-${index}`,
-      Id: `folder-${index}`,
-      Guid: `folder-${index}`,
-      PrimaryImageItemId: null,
-      RefreshProgress: null,
-      RefreshStatus: 'Idle',
-    }));
-    
-    return new Response(JSON.stringify(virtualFolders), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get server endpoints
-  private async getEndpoints(): Promise<Response> {
-    const baseUrl = this.getBaseUrl();
-    return new Response(JSON.stringify({
-      IsLocal: true,
-      IsInNetwork: true
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get branding configuration
-  private async getBrandingConfiguration(): Promise<Response> {
-    return new Response(JSON.stringify({
-      LoginDisclaimer: '',
-      CustomCss: '',
-      SplashscreenEnabled: false
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Handle session endpoints
-  private async handleSession(request: Request): Promise<Response> {
-    return new Response(JSON.stringify({
-      Id: 'session-' + Date.now(),
-      UserId: 'default-user',
-      UserName: 'Default',
-      Client: 'Infuse',
-      LastActivityDate: new Date().toISOString(),
-      DeviceName: 'Infuse',
-      DeviceId: 'infuse-device',
-      ApplicationVersion: '1.0.0',
-      IsActive: true,
-      SupportsMediaControl: true,
-      SupportsRemoteControl: true,
-      PlayState: {
-        CanSeek: true,
-        IsPaused: false,
-        IsMuted: false,
-        RepeatMode: 'RepeatNone'
-      },
-      ServerId: this.serverId
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get latest items
-  private async getLatestItems(url?: URL): Promise<Response> {
-    const params = url?.searchParams;
-    const parentId = params?.get('parentId');
-    const limit = parseInt(params?.get('limit') || '20');
-    
-    // If requesting latest items for streaming library
-    if (parentId === 'library-streaming') {
-      if (!this.streamingServer || this.streamingServer.currentStreamingItems.size === 0) {
-        return new Response(JSON.stringify([]), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
-      
-      // Get latest streaming items
-      const streamingItems = this.streamingServer.orderedItemIds
-        .slice(0, limit)
-        .map(id => this.streamingServer.currentStreamingItems.get(id))
-        .filter(item => item !== undefined);
-      
-      const jellyfinItems = streamingItems.map(item => ({
-        Name: item.filename,
-        ServerId: this.serverId,
-        Id: item.id.toString(),
-        DateCreated: item.createdAt,
-        PremiereDate: item.createdAt,
-        ProductionYear: new Date(item.createdAt).getFullYear(),
-        Type: item.fileType === 'video' ? 'Movie' : 'Photo',
-        MediaType: item.fileType === 'video' ? 'Video' : 'Photo',
-        LocationType: 'FileSystem',
-        ParentId: parentId,
-        PlayAccess: 'Full',
-        UserData: {
-          PlaybackPositionTicks: 0,
-          PlayCount: 0,
-          IsFavorite: false,
-          Played: false,
-        },
-        Width: item.width,
-        Height: item.height,
-      }));
-      
-      return new Response(JSON.stringify(jellyfinItems), {
+    // Handle library folder playback info requests (shouldn't happen, but Infuse asks)
+    if (itemId.startsWith('library-')) {
+      return new Response(JSON.stringify({
+        PlaySessionId: null,
+        MediaSources: [],
+        ErrorCode: 'NotAllowed'
+      }), {
         headers: {
           'Content-Type': 'application/json',
           'Access-Control-Allow-Origin': '*'
@@ -1356,212 +825,12 @@ export class JellyfinPlugin {
       });
     }
     
-    // Regular latest items query
-    let query = db.select().from(schema.mediaItems);
-    
-    // Filter by folder if parentId specified
-    if (parentId && parentId.startsWith('library-')) {
-      const folderId = parseInt(parentId.replace('library-', ''));
-      if (!isNaN(folderId)) {
-        const [folder] = await db.select()
-          .from(schema.indexedFolders)
-          .where(eq(schema.indexedFolders.id, folderId))
-          .limit(1);
-        
-        if (folder) {
-          query = query.where(sql`${schema.mediaItems.filepath} LIKE ${folder.path + '%'}`);
-        }
-      }
-    }
-    
-    const items = await query
-      .orderBy(desc(schema.mediaItems.createdAt))
-      .limit(limit);
-    
-    const jellyfinItems = items.map(item => {
-      const converted = this.convertToJellyfinItem(item);
-      if (parentId) {
-        converted.ParentId = parentId;
-      }
-      return converted;
-    });
-    
-    return new Response(JSON.stringify(jellyfinItems), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get display preferences
-  private async getDisplayPreferences(): Promise<Response> {
-    return new Response(JSON.stringify({
-      Id: 'default',
-      ViewType: 'Poster',
-      SortBy: 'DateCreated',
-      SortOrder: 'Descending',
-      IndexBy: 'None',
-      RememberIndexing: false,
-      PrimaryImageHeight: 250,
-      PrimaryImageWidth: 250,
-      ScrollDirection: 'Horizontal',
-      ShowBackdrop: false,
-      RememberSorting: true,
-      ShowSidebar: true
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get system configuration
-  private async getSystemConfiguration(): Promise<Response> {
-    return new Response(JSON.stringify({
-      ServerName: this.serverName,
-      Version: '10.8.0',
-      LocalAddress: this.getBaseUrl(),
-      WanAddress: this.getBaseUrl(),
-      EnableExternalContentInSuggestions: false,
-      RequireHttps: false,
-      PublicHttpsPort: 8920,
-      HttpServerPortNumber: parseInt(process.env.PORT || '4001'),
-      HttpsPortNumber: 8920,
-      EnableHttps: false,
-      IsPortAuthorized: true,
-      EnableRemoteAccess: true,
-      LogFileRetentionDays: 3,
-      RunAtStartup: false,
-      IsStartupWizardCompleted: true,
-      EnableUPnP: false,
-      EnableMetrics: false,
-      PublicPort: parseInt(process.env.PORT || '4001'),
-      EnableCaseSensitiveItemIds: true,
-      MetadataPath: '/config/metadata',
-      MetadataNetworkPath: '',
-      PreferredMetadataLanguage: 'en',
-      MetadataCountryCode: 'US',
-      SaveMetadataInFolders: false,
-      EnableAutomaticSeriesGrouping: false,
-      EnableEmbeddedTitles: false,
-      EnableEmbeddedEpisodeInfos: false,
-      AutomaticRefreshIntervalDays: 0,
-      LibraryRefreshInterval: 1440,
-      ImageSavingConvention: 'Compatible',
-      EnableFolderView: true,
-      EnableGroupingIntoCollections: false,
-      DisplaySpecialsWithinSeasons: true,
-      MinResumePct: 5,
-      MaxResumePct: 90,
-      MinResumeDurationSeconds: 300,
-      RemoteClientBitrateLimit: 0,
-      EnableDashboardResponseCaching: true,
-      DashboardSourcePath: '',
-      ImageExtractionTimeoutMs: 0,
-      FindInternetTrailers: false,
-      PathSubstitutions: [],
-      UninstalledPlugins: [],
-      FailedPluginAssemblies: [],
-      Plugins: [],
-      ChapterImageResolution: 'MatchSource',
-      ParallelImageEncodingLimit: 0,
-      CastReceiverApplications: [],
-      TrickplayOptions: {
-        EnableHwAcceleration: false,
-        EnableHwEncoding: false,
-        ScanBehavior: 'NonBlocking',
-        ProcessPriority: 'Normal',
-        Interval: 10000,
-        WidthResolutions: [320],
-        TileWidth: 10,
-        TileHeight: 10,
-        Qscale: 4,
-        JpegQuality: 90,
-        ProcessThreads: 1
-      }
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Health check endpoint
-  private async getHealthCheck(): Promise<Response> {
-    return new Response(JSON.stringify({
-      status: 'Healthy',
-      version: '10.8.0'
-    }), {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // User configuration endpoint
-  private async getUserConfiguration(): Promise<Response> {
-    return new Response(JSON.stringify({
-      AudioLanguagePreference: '',
-      PlayDefaultAudioTrack: true,
-      SubtitleLanguagePreference: '',
-      DisplayMissingEpisodes: false,
-      GroupedFolders: [],
-      SubtitleMode: 'Default',
-      DisplayCollectionsView: false,
-      EnableLocalPassword: false,
-      OrderedViews: [],
-      LatestItemsExcludes: [],
-      MyMediaExcludes: [],
-      HidePlayedInLatest: true,
-      RememberAudioSelections: true,
-      RememberSubtitleSelections: true,
-      EnableNextEpisodeAutoPlay: true
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get plugins endpoint
-  private async getPlugins(): Promise<Response> {
-    return new Response(JSON.stringify([]), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get next up shows (TV series continuation)
-  private async getNextUp(url: URL): Promise<Response> {
-    // Return empty array since we don't have TV series functionality
-    return new Response(JSON.stringify({
-      Items: [],
-      TotalRecordCount: 0,
-      StartIndex: 0
-    }), {
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
-  }
-
-  // Get playback info for media streaming
-  private async getPlaybackInfo(itemId: string, url: URL): Promise<Response> {
     const mediaId = parseInt(itemId);
     if (isNaN(mediaId)) {
       return new Response('Not found', { status: 404 });
     }
 
-    // Check if item is in streaming folder first
+    // Check streaming folder first
     if (this.streamingServer) {
       const streamingItem = this.streamingServer.currentStreamingItems.get(mediaId);
       if (streamingItem) {
@@ -1585,6 +854,7 @@ export class JellyfinPlugin {
   // Create playback info response
   private createPlaybackInfo(item: any): Response {
     const isVideo = item.fileType === 'video';
+    const { videoCodec, audioCodec } = this.getCodecInfo(item);
     
     const playbackInfo = {
       MediaSources: [{
@@ -1605,14 +875,47 @@ export class JellyfinPlugin {
         RequiresLooping: false,
         SupportsProbing: true,
         VideoType: isVideo ? 'VideoFile' : undefined,
-        MediaStreams: isVideo ? [{
-          Codec: item.filepath.split('.').pop(),
-          Type: 'Video',
-          Index: 0,
-          IsDefault: true,
-          Width: item.width || 1920,
-          Height: item.height || 1080,
-        }] : undefined,
+        MediaStreams: isVideo ? [
+          {
+            Codec: videoCodec,
+            Type: 'Video',
+            Index: 0,
+            IsDefault: true,
+            IsInterlaced: false,
+            BitRate: item.bitrate || 5000000,
+            BitDepth: 8,
+            RefFrames: 1,
+            IsAnamorphic: false,
+            Width: item.width || 1920,
+            Height: item.height || 1080,
+            AverageFrameRate: 30,
+            RealFrameRate: 30,
+            Profile: 'High',
+            Level: '4.1',
+            PixelFormat: 'yuv420p',
+            HasThumbnail: false,
+            IsExternal: false,
+            IsTextSubtitleStream: false,
+            SupportsExternalStream: false,
+            Protocol: 'File'
+          },
+          {
+            Codec: audioCodec,
+            Type: 'Audio',
+            Index: 1,
+            IsDefault: true,
+            Channels: 2,
+            ChannelLayout: 'stereo',
+            BitRate: 128000,
+            SampleRate: 48000,
+            IsInterlaced: false,
+            IsAVC: false,
+            IsExternal: false,
+            IsTextSubtitleStream: false,
+            SupportsExternalStream: false,
+            Protocol: 'File'
+          }
+        ] : undefined,
         DirectStreamUrl: `/Videos/${item.id}/stream`,
         TranscodingUrl: `/Videos/${item.id}/stream`,
         TranscodingSubProtocol: 'http',
@@ -1633,11 +936,36 @@ export class JellyfinPlugin {
     });
   }
 
-  // Get media segments (chapters/bookmarks)
-  private async getMediaSegments(itemId: string): Promise<Response> {
-    // Return empty segments as we don't have chapter/segment functionality
+  // Get base URL with actual network IP
+  private getBaseUrl(): string {
+    const { getLocalIpAddress } = require('../../utils/network');
+    const localIp = getLocalIpAddress();
+    const port = process.env.PORT || '4001';
+    return `http://${localIp}:${port}`;
+  }
+
+  // Get grouping options (required by Infuse)
+  private async getGroupingOptions(): Promise<Response> {
+    return new Response(JSON.stringify([
+      {
+        Id: 'None',
+        Name: 'None'
+      }
+    ]), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  }
+
+  // Get items by grouping type (required by Infuse)
+  private async getItemsByGrouping(url: URL, groupingType: string): Promise<Response> {
+    // For "None" grouping, just return empty - Infuse will use the regular Items endpoint
     return new Response(JSON.stringify({
-      Items: []
+      Items: [],
+      TotalRecordCount: 0,
+      StartIndex: 0,
     }), {
       headers: {
         'Content-Type': 'application/json',
@@ -1646,135 +974,224 @@ export class JellyfinPlugin {
     });
   }
 
-  // Get library folder details
-  private async getLibraryDetails(libraryId: string, url: URL): Promise<Response> {
-    // Handle double ?? in URL that some clients send
-    const urlString = url.toString().replace('??', '?');
-    const fixedUrl = new URL(urlString);
+  // Get virtual folders (required by Infuse)
+  private async getVirtualFolders(): Promise<Response> {
+    const folders = [];
+    
+    // Add streaming folder if available
+    if (this.streamingServer) {
+      folders.push({
+        Name: '🎬 Now Playing',
+        Id: 'library-streaming',
+        Locations: ['/streaming'],
+        CollectionType: 'homevideos', // Use 'homevideos' for home media collections
+        LibraryOptions: {
+          EnablePhotos: true,
+          EnableRealtimeMonitor: false,
+          EnableArchiveMediaFiles: false,
+          EnableChapterImageExtraction: false,
+          ExtractChapterImagesDuringLibraryScan: false,
+          DownloadImagesInAdvance: false,
+          PathInfos: [{
+            Path: '/streaming'
+          }],
+          SaveLocalMetadata: false,
+          EnableInternetProviders: false,
+          EnableAutomaticSeriesGrouping: false,
+          EnableEmbeddedTitles: false,
+          EnableEmbeddedEpisodeInfos: false,
+          AutomaticRefreshIntervalDays: 0,
+          PreferredMetadataLanguage: '',
+          MetadataCountryCode: '',
+          SeasonZeroDisplayName: 'Specials',
+          MetadataSavers: [],
+          DisabledLocalMetadataReaders: [],
+          LocalMetadataReaderOrder: [],
+          DisabledSubtitleFetchers: [],
+          SubtitleFetcherOrder: [],
+          SkipSubtitlesIfEmbeddedSubtitlesPresent: false,
+          SkipSubtitlesIfAudioTrackMatches: false,
+          SubtitleDownloadLanguages: [],
+          RequirePerfectSubtitleMatch: false,
+          SaveSubtitlesWithMedia: false
+        },
+        ItemId: 'library-streaming',
+        PrimaryImageItemId: null,
+        RefreshStatus: 'Idle'
+      });
+    }
+    
+    return new Response(JSON.stringify(folders), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  }
+
+  // Get display preferences (required by Infuse)
+  private async getDisplayPreferences(): Promise<Response> {
+    return new Response(JSON.stringify({
+      Id: 'default',
+      ViewType: 'Poster',
+      SortBy: 'DateCreated',
+      SortOrder: 'Descending',
+      IndexBy: 'None',
+      RememberIndexing: false,
+      PrimaryImageHeight: 250,
+      PrimaryImageWidth: 250,
+      ScrollDirection: 'Horizontal',
+      ShowBackdrop: false,
+      RememberSorting: true,
+      ShowSidebar: true
+    }), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+      }
+    });
+  }
+
+  // Get library details (needed for Infuse to browse the library)
+  private async getLibraryDetails(libraryId: string, request: Request): Promise<Response> {
+    console.log(`🎭 Jellyfin: Getting library details for ${libraryId}`);
     
     if (libraryId === 'library-streaming') {
       // Return streaming library folder details
       const itemCount = this.streamingServer ? this.streamingServer.currentStreamingItems.size : 0;
+      const etag = `W/"library-streaming-${itemCount}"`;
       
-      return new Response(JSON.stringify({
+      // Check for conditional request
+      const ifNoneMatch = request.headers.get('If-None-Match');
+      if (ifNoneMatch && ifNoneMatch === etag) {
+        console.log(`🎭 Jellyfin: Returning 304 Not Modified for library-streaming`);
+        // Content hasn't changed, return 304 Not Modified
+        return new Response(null, {
+          status: 304,
+          headers: {
+            'ETag': etag,
+            'Cache-Control': 'public, max-age=30',
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
+      
+      console.log(`🎭 Jellyfin: Returning library details with ${itemCount} items`);
+      
+      // Include all fields that Infuse requests via Fields parameter
+      const libraryData = {
         Name: '🎬 Now Playing',
         ServerId: this.serverId,
         Id: 'library-streaming',
-        Etag: 'library-streaming',
+        Etag: etag.replace('W/', ''), // Remove weak validator prefix for JSON field
         DateCreated: new Date().toISOString(),
         CanDelete: false,
         CanDownload: true,
         SortName: '!Streaming',
-        ExternalUrls: [],
         Path: '/streaming',
-        EnableMediaSourceDisplay: false,
-        Taglines: [],
-        Genres: [],
-        PlayAccess: 'Full',
-        RemoteTrailers: [],
-        ProviderIds: {},
+        Type: 'CollectionFolder',
+        CollectionType: 'homevideos', // Use 'homevideos' for home media collections
         IsFolder: true,
         ParentId: null,
-        Type: 'CollectionFolder',
-        People: [],
-        Studios: [],
-        GenreItems: [],
-        LocalTrailerCount: 0,
+        LocationType: 'FileSystem',
+        PlayAccess: 'Full',
+        RecursiveItemCount: itemCount,
+        ChildCount: itemCount,
+        // Additional fields requested by Infuse
+        Genres: [], // Empty array for collection folders
+        MediaSources: [], // Collection folders don't have media sources
+        AlternateMediaSources: [], // No alternate sources for folders
+        Overview: 'Currently playing media items', // Description of the folder
+        People: [], // No people for collection folders
+        ProviderIds: {}, // No external provider IDs
         UserData: {
           PlaybackPositionTicks: 0,
           PlayCount: 0,
           IsFavorite: false,
           Played: false,
-          Key: 'library-streaming'
+          LastPlayedDate: null,
+          Key: `library-streaming-default-user`
         },
-        SpecialFeatureCount: 0,
+        // Additional metadata that might help Infuse
         DisplayPreferencesId: 'library-streaming',
-        Tags: [],
-        PrimaryImageAspectRatio: 1,
-        CollectionType: 'homevideos',
-        ImageTags: {},
+        PrimaryImageAspectRatio: null,
         BackdropImageTags: [],
         ScreenshotImageTags: [],
-        LocationType: 'FileSystem',
-        LockedFields: [],
-        LockData: false,
-        RecursiveItemCount: itemCount,
-        ChildCount: itemCount
-      }), {
+        Chapters: [],
+        MediaType: null,
+        Width: null,
+        Height: null,
+        IsPlaceHolder: false,
+        Tags: [],
+        RunTimeTicks: null,
+        Studios: [],
+        GenreItems: [],
+        // Add these fields that might be expected
+        ImageTags: {},
+        BackdropImageItemId: null,
+        IndexNumber: null,
+        ParentIndexNumber: null,
+        PremiereDate: null,
+        ProductionYear: null,
+        Status: null,
+        CommunityRating: null,
+        OfficialRating: null,
+        CustomRating: null,
+        OriginalTitle: null,
+        SortIndexNumber: null,
+        SortParentIndexNumber: null,
+        AirTime: null,
+        AirDays: null,
+        IndexOptions: [],
+        PrimaryImageTag: null,
+        ThumbImageTag: null,
+        ThumbImageItemId: null,
+        BackdropImageTag: null,
+        ParentLogoImageTag: null,
+        SeriesName: null,
+        SeriesId: null,
+        SeasonId: null,
+        SpecialFeatureCount: null,
+        SoundtrackIds: null,
+        VideoType: null,
+        PartCount: null,
+        MediaSourceCount: null,
+        LocalTrailerCount: null,
+        Video3DFormat: null,
+        CriticRating: null,
+        GameSystem: null,
+        CriticRatingSummary: null,
+        MultiPartGameFiles: null,
+        IsHD: null,
+        HasSubtitles: false,
+        Container: null,
+        IsShortcut: false,
+        ShortcutPath: null,
+        Taglines: [],
+        Keywords: [],
+        RemoteTrailers: [],
+        ExtraIds: [],
+        TmdbCollectionName: null,
+        CollectionItems: []
+      };
+      
+      return new Response(JSON.stringify(libraryData), {
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          'Access-Control-Allow-Origin': '*',
+          // Add cache control to prevent excessive requests
+          'Cache-Control': 'public, max-age=30',
+          'ETag': etag
         }
       });
-    }
-    
-    // Handle other library IDs
-    const folderId = parseInt(libraryId.replace('library-', ''));
-    if (!isNaN(folderId)) {
-      const [folder] = await db.select()
-        .from(schema.indexedFolders)
-        .where(eq(schema.indexedFolders.id, folderId))
-        .limit(1);
-      
-      if (folder) {
-        // Get item count for this folder
-        const itemCount = await db.select({ count: sql`count(*)` })
-          .from(schema.mediaItems)
-          .where(sql`${schema.mediaItems.filepath} LIKE ${folder.path + '%'}`);
-        
-        return new Response(JSON.stringify({
-          Name: folder.path.split('/').pop() || 'Media',
-          ServerId: this.serverId,
-          Id: libraryId,
-          Etag: libraryId,
-          DateCreated: folder.addedAt.toISOString(),
-          CanDelete: false,
-          CanDownload: true,
-          SortName: folder.path.split('/').pop() || 'Media',
-          ExternalUrls: [],
-          Path: folder.path,
-          EnableMediaSourceDisplay: false,
-          Taglines: [],
-          Genres: [],
-          PlayAccess: 'Full',
-          RemoteTrailers: [],
-          ProviderIds: {},
-          IsFolder: true,
-          ParentId: null,
-          Type: 'CollectionFolder',
-          People: [],
-          Studios: [],
-          GenreItems: [],
-          LocalTrailerCount: 0,
-          UserData: {
-            PlaybackPositionTicks: 0,
-            PlayCount: 0,
-            IsFavorite: false,
-            Played: false,
-            Key: libraryId
-          },
-          SpecialFeatureCount: 0,
-          DisplayPreferencesId: libraryId,
-          Tags: [],
-          PrimaryImageAspectRatio: 1,
-          CollectionType: 'homevideos',
-          ImageTags: {},
-          BackdropImageTags: [],
-          ScreenshotImageTags: [],
-          LocationType: 'FileSystem',
-          LockedFields: [],
-          LockData: false,
-          RecursiveItemCount: itemCount[0]?.count || 0,
-          ChildCount: itemCount[0]?.count || 0
-        }), {
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
-      }
     }
     
     return new Response('Not found', { status: 404 });
   }
 }
+
+// Export plugin interface
+export default {
+  name: 'jellyfin',
+  plugin: JellyfinPlugin,
+};
